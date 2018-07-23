@@ -32,6 +32,7 @@ public class ApiUserShopCartController extends ApiBaseController {
     public Object updateCart(MobileInfo mobileInfo,String goodsId,Integer num) {
 //        String json=jedisTemplate.get(RedisKeyUtils.SHOP_CART+mobileInfo.getUserid());
 //        JSONUtils.deserialize();
+
       return "test";
     }
 
