@@ -1,7 +1,10 @@
 package com.item.service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import com.api.view.shopCart.ShopCartVo;
 import com.item.daoEx.ShopCartMapperEx;
 import com.item.daoEx.model.ShopCartEx;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.item.dao.ShopCartMapper;
 import com.item.dao.model.ShopCart;
 import com.item.dao.model.ShopCartExample;
+import java.util.Map;
 
 @Service
 public class ShopCartService {
@@ -68,8 +72,27 @@ public class ShopCartService {
 	 * @param userId
 	 * @return
 	 */
-	public List<ShopCartEx> findList(Integer userId){
-		return shopCartMapperEx.findList(userId);
+	public List<ShopCartVo> findList(Integer userId){
+		List<ShopCartEx> list=shopCartMapperEx.findList(userId);
+		List<ShopCartVo> result=new ArrayList<>();
+		Map<Integer,ShopCartVo> map=new HashMap<>();
+		for (ShopCartEx ex:list){
+			ShopCartVo cartVo= map.get(ex.getOrgId());
+			if (cartVo==null){
+				ShopCartVo shopCartVo=new ShopCartVo();
+				shopCartVo.setOrgId(ex.getOrgId());
+				shopCartVo.setOrgLogo(ex.getOrgLogo());
+				shopCartVo.setOrgName(ex.getOrgName());
+				List<ShopCartEx> exes=new ArrayList<>();
+				exes.add(ex);
+				shopCartVo.setGoods(exes);
+				map.put(shopCartVo.getOrgId(),shopCartVo);
+				result.add(cartVo);
+			}else {
+				cartVo.getGoods().add(ex);
+			}
+		}
+		return result;
 	}
 
 }
