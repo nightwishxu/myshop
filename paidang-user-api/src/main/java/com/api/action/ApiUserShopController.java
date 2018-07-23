@@ -27,20 +27,8 @@ public class ApiUserShopController {
     @RequestMapping(value = "/addGoods", method = RequestMethod.POST)
     @ApiMethod(isLogin = true)
     public UserInfo getUserInfo(MobileInfo mobileInfo,String goodsId,Integer num) {
-        User record = userService.selectByPrimaryKey(mobileInfo.getUserid());
-        
-        if (record == null) {
-            throw new ApiException(MEnumError.USER_NOEXIST_ERROR);
-        }
-        UserInfo userInfo = new UserInfo();
-        userInfo.setId(record.getId());
-        userInfo.setHeadImg(record.getHeadImg());
-        userInfo.setIdCardImg(record.getIdCardImg());
-        userInfo.setIdCardReverse(record.getIdCardReverse());
-        userInfo.setNickName(record.getNickName());
-        userInfo.setAccount(record.getAccount());
-        userInfo.setIsBind(record.getIsBind());
-        return userInfo;
+
+        return null;
     }
 
 }
