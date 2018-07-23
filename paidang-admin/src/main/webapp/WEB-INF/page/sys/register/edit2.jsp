@@ -9,13 +9,13 @@
     </style>
     <script type="text/javascript">
         var id = "${id}";
-        var type = "${type}";
+        <%--var type = "${type}";--%>
         var source = "${source}";
 
         var editor;
         $(function() {
             $("#id").val(id);
-            $("#type").val(type);
+            // $("#type").val(type);
             $("#source").val(source);
         });
         var submitForm = function($dialog, $pjq) {

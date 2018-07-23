@@ -4,6 +4,7 @@ import com.base.action.CoreController;
 import com.base.dao.model.Ret;
 import com.base.des.Md5;
 import com.base.exception.SystemException;
+import com.base.pay.wx.util.MD5Util;
 import com.base.security.shiro.Principal;
 import com.base.security.shiro.token.UsernamePasswordToken;
 import com.base.security.util.UserUtils;
@@ -15,7 +16,9 @@ import com.item.dao.model.Role;
 import com.item.dao.model.UserGroup;
 import com.item.util.RoleUtil;
 import com.paidang.dao.model.PawnOrg;
+import com.paidang.dao.model.PawnOrgExample;
 import com.paidang.service.PawnOrgService;
+import com.youtu.sign.MD5;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -32,6 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,17 +89,30 @@ public class LoginController extends CoreController{
 		return "sys/login2";
 	}
 
-	@RequestMapping("commonLogin")
-	public String commonLogin(HttpSession session, String role, ModelMap model){
-		model.put("sysName", "");
-		return "sys/commonLogin";
-	}
 
 	@RequestMapping("register")
 	public String register(HttpSession session, String role, ModelMap model,PawnOrg pawnOrg){
+		System.err.println(MD5Util.MD5Encode("1","UTF-8"));
 		model.put("sysName", "");
+		PawnOrgExample example=new PawnOrgExample();
+		PawnOrgExample.Criteria criteria=example.createCriteria();
+		criteria.andAccountEqualTo(pawnOrg.getAccount());
+		List<PawnOrg> list=pawnOrgService.selectByExample(example);
+		if (list!=null && list.size()>0){
+			return msg(-1,"该账号已被注册请重新注册！");
+		}
+		pawnOrg.setCreateTime(new Date());
+		pawnOrg.setPassword(MD5Util.MD5Encode("1","UTF-8"));
+		if (pawnOrg.getType()==1){
+			pawnOrg.setRoleCode("org_admin");
+		}else if (pawnOrg.getType()==3){
+			pawnOrg.setRoleCode("supplier_admin");
+		}
+
+		pawnOrgService.insert(pawnOrg);
 		return "sys/commonLogin";
 	}
+
 
 
 	@RequestMapping("{system}/login")
