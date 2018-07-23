@@ -275,7 +275,6 @@ public class PawnCron{
 
 			//释放商品表库存
 			int updateGoods = orderService.updateGoodsList(list);
-
 		}
 	}
 
