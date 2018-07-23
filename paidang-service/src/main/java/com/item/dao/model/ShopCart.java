@@ -8,6 +8,11 @@ package com.item.dao.model;
 public class ShopCart {
 
 	/**
+	 *
+	 */
+	private Integer id;
+
+	/**
 	 *用户id
 	 */
 	private Integer userId;
@@ -36,6 +41,14 @@ public class ShopCart {
 	 *
 	 */
 	private java.util.Date modifyTime;
+
+	public void setId(Integer id) {
+		this.id=id;
+	}
+
+	public Integer getId() {
+		return id;
+	}
 
 	public void setUserId(Integer userId) {
 		this.userId=userId;

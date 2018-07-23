@@ -3,5 +3,11 @@
 <mapper namespace="com.item.daoEx.ShopCartMapperEx" >
   <resultMap id="BaseResultMap" type="com.item.daoEx.model.ShopCartEx" extends="com.item.dao.ShopCartMapper.BaseResultMap">
   </resultMap>
-  
+
+  <select id="findList" resultType="com.item.daoEx.model.ShopCartEx" parameterType="java.lang.Integer">
+    select sc.*,g.name as goodsName,g.price as goodsPrice,g.img as goodsImg,g.info as goodsInfo,
+     po.name as orgName,po.org_logo as orgLogo from p_shop_cart sc left join p_goods g on  sc.goods_id = g.id left join p_pawn_org po on sc.org_id= po.id
+    where sc.user_id=#{userId}
+  </select>
+
 </mapper>

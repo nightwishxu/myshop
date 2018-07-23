@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.item.dao.ShopCartMapper" >
     <resultMap id="BaseResultMap" type="com.item.dao.model.ShopCart" >
-        <id column="user_id" property="userId" jdbcType="INTEGER" />
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="user_id" property="userId" jdbcType="INTEGER" />
         <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
         <result column="num" property="num" jdbcType="INTEGER" />
         <result column="org_id" property="orgId" jdbcType="INTEGER" />
@@ -71,7 +72,7 @@
     </sql>
 
     <sql id="Base_Column_List" >
-        user_id,goods_id,num,org_id,create_time,modify_time
+        id,user_id,goods_id,num,org_id,create_time,modify_time
     </sql>
 
     <select id="selectByExample" resultMap="BaseResultMap" >
@@ -93,12 +94,12 @@
         select
         <include refid="Base_Column_List" />
         from p_shop_cart
-        where user_id = #{userId}
+        where id = #{id}
     </select>
 
     <delete id="deleteByPrimaryKey" >
         delete from p_shop_cart
-        where user_id = #{userId}
+        where id = #{id}
     </delete>
 
     <delete id="deleteByExample" >
@@ -108,16 +109,18 @@
         </if>
     </delete>
 
-    <insert id="insert" >
-        insert into p_shop_cart (user_id,goods_id,num,
-        org_id,create_time,modify_time
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" >
+        insert into p_shop_cart (user_id,goods_id,
+        num,org_id,create_time,
+        modify_time
         )
-        values (#{userId,jdbcType=INTEGER},#{goodsId,jdbcType=INTEGER},#{num,jdbcType=INTEGER},
-        #{orgId,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP},#{modifyTime,jdbcType=TIMESTAMP}
+        values (#{userId,jdbcType=INTEGER},#{goodsId,jdbcType=INTEGER},
+        #{num,jdbcType=INTEGER},#{orgId,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP},
+        #{modifyTime,jdbcType=TIMESTAMP}
         )
     </insert>
 
-    <insert id="insertSelective" >
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" >
         insert into p_shop_cart
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="userId != null" >
@@ -171,6 +174,9 @@
     <update id="updateByExampleSelective" >
         update p_shop_cart
         <set >
+            <if test="record.id != null" >
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
             <if test="record.userId != null" >
                 user_id = #{record.userId,jdbcType=INTEGER},
             </if>
@@ -197,7 +203,8 @@
 
     <update id="updateByExample" >
         update p_shop_cart
-        set user_id = #{userId,jdbcType=INTEGER},
+        set id = #{id,jdbcType=INTEGER},
+        user_id = #{userId,jdbcType=INTEGER},
         goods_id = #{goodsId,jdbcType=INTEGER},
         num = #{num,jdbcType=INTEGER},
         org_id = #{orgId,jdbcType=INTEGER},
@@ -211,6 +218,9 @@
     <update id="updateByPrimaryKeySelective" >
         update p_shop_cart
         <set >
+            <if test="userId != null" >
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
             <if test="goodsId != null" >
                 goods_id = #{goodsId,jdbcType=INTEGER},
             </if>
@@ -227,17 +237,18 @@
                 modify_time = #{modifyTime,jdbcType=TIMESTAMP},
             </if>
         </set>
-        where user_id = #{userId}
+        where id = #{id}
     </update>
 
     <update id="updateByPrimaryKey" >
         update p_shop_cart
-        set goods_id = #{goodsId,jdbcType=INTEGER},
+        set user_id = #{userId,jdbcType=INTEGER},
+        goods_id = #{goodsId,jdbcType=INTEGER},
         num = #{num,jdbcType=INTEGER},
         org_id = #{orgId,jdbcType=INTEGER},
         create_time = #{createTime,jdbcType=TIMESTAMP},
         modify_time = #{modifyTime,jdbcType=TIMESTAMP}
-        where user_id = #{userId}
+        where id = #{id}
     </update>
 
 </mapper>

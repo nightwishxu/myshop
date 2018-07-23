@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -37,7 +38,7 @@ public class ApiUserShopCartController extends CoreController {
     @Autowired
     private ShopCartService shopCartService;
 
-    @RequestMapping("/list")
+/*    @RequestMapping("/list")
     @ResponseBody
     public String list(Integer page, Integer rows){
         PaginationSupport.byPage(page, rows);
@@ -50,7 +51,7 @@ public class ApiUserShopCartController extends CoreController {
     @RequestMapping("/save")
     @ResponseBody
     public String save(ShopCart shopCart){
-        if (shopCart.getUserId() == null){
+        if (shopCart.getId() == null){
             shopCartService.insert(shopCart);
         }else{
             shopCartService.updateByPrimaryKeySelective(shopCart);
@@ -73,16 +74,60 @@ public class ApiUserShopCartController extends CoreController {
             shopCartService.deleteByPrimaryKey(Integer.parseInt(str));
         }
         return ok();
-    }
+    }*/
 
 
     @ApiOperation(value = "修改购物车商品数量", notes = "登陆")
     @RequestMapping(value = "/updateCart", method = RequestMethod.POST)
     @ApiMethod(isLogin = false)
-    public Object updateCart(MobileInfo mobileInfo,String goodsId,Integer num) {
-//        String json=jedisTemplate.get(RedisKeyUtils.SHOP_CART+mobileInfo.getUserid());
-//        JSONUtils.deserialize();
-      return "test";
+    public Object updateCart(MobileInfo mobileInfo,Integer goodsId,Integer num,Integer orgId) {
+        ShopCartExample entity=new ShopCartExample();
+        ShopCartExample.Criteria criteria=entity.createCriteria();
+        criteria.andUserIdEqualTo(mobileInfo.getUserid());
+        criteria.andGoodsIdEqualTo(goodsId);
+        List<ShopCart> list=shopCartService.selectByExample(entity);
+        if (list!=null && list.size()>0){
+            //购物车有商品修改
+            ShopCart shopCart=list.get(0);
+            shopCart.setNum(shopCart.getNum()+num);
+            if (shopCart.getNum()==0){
+                shopCartService.deleteByPrimaryKey(shopCart.getId());
+            }else {
+                shopCartService.updateByPrimaryKeySelective(shopCart);
+            }
+        }else {
+            //购物车没有商品新增
+            ShopCart shopCart=new ShopCart();
+            shopCart.setGoodsId(goodsId);
+            shopCart.setNum(num);
+            shopCart.setCreateTime(new Date());
+            shopCart.setUserId(mobileInfo.getUserid());
+            shopCart.setOrgId(orgId);
+            shopCartService.insert(shopCart);
+        }
+        return "1";
     }
+
+
+    @ApiOperation(value = "删除购物车商品", notes = "登陆")
+    @RequestMapping(value = "/delGoods", method = RequestMethod.POST)
+    @ApiMethod(isLogin = false)
+    public Object delGoods(MobileInfo mobileInfo,Integer goodsId) {
+        ShopCartExample entity=new ShopCartExample();
+        ShopCartExample.Criteria criteria=entity.createCriteria();
+        criteria.andUserIdEqualTo(mobileInfo.getUserid());
+        criteria.andGoodsIdEqualTo(goodsId);
+        return shopCartService.deleteByExample(entity);
+    }
+
+
+    @ApiOperation(value = "购物车商品列表", notes = "登陆")
+    @RequestMapping(value = "/list", method = RequestMethod.POST)
+    @ApiMethod(isLogin = false)
+    public Object list(MobileInfo mobileInfo) {
+        return shopCartService.findList(mobileInfo.getUserid());
+    }
+
+
 
 }

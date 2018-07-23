@@ -2,6 +2,8 @@ package com.item.service;
 
 import java.util.List;
 
+import com.item.daoEx.ShopCartMapperEx;
+import com.item.daoEx.model.ShopCartEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,9 @@ import com.item.dao.model.ShopCartExample;
 public class ShopCartService {
 	@Autowired
 	private ShopCartMapper shopCartMapper;
+
+	@Autowired
+	private ShopCartMapperEx shopCartMapperEx;
 
 	public int countByExample(ShopCartExample example) {
 		return this.shopCartMapper.countByExample(example);
@@ -26,8 +31,8 @@ public class ShopCartService {
 		return this.shopCartMapper.selectByExample(example);
 	}
 
-	public int deleteByPrimaryKey(Integer user_id) {
-		return this.shopCartMapper.deleteByPrimaryKey(user_id);
+	public int deleteByPrimaryKey(Integer id) {
+		return this.shopCartMapper.deleteByPrimaryKey(id);
 	}
 
 	public int updateByPrimaryKeySelective(ShopCart record) {
@@ -56,6 +61,15 @@ public class ShopCartService {
 
 	public int insertSelective(ShopCart record) {
 		return this.shopCartMapper.insertSelective(record);
+	}
+
+	/**
+	 * 购物车列表
+	 * @param userId
+	 * @return
+	 */
+	public List<ShopCartEx> findList(Integer userId){
+		return shopCartMapperEx.findList(userId);
 	}
 
 }
