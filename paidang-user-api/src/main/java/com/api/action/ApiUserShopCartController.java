@@ -91,9 +91,9 @@ public class ApiUserShopCartController extends CoreController {
             ShopCart shopCart=list.get(0);
             shopCart.setNum(shopCart.getNum()+num);
             if (shopCart.getNum()==0){
-                shopCartService.deleteByPrimaryKey(shopCart.getId());
+               return shopCartService.deleteByPrimaryKey(shopCart.getId());
             }else {
-                shopCartService.updateByPrimaryKeySelective(shopCart);
+                return shopCartService.updateByPrimaryKeySelective(shopCart);
             }
         }else {
             //购物车没有商品新增
@@ -103,9 +103,8 @@ public class ApiUserShopCartController extends CoreController {
             shopCart.setCreateTime(new Date());
             shopCart.setUserId(mobileInfo.getUserid());
             shopCart.setOrgId(orgId);
-            shopCartService.insert(shopCart);
+            return shopCartService.insert(shopCart);
         }
-        return "1";
     }
 
 
