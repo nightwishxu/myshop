@@ -9,14 +9,14 @@
     </style>
     <script type="text/javascript">
         var id = "${id}";
-        var type = "${type}";
+        <%--var type = "${type}";--%>
         var source = "${source}";
 
         var editor;
         $(function() {
             $("#id").val(id);
-            $("#type").val(type);
-            $("#source").val(source);
+            // $("#type").val(3);
+          6  $("#source").val(source);
         });
         var submitForm = function($dialog, $pjq) {
             if ($('form').form('validate')) {
