@@ -18,6 +18,7 @@ import com.redis.JedisTemplate;
 import com.redis.RedisKeyUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -79,8 +80,8 @@ public class ApiUserShopCartController extends CoreController {
 
     @ApiOperation(value = "修改购物车商品数量", notes = "登陆")
     @RequestMapping(value = "/updateCart", method = RequestMethod.POST)
-    @ApiMethod(isLogin = false)
-    public Object updateCart(MobileInfo mobileInfo,Integer goodsId,Integer num,Integer orgId) {
+    @ApiMethod(isLogin = true)
+    public Object updateCart(MobileInfo mobileInfo,@ApiParam(value = "商品id", required = true)Integer goodsId,@ApiParam(value = "商品数量", required = true)Integer num,@ApiParam(value = "机构id(新增时必填)", required = false)Integer orgId) {
         ShopCartExample entity=new ShopCartExample();
         ShopCartExample.Criteria criteria=entity.createCriteria();
         criteria.andUserIdEqualTo(mobileInfo.getUserid());
@@ -96,6 +97,9 @@ public class ApiUserShopCartController extends CoreController {
                 return shopCartService.updateByPrimaryKeySelective(shopCart);
             }
         }else {
+            if (orgId==null){
+                return msg(-1,"缺少机构id");
+            }
             //购物车没有商品新增
             ShopCart shopCart=new ShopCart();
             shopCart.setGoodsId(goodsId);
@@ -111,7 +115,7 @@ public class ApiUserShopCartController extends CoreController {
     @ApiOperation(value = "删除购物车商品", notes = "登陆")
     @RequestMapping(value = "/delGoods", method = RequestMethod.POST)
     @ApiMethod(isLogin = false)
-    public Object delGoods(MobileInfo mobileInfo,Integer goodsId) {
+    public Object delGoods(MobileInfo mobileInfo,@ApiParam(value = "商品id", required = true)Integer goodsId) {
         ShopCartExample entity=new ShopCartExample();
         ShopCartExample.Criteria criteria=entity.createCriteria();
         criteria.andUserIdEqualTo(mobileInfo.getUserid());
@@ -123,8 +127,8 @@ public class ApiUserShopCartController extends CoreController {
     @ApiOperation(value = "购物车商品列表", notes = "登陆")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ApiMethod(isLogin = false)
-    public Object list(MobileInfo mobileInfo) {
-        return shopCartService.findList(mobileInfo.getUserid());
+    public Object list( @ApiParam(value = "用户id", required = true)Integer userId) {
+        return shopCartService.findList(userId);
     }
 
 

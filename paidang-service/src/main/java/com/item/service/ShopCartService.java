@@ -87,7 +87,7 @@ public class ShopCartService {
 				exes.add(ex);
 				shopCartVo.setGoods(exes);
 				map.put(shopCartVo.getOrgId(),shopCartVo);
-				result.add(cartVo);
+				result.add(shopCartVo);
 			}else {
 				cartVo.getGoods().add(ex);
 			}

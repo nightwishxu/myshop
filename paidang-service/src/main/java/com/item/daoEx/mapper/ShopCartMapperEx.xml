@@ -5,9 +5,25 @@
   </resultMap>
 
   <select id="findList" resultType="com.item.daoEx.model.ShopCartEx" parameterType="java.lang.Integer">
-    select sc.*,g.name as goodsName,g.price as goodsPrice,g.img as goodsImg,g.info as goodsInfo,
-     po.name as orgName,po.org_logo as orgLogo from p_shop_cart sc left join p_goods g on  sc.goods_id = g.id left join p_pawn_org po on sc.org_id= po.id
-    where sc.user_id=#{userId}
+    SELECT
+	sc.id AS id,
+	sc.org_id AS orgId,
+	sc.num AS num,
+	sc.goods_id AS goodsId,
+	sc.create_time createTime,
+	sc.modify_time AS modifyTime,
+	g.NAME AS goodsName,
+	g.price AS goodsPrice,
+	g.img AS goodsImg,
+	g.info AS goodsInfo,
+	po.NAME AS orgName,
+	po.org_logo AS orgLogo
+FROM
+	p_shop_cart sc
+	LEFT JOIN p_goods g ON sc.goods_id = g.id
+	LEFT JOIN p_pawn_org po ON sc.org_id = po.id
+WHERE
+	sc.user_id = #{userId}
   </select>
 
 </mapper>
