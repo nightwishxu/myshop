@@ -16,6 +16,8 @@
 	g.price AS goodsPrice,
 	g.img AS goodsImg,
 	g.info AS goodsInfo,
+	g.total AS goodsTotal,
+	g.is_online AS isOnline,
 	po.NAME AS orgName,
 	po.org_logo AS orgLogo
 FROM

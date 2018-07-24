@@ -1,8 +1,6 @@
 package com.item.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import com.api.view.shopCart.ShopCartVo;
 import com.item.daoEx.ShopCartMapperEx;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.item.dao.ShopCartMapper;
 import com.item.dao.model.ShopCart;
 import com.item.dao.model.ShopCartExample;
-import java.util.Map;
 
 @Service
 public class ShopCartService {
@@ -75,7 +72,7 @@ public class ShopCartService {
 	public List<ShopCartVo> findList(Integer userId){
 		List<ShopCartEx> list=shopCartMapperEx.findList(userId);
 		List<ShopCartVo> result=new ArrayList<>();
-		Map<Integer,ShopCartVo> map=new HashMap<>();
+		Map<Integer,ShopCartVo> map=new LinkedHashMap<>();
 		for (ShopCartEx ex:list){
 			ShopCartVo cartVo= map.get(ex.getOrgId());
 			if (cartVo==null){

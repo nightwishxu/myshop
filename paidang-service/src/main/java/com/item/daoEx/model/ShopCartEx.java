@@ -20,7 +20,11 @@ public class ShopCartEx extends ShopCart {
     private String orgName;
     //机构logo
     private String orgLogo;
+    //商品库存数量
+    private Integer goodsTotal;
 
+    //1上架0下架
+    private  Integer isOnline;
 
     public String getGoodsName() {
         return goodsName;
@@ -68,5 +72,21 @@ public class ShopCartEx extends ShopCart {
 
     public void setOrgLogo(String orgLogo) {
         this.orgLogo = orgLogo;
+    }
+
+    public Integer getGoodsTotal() {
+        return goodsTotal;
+    }
+
+    public void setGoodsTotal(Integer goodsTotal) {
+        this.goodsTotal = goodsTotal;
+    }
+
+    public Integer getIsOnline() {
+        return isOnline;
+    }
+
+    public void setIsOnline(Integer isOnline) {
+        this.isOnline = isOnline;
     }
 }
