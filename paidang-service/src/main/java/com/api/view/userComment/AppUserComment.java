@@ -17,6 +17,14 @@ public class AppUserComment {
     @ApiModelProperty(value="用户id",required = true)
     private Integer userId;
 
+
+    /**
+     *用户id
+     */
+    @ApiModelProperty(value="订单id",required = true)
+    private Integer orderId;
+
+
     /**
      *用户名
      */

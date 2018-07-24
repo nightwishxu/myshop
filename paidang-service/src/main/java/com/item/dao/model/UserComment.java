@@ -13,6 +13,11 @@ public class UserComment {
 	private Integer id;
 
 	/**
+	 *订单id
+	 */
+	private Integer orderId;
+
+	/**
 	 *用户id
 	 */
 	private Integer userId;
@@ -93,6 +98,14 @@ public class UserComment {
 
 	public Integer getId() {
 		return id;
+	}
+
+	public void setOrderId(Integer orderId) {
+		this.orderId=orderId;
+	}
+
+	public Integer getOrderId() {
+		return orderId;
 	}
 
 	public void setUserId(Integer userId) {

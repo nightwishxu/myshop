@@ -3,6 +3,7 @@
 <mapper namespace="com.item.dao.UserCommentMapper" >
     <resultMap id="BaseResultMap" type="com.item.dao.model.UserComment" >
         <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="order_id" property="orderId" jdbcType="INTEGER" />
         <result column="user_id" property="userId" jdbcType="INTEGER" />
         <result column="user_name" property="userName" jdbcType="VARCHAR" />
         <result column="goods_id" property="goodsId" jdbcType="INTEGER" />
@@ -81,7 +82,7 @@
     </sql>
 
     <sql id="Base_Column_List" >
-        id,user_id,user_name,goods_id,goods_name,org_id,info,img,score,replay_user_id,replay_info,replay_time,status,show_name,create_time,modify_time
+        id,order_id,user_id,user_name,goods_id,goods_name,org_id,info,img,score,replay_user_id,replay_info,replay_time,status,show_name,create_time,modify_time
     </sql>
 
     <select id="selectByExample" resultMap="BaseResultMap" >
@@ -119,19 +120,19 @@
     </delete>
 
     <insert id="insert" >
-        insert into p_user_comment (id,user_id,user_name,
-        goods_id,goods_name,org_id,
-        info,img,score,
-        replay_user_id,replay_info,replay_time,
-        status,show_name,create_time,
-        modify_time
+        insert into p_user_comment (id,order_id,user_id,
+        user_name,goods_id,goods_name,
+        org_id,info,img,
+        score,replay_user_id,replay_info,
+        replay_time,status,show_name,
+        create_time,modify_time
         )
-        values (#{id,jdbcType=INTEGER},#{userId,jdbcType=INTEGER},#{userName,jdbcType=VARCHAR},
-        #{goodsId,jdbcType=INTEGER},#{goodsName,jdbcType=VARCHAR},#{orgId,jdbcType=INTEGER},
-        #{info,jdbcType=VARCHAR},#{img,jdbcType=VARCHAR},#{score,jdbcType=INTEGER},
-        #{replayUserId,jdbcType=INTEGER},#{replayInfo,jdbcType=VARCHAR},#{replayTime,jdbcType=TIMESTAMP},
-        #{status,jdbcType=INTEGER},#{showName,jdbcType=INTEGER},#{createTime,jdbcType=TIMESTAMP},
-        #{modifyTime,jdbcType=TIMESTAMP}
+        values (#{id,jdbcType=INTEGER},#{orderId,jdbcType=INTEGER},#{userId,jdbcType=INTEGER},
+        #{userName,jdbcType=VARCHAR},#{goodsId,jdbcType=INTEGER},#{goodsName,jdbcType=VARCHAR},
+        #{orgId,jdbcType=INTEGER},#{info,jdbcType=VARCHAR},#{img,jdbcType=VARCHAR},
+        #{score,jdbcType=INTEGER},#{replayUserId,jdbcType=INTEGER},#{replayInfo,jdbcType=VARCHAR},
+        #{replayTime,jdbcType=TIMESTAMP},#{status,jdbcType=INTEGER},#{showName,jdbcType=INTEGER},
+        #{createTime,jdbcType=TIMESTAMP},#{modifyTime,jdbcType=TIMESTAMP}
         )
     </insert>
 
@@ -140,6 +141,9 @@
         <trim prefix="(" suffix=")" suffixOverrides="," >
             <if test="id != null" >
                 id,
+            </if>
+            <if test="orderId != null" >
+                order_id,
             </if>
             <if test="userId != null" >
                 user_id,
@@ -190,6 +194,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="id != null" >
                 #{id,jdbcType=INTEGER},
+            </if>
+            <if test="orderId != null" >
+                #{orderId,jdbcType=INTEGER},
             </if>
             <if test="userId != null" >
                 #{userId,jdbcType=INTEGER},
@@ -252,6 +259,9 @@
             <if test="record.id != null" >
                 id = #{record.id,jdbcType=INTEGER},
             </if>
+            <if test="record.orderId != null" >
+                order_id = #{record.orderId,jdbcType=INTEGER},
+            </if>
             <if test="record.userId != null" >
                 user_id = #{record.userId,jdbcType=INTEGER},
             </if>
@@ -306,6 +316,7 @@
     <update id="updateByExample" >
         update p_user_comment
         set id = #{id,jdbcType=INTEGER},
+        order_id = #{orderId,jdbcType=INTEGER},
         user_id = #{userId,jdbcType=INTEGER},
         user_name = #{userName,jdbcType=VARCHAR},
         goods_id = #{goodsId,jdbcType=INTEGER},
@@ -329,6 +340,9 @@
     <update id="updateByPrimaryKeySelective" >
         update p_user_comment
         <set >
+            <if test="orderId != null" >
+                order_id = #{orderId,jdbcType=INTEGER},
+            </if>
             <if test="userId != null" >
                 user_id = #{userId,jdbcType=INTEGER},
             </if>
@@ -380,7 +394,8 @@
 
     <update id="updateByPrimaryKey" >
         update p_user_comment
-        set user_id = #{userId,jdbcType=INTEGER},
+        set order_id = #{orderId,jdbcType=INTEGER},
+        user_id = #{userId,jdbcType=INTEGER},
         user_name = #{userName,jdbcType=VARCHAR},
         goods_id = #{goodsId,jdbcType=INTEGER},
         goods_name = #{goodsName,jdbcType=VARCHAR},
