@@ -16,8 +16,18 @@
         $(function() {
             $("#id").val(id);
             // $("#type").val(3);
-          6  $("#source").val(source);
+          $("#source").val(source);
         });
+
+        $.extend($.fn.validatebox.defaults.rules, {
+            equals: {
+                validator: function(value,param){
+                    return value == $(param[0]).val();
+                },
+                message: '输入的密码不匹配!'
+            }
+        });
+
         var submitForm = function($dialog, $pjq) {
             if ($('form').form('validate')) {
                 var obj=sy.serializeObject($('form'));
@@ -86,6 +96,22 @@
                     <input class="easyui-textbox" id = "account" name="account"  data-options="required:true" style="width:100%" missingMessage="请输入账号"/>
                 </td>
             </tr>
+
+            <tr>
+                <th style="width:100px;">密码：</th>
+                <td>
+                    <input class="easyui-textbox" type="password" id = "password" name="password"  data-options="required:true" style="width:100%" missingMessage="请输入账号"/>
+                </td>
+            </tr>
+
+            <tr>
+                <th style="width:100px;">确认密码：</th>
+                <td>
+                    <input class="easyui-textbox" type="password" id = "confirmPassword" name="confirmPassword"  data-options="required:true" style="width:100%" missingMessage="请输入账号"
+                           validType="equals['#pwd']"/>
+                </td>
+            </tr>
+
             <tr>
                 <th style="width:100px;">店铺名：</th>
                 <td>
