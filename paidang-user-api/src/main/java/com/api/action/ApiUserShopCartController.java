@@ -14,6 +14,8 @@ import com.item.dao.model.ShopCart;
 import com.item.dao.model.ShopCartExample;
 import com.item.dao.model.User;
 import com.item.service.ShopCartService;
+import com.paidang.dao.model.Goods;
+import com.paidang.service.GoodsService;
 import com.redis.JedisTemplate;
 import com.redis.RedisKeyUtils;
 import io.swagger.annotations.Api;
@@ -38,6 +40,9 @@ public class ApiUserShopCartController extends CoreController {
 
     @Autowired
     private ShopCartService shopCartService;
+
+    @Autowired
+    private GoodsService goodsService;
 
 /*    @RequestMapping("/list")
     @ResponseBody
@@ -80,16 +85,31 @@ public class ApiUserShopCartController extends CoreController {
 
     @ApiOperation(value = "修改购物车商品数量", notes = "登陆")
     @RequestMapping(value = "/updateCart", method = RequestMethod.POST)
-    @ApiMethod(isLogin = true)
-    public Object updateCart(MobileInfo mobileInfo,@ApiParam(value = "商品id", required = true)Integer goodsId,@ApiParam(value = "商品数量", required = true)Integer num,@ApiParam(value = "机构id(新增时必填)", required = false)Integer orgId) {
+    @ApiMethod(isLogin = false)
+    public Object updateCart(MobileInfo mobileInfo,@ApiParam(value = "商品id", required = true)Integer goodsId,@ApiParam(value = "商品数量", required = true)Integer num) {
         ShopCartExample entity=new ShopCartExample();
         ShopCartExample.Criteria criteria=entity.createCriteria();
         criteria.andUserIdEqualTo(mobileInfo.getUserid());
         criteria.andGoodsIdEqualTo(goodsId);
         List<ShopCart> list=shopCartService.selectByExample(entity);
+        Goods goods=goodsService.selectByPrimaryId(goodsId);
+        if (goods==null){
+            return msg(-1,"该商品不存在！");
+        }
+        if(goods.getIsOnline()==0){
+            return msg(-1,"该商品已经下架！");
+        }
         if (list!=null && list.size()>0){
+
             //购物车有商品修改
             ShopCart shopCart=list.get(0);
+
+            Integer currentNum=shopCart.getNum();
+            if (num>0 &&(currentNum+num)>goods.getTotal()){
+                return msg(-1,"该商品库存不足！");
+            }else if (num<0 && Math.abs(num)>currentNum){
+                return msg(-1,"购物车中没有足够商品！");
+            }
             shopCart.setNum(shopCart.getNum()+num);
             if (shopCart.getNum()==0){
                return shopCartService.deleteByPrimaryKey(shopCart.getId());
@@ -97,8 +117,8 @@ public class ApiUserShopCartController extends CoreController {
                 return shopCartService.updateByPrimaryKeySelective(shopCart);
             }
         }else {
-            if (orgId==null){
-                return msg(-1,"缺少机构id");
+            if (num>goods.getTotal()){
+                return msg(-1,"库存不足");
             }
             //购物车没有商品新增
             ShopCart shopCart=new ShopCart();
@@ -106,7 +126,7 @@ public class ApiUserShopCartController extends CoreController {
             shopCart.setNum(num);
             shopCart.setCreateTime(new Date());
             shopCart.setUserId(mobileInfo.getUserid());
-            shopCart.setOrgId(orgId);
+            shopCart.setOrgId(goods.getOrgId());
             return shopCartService.insert(shopCart);
         }
     }
@@ -129,6 +149,18 @@ public class ApiUserShopCartController extends CoreController {
     @ApiMethod(isLogin = false)
     public Object list( @ApiParam(value = "用户id", required = true)Integer userId) {
         return shopCartService.findList(userId);
+    }
+
+
+
+    @ApiOperation(value = "清空购物车商品", notes = "登陆")
+    @RequestMapping(value = "/delAll", method = RequestMethod.POST)
+    @ApiMethod(isLogin = false)
+    public Object delAll(MobileInfo mobileInfo) {
+        ShopCartExample entity=new ShopCartExample();
+        ShopCartExample.Criteria criteria=entity.createCriteria();
+        criteria.andUserIdEqualTo(mobileInfo.getUserid());
+        return shopCartService.deleteByExample(entity);
     }
 
 
