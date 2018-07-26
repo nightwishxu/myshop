@@ -85,7 +85,7 @@ public class ApiUserShopCartController extends CoreController {
 
     @ApiOperation(value = "修改购物车商品数量", notes = "登陆")
     @RequestMapping(value = "/updateCart", method = RequestMethod.POST)
-    @ApiMethod(isLogin = false)
+    @ApiMethod(isLogin = true)
     public Object updateCart(MobileInfo mobileInfo,@ApiParam(value = "商品id", required = true)Integer goodsId,@ApiParam(value = "商品数量", required = true)Integer num) {
         ShopCartExample entity=new ShopCartExample();
         ShopCartExample.Criteria criteria=entity.createCriteria();
@@ -134,7 +134,7 @@ public class ApiUserShopCartController extends CoreController {
 
     @ApiOperation(value = "删除购物车商品", notes = "登陆")
     @RequestMapping(value = "/delGoods", method = RequestMethod.POST)
-    @ApiMethod(isLogin = false)
+    @ApiMethod(isLogin = true)
     public Object delGoods(MobileInfo mobileInfo,@ApiParam(value = "商品id", required = true)Integer goodsId) {
         ShopCartExample entity=new ShopCartExample();
         ShopCartExample.Criteria criteria=entity.createCriteria();
@@ -146,7 +146,7 @@ public class ApiUserShopCartController extends CoreController {
 
     @ApiOperation(value = "购物车商品列表", notes = "登陆")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
-    @ApiMethod(isLogin = false)
+    @ApiMethod(isLogin = true)
     public Object list( @ApiParam(value = "用户id", required = true)Integer userId) {
         return shopCartService.findList(userId);
     }
@@ -155,7 +155,7 @@ public class ApiUserShopCartController extends CoreController {
 
     @ApiOperation(value = "清空购物车商品", notes = "登陆")
     @RequestMapping(value = "/delAll", method = RequestMethod.POST)
-    @ApiMethod(isLogin = false)
+    @ApiMethod(isLogin = true)
     public Object delAll(MobileInfo mobileInfo) {
         ShopCartExample entity=new ShopCartExample();
         ShopCartExample.Criteria criteria=entity.createCriteria();
