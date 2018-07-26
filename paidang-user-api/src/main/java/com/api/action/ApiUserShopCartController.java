@@ -85,8 +85,11 @@ public class ApiUserShopCartController extends CoreController {
 
     @ApiOperation(value = "修改购物车商品数量", notes = "登陆")
     @RequestMapping(value = "/updateCart", method = RequestMethod.POST)
-    @ApiMethod(isLogin = true)
+    @ApiMethod(isLogin = false)
     public Object updateCart(MobileInfo mobileInfo,@ApiParam(value = "商品id", required = true)Integer goodsId,@ApiParam(value = "商品数量", required = true)Integer num) {
+        if (num==0){
+            return msg(-1,"数量不能为0");
+        }
         ShopCartExample entity=new ShopCartExample();
         ShopCartExample.Criteria criteria=entity.createCriteria();
         criteria.andUserIdEqualTo(mobileInfo.getUserid());
