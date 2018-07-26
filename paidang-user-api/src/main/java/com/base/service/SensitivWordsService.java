@@ -15,9 +15,7 @@ import java.util.Set;
 
 /**
  * 敏感词库 初始化缓存
- * 
- * @author lvpeng
- * @version [版本号, 2017年8月29日]
+ *
  */
 @Component
 @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
@@ -32,9 +30,7 @@ public class SensitivWordsService {
     
     /**
      * 加载敏感词
-     * 
-     * @author lvpeng
-     * @date 2017年8月29日
+     *
      */
     @PostConstruct
     public void load() {
@@ -76,8 +72,6 @@ public class SensitivWordsService {
     
     /**
      * 过滤敏感词
-     * @author lvpeng
-     * @date 2017年8月29日
      * @param info
      * @return
      */
