@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.paidang.daoEx.GoodsMapperEx" >
-  <resultMap id="BaseResultMap" type="com.paidang.daoEx.model.GoodsEx" extends="com.paidang.dao.GoodsMapper.BaseResultMap">
+    <resultMap id="BaseResultMap" type="com.paidang.daoEx.model.GoodsEx" extends="com.paidang.dao.GoodsMapper.BaseResultMap">
     <result column="cate_name" property="cateName"/>
     <result column="good_estate" property="estate"/>
     <result column="good_shelfDown" property="shelfDown"/>
