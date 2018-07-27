@@ -2,9 +2,6 @@ package com.paidang.dao.model;
 
 
 
-/**
- *
- */
 public class Goods {
 
 	/**
@@ -151,6 +148,11 @@ public class Goods {
 	 *是否设置为推荐 0不设置 1设置
 	 */
 	private Integer isSuggest;
+
+	/**
+	 *规格
+	 */
+	private String spec;
 
 	public void setId(Integer id) {
 		this.id=id;
@@ -382,6 +384,14 @@ public class Goods {
 
 	public Integer getIsSuggest() {
 		return isSuggest;
+	}
+
+	public void setSpec(String spec) {
+		this.spec=spec == null ? spec : spec.trim();
+	}
+
+	public String getSpec() {
+		return spec;
 	}
 
 }

@@ -1904,7 +1904,77 @@ public class GoodsExample {
 			return (Criteria) this;
 		}
 
-}
+		public Criteria andSpecIsNull() {
+			addCriterion("spec is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecIsNotNull() {
+			addCriterion("spec is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecEqualTo(String value) {
+			addCriterion("spec =", value, "spec");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecNotEqualTo(String value) {
+			addCriterion("spec <>", value, "spec");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecGreaterThan(String value) {
+			addCriterion("spec >", value, "spec");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecGreaterThanOrEqualTo(String value) {
+			addCriterion("spec >=", value, "spec");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecLessThan(String value) {
+			addCriterion("spec <", value, "spec");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecLessThanOrEqualTo(String value) {
+			addCriterion("spec <=", value, "spec");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecLike(String value) {
+			addCriterion("spec like", value, "spec");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecNotLike(String value) {
+			addCriterion("spec not like", value, "spec");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecIn(List<String> values) {
+			addCriterion("spec in", values, "spec");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecNotIn(List<String> values) {
+			addCriterion("spec not in", values, "spec");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecBetween(String value1, String value2) {
+			addCriterion("spec between", value1, value2, "spec");
+			return (Criteria) this;
+		}
+
+		public Criteria andSpecNotBetween(String value1, String value2) {
+			addCriterion("spec not between", value1, value2, "spec");
+			return (Criteria) this;
+		}
+
+	}
 
 	public static class Criteria extends GeneratedCriteria {
 
@@ -1943,7 +2013,7 @@ public class GoodsExample {
 		}
 
 		public boolean isNoValue() {
-		return noValue;
+			return noValue;
 		}
 
 		public boolean isSingleValue() {

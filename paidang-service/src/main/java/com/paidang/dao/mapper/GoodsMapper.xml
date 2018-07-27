@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.paidang.dao.GoodsMapper" >
-    <resultMap id="BaseResultMap" type="com.paidang.dao.model.Goods" >
+<mapper namespace="com.paidang.dao.model.GoodsMapper" >
+    <resultMap id="BaseResultMap" type="com.paidang.dao.model.model.Goods" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="source" property="source" jdbcType="TINYINT" />
         <result column="type" property="type" jdbcType="TINYINT" />
@@ -30,9 +30,10 @@
         <result column="platform_state" property="platformState" jdbcType="TINYINT" />
         <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
         <result column="is_suggest" property="isSuggest" jdbcType="TINYINT" />
+        <result column="spec" property="spec" jdbcType="VARCHAR" />
     </resultMap>
 
-    <resultMap id="ResultMapWithBLOBs" type="com.paidang.dao.model.Goods" extends="BaseResultMap" >
+    <resultMap id="ResultMapWithBLOBs" type="com.paidang.dao.model.model.Goods" extends="BaseResultMap" >
         <result column="info" property="info" jdbcType="LONGVARCHAR" />
     </resultMap>
 
@@ -97,7 +98,7 @@
     </sql>
 
     <sql id="Base_Column_List" >
-        id,source,type,cate_code,org_id,goods_id,name,cost,price,total,sold_out,is_online,is_verfiy,imgs,img,width,height,create_time,modify_time,state,max_aution_id,max_auction,user_id,platform_rate,platform_money,platform_state,sort_order,is_suggest
+        id,source,type,cate_code,org_id,goods_id,name,cost,price,total,sold_out,is_online,is_verfiy,imgs,img,width,height,create_time,modify_time,state,max_aution_id,max_auction,user_id,platform_rate,platform_money,platform_state,sort_order,is_suggest,spec
     </sql>
 
     <sql id="Blob_Column_List" >
@@ -167,7 +168,7 @@
         create_time,modify_time,state,
         max_aution_id,max_auction,user_id,
         platform_rate,platform_money,platform_state,
-        sort_order,is_suggest
+        sort_order,is_suggest,spec
         )
         values (#{source,jdbcType=TINYINT},#{type,jdbcType=TINYINT},
         #{cateCode,jdbcType=INTEGER},#{orgId,jdbcType=INTEGER},#{goodsId,jdbcType=INTEGER},
@@ -178,7 +179,7 @@
         #{createTime,jdbcType=TIMESTAMP},#{modifyTime,jdbcType=TIMESTAMP},#{state,jdbcType=TINYINT},
         #{maxAutionId,jdbcType=INTEGER},#{maxAuction,jdbcType=DECIMAL},#{userId,jdbcType=INTEGER},
         #{platformRate,jdbcType=DECIMAL},#{platformMoney,jdbcType=DECIMAL},#{platformState,jdbcType=TINYINT},
-        #{sortOrder,jdbcType=INTEGER},#{isSuggest,jdbcType=TINYINT}
+        #{sortOrder,jdbcType=INTEGER},#{isSuggest,jdbcType=TINYINT},#{spec,jdbcType=VARCHAR}
         )
     </insert>
 
@@ -269,6 +270,9 @@
             <if test="isSuggest != null" >
                 is_suggest,
             </if>
+            <if test="spec != null" >
+                spec,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="source != null" >
@@ -354,6 +358,9 @@
             </if>
             <if test="isSuggest != null" >
                 #{isSuggest,jdbcType=TINYINT},
+            </if>
+            <if test="spec != null" >
+                #{spec,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -455,6 +462,9 @@
             <if test="record.isSuggest != null" >
                 is_suggest = #{record.isSuggest,jdbcType=TINYINT},
             </if>
+            <if test="record.spec != null" >
+                spec = #{record.spec,jdbcType=VARCHAR},
+            </if>
         </set>
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
@@ -491,7 +501,8 @@
         platform_money = #{platformMoney,jdbcType=DECIMAL},
         platform_state = #{platformState,jdbcType=TINYINT},
         sort_order = #{sortOrder,jdbcType=INTEGER},
-        is_suggest = #{isSuggest,jdbcType=TINYINT}
+        is_suggest = #{isSuggest,jdbcType=TINYINT},
+        spec = #{spec,jdbcType=VARCHAR}
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
         </if>
@@ -526,7 +537,8 @@
         platform_money = #{platformMoney,jdbcType=DECIMAL},
         platform_state = #{platformState,jdbcType=TINYINT},
         sort_order = #{sortOrder,jdbcType=INTEGER},
-        is_suggest = #{isSuggest,jdbcType=TINYINT}
+        is_suggest = #{isSuggest,jdbcType=TINYINT},
+        spec = #{spec,jdbcType=VARCHAR}
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
         </if>
@@ -619,6 +631,9 @@
             <if test="isSuggest != null" >
                 is_suggest = #{isSuggest,jdbcType=TINYINT},
             </if>
+            <if test="spec != null" >
+                spec = #{spec,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id}
     </update>
@@ -652,7 +667,8 @@
         platform_money = #{platformMoney,jdbcType=DECIMAL},
         platform_state = #{platformState,jdbcType=TINYINT},
         sort_order = #{sortOrder,jdbcType=INTEGER},
-        is_suggest = #{isSuggest,jdbcType=TINYINT}
+        is_suggest = #{isSuggest,jdbcType=TINYINT},
+        spec = #{spec,jdbcType=VARCHAR}
         where id = #{id}
     </update>
 
@@ -684,7 +700,8 @@
         platform_money = #{platformMoney,jdbcType=DECIMAL},
         platform_state = #{platformState,jdbcType=TINYINT},
         sort_order = #{sortOrder,jdbcType=INTEGER},
-        is_suggest = #{isSuggest,jdbcType=TINYINT}
+        is_suggest = #{isSuggest,jdbcType=TINYINT},
+        spec = #{spec,jdbcType=VARCHAR}
         where id = #{id}
     </update>
 
