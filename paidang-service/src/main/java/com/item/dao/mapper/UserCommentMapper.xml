@@ -119,15 +119,15 @@
         </if>
     </delete>
 
-    <insert id="insert" >
-        insert into p_user_comment (id,order_id,user_id,
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" >
+        insert into p_user_comment (order_id,user_id,
         user_name,goods_id,goods_name,
         org_id,info,img,
         score,replay_user_id,replay_info,
         replay_time,status,show_name,
         create_time,modify_time
         )
-        values (#{id,jdbcType=INTEGER},#{orderId,jdbcType=INTEGER},#{userId,jdbcType=INTEGER},
+        values (#{orderId,jdbcType=INTEGER},#{userId,jdbcType=INTEGER},
         #{userName,jdbcType=VARCHAR},#{goodsId,jdbcType=INTEGER},#{goodsName,jdbcType=VARCHAR},
         #{orgId,jdbcType=INTEGER},#{info,jdbcType=VARCHAR},#{img,jdbcType=VARCHAR},
         #{score,jdbcType=INTEGER},#{replayUserId,jdbcType=INTEGER},#{replayInfo,jdbcType=VARCHAR},
@@ -136,12 +136,9 @@
         )
     </insert>
 
-    <insert id="insertSelective" >
+    <insert id="insertSelective" useGeneratedKeys="true" keyProperty="id" >
         insert into p_user_comment
         <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="id != null" >
-                id,
-            </if>
             <if test="orderId != null" >
                 order_id,
             </if>
@@ -192,9 +189,6 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="id != null" >
-                #{id,jdbcType=INTEGER},
-            </if>
             <if test="orderId != null" >
                 #{orderId,jdbcType=INTEGER},
             </if>
