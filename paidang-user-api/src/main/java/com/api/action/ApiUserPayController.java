@@ -199,4 +199,111 @@ public class ApiUserPayController extends ApiBaseController{
 		}
 		return result;
 	}
+
+
+	@ApiOperation(value = "购物车下单", notes = "登陆")
+	@RequestMapping("/createShopCartOrder")
+	@ApiMethod(isLogin = true)
+	public PayResult createShopCartOrder(MobileInfo mobileInfo,
+								 @ApiParam(value = "商品id,以,相隔", required = true)String goodsIds,
+								 @ApiParam(value = "优惠券id", required = false)Integer couponId,
+								 @ApiParam(value = "地址id", required = true)Integer addressId){
+		PayResult payResult = new PayResult();
+		long code = System.currentTimeMillis();
+		String[] goodsIdArray=goodsIds.split(",");
+		for (String id:goodsIdArray){
+			Integer goodsId=Integer.valueOf(id);
+			GoodsExample goodsExample = new GoodsExample();
+			goodsExample.createCriteria().andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andTotalGreaterThanOrEqualTo(1).andIdEqualTo(goodsId);//.andStateEqualTo(1);
+			List<Goods> list = goodsService.selectByExample(goodsExample);
+			if(null == list || list.size() ==0) {
+				throw new ApiException(MEnumError.GOODS_NOT_EXIST);
+
+			}
+			Goods goods = list.get(0);
+			UserCoupon userCoupon = null;
+			//用户使用优惠券
+//			if(null != couponId){
+//				UserCouponExample userCouponExample = new UserCouponExample();
+//				userCouponExample.createCriteria().andEndTimeGreaterThanOrEqualTo(new Date()).andIdEqualTo(couponId).andStateEqualTo(1);
+//				List<UserCoupon> userCouponList = userCouponService.selectByExample(userCouponExample);
+//				if(null == userCouponList || list.size() ==0){
+//					throw new ApiException(MEnumError.COUPON_TYPE_EXIST);
+//				}
+//				userCoupon = userCouponList.get(0);
+//			}
+
+
+			UserAddress userAddress = userAddressService.selectByPrimaryKey(addressId);
+			if(null == userAddress){
+				throw new ApiException(MEnumError.ADDRESS_NOT_EXIST);
+			}
+
+			Order order = new Order();
+
+			//订单号生成规则：时间戳加商品编号
+			order.setCode(code + goodsId.toString());
+			order.setUserId(mobileInfo.getUserid());
+			order.setGoodsId(goods.getId());
+			order.setGoodsName(goods.getName());
+			order.setGoodsImg(goods.getImg());
+			order.setGoodsSource(goods.getSource());
+			order.setOrgId(goods.getOrgId());
+			order.setGoodsPrice(goods.getPrice());
+			order.setGoodsCost(goods.getCost());
+			//优惠券
+
+			BigDecimal finalPrice = null;
+			if(null == userCoupon){
+				//没有优惠券
+				finalPrice = goods.getPrice();
+			}else{
+				finalPrice = goods.getPrice().subtract(userCoupon.getFull());
+			}
+			order.setPrice(finalPrice);
+			order.setState(1);
+			order.setIsBalance(0);
+			order.setShipUser(userAddress.getUserName());
+			order.setShipPhone(userAddress.getPhone());
+			order.setShipAddress(userAddress.getArea()+userAddress.getAddress());
+			order.setRefState(0);
+			if(null != couponId){
+				order.setCouponValue(userCoupon.getFull());
+			}
+			order.setCouponId(couponId);
+			order.setIsDel(0);
+			int result = orderService.insert(order);
+			if(0 == result){
+				throw new ApiException(MEnumError.SERVER_BUSY_ERROR);
+			}
+
+			//商品数量-1
+			goods.setTotal(goods.getTotal() - 1);
+			goods.setSoldOut(goods.getSoldOut() + 1);
+			int reuslt2 = goodsService.updateByPrimaryKeySelective(goods);
+
+			if(0 == reuslt2){
+				throw new ApiException(MEnumError.SERVER_BUSY_ERROR);
+			}
+
+			//优惠券不可用
+			if(null != userCoupon){
+				userCoupon.setState(0);
+				int result3 = userCouponService.updateByPrimaryKeySelective(userCoupon);
+				if(0 == result3){
+					throw new ApiException(MEnumError.SERVER_BUSY_ERROR);
+				}
+			}
+
+			payResult.setId(order.getId().toString());
+		}
+
+
+
+		return payResult;
+
+	}
+
+
+
 }
