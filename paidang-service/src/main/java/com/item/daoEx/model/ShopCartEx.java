@@ -25,6 +25,8 @@ public class ShopCartEx extends ShopCart {
 
     //1上架0下架
     private  Integer isOnline;
+    //商品规格
+    private String spec;
 
     public String getGoodsName() {
         return goodsName;
@@ -88,5 +90,13 @@ public class ShopCartEx extends ShopCart {
 
     public void setIsOnline(Integer isOnline) {
         this.isOnline = isOnline;
+    }
+
+    public String getSpec() {
+        return spec;
+    }
+
+    public void setSpec(String spec) {
+        this.spec = spec;
     }
 }

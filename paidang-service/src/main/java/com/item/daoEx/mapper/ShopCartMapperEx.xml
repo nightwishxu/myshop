@@ -18,6 +18,7 @@
 	g.info AS goodsInfo,
 	g.total AS goodsTotal,
 	g.is_online AS isOnline,
+	g.spec AS spec,
 	po.NAME AS orgName,
 	po.org_logo AS orgLogo
 FROM
