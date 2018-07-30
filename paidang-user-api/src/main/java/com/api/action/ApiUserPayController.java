@@ -1,5 +1,6 @@
 package com.api.action;
 
+import com.alibaba.fastjson.JSONObject;
 import com.api.MEnumError;
 import com.api.view.pay.PayResult;
 import com.base.api.ApiBaseController;
@@ -29,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -201,13 +203,15 @@ public class ApiUserPayController extends ApiBaseController{
 	}
 
 
-	@ApiOperation(value = "购物车下单", notes = "登陆")
+	/*@ApiOperation(value = "购物车下单", notes = "登陆")
 	@RequestMapping("/createShopCartOrder")
 	@ApiMethod(isLogin = true)
-	public PayResult createShopCartOrder(MobileInfo mobileInfo,
-								 @ApiParam(value = "商品id,以,相隔", required = true)String goodsIds,
-								 @ApiParam(value = "优惠券id", required = false)Integer couponId,
-								 @ApiParam(value = "地址id", required = true)Integer addressId){
+	public PayResult createShopCartOrder(MobileInfo mobileInfo, @ApiParam(value = "json参数", required = true)String param){
+		List<Map> mapList=JSONObject.parseArray(param,Map.class);
+		if (mapList!=null && mapList.size()>0){
+			throw new ApiException("缺少必要参数");
+		}
+		for (Map<String,>)
 		PayResult payResult = new PayResult();
 		long code = System.currentTimeMillis();
 		String[] goodsIdArray=goodsIds.split(",");
@@ -302,7 +306,7 @@ public class ApiUserPayController extends ApiBaseController{
 
 		return payResult;
 
-	}
+	}*/
 
 
 
