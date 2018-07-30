@@ -1,5 +1,6 @@
 package com.api.action;
 
+import com.alibaba.fastjson.JSONObject;
 import com.api.MEnumError;
 import com.api.view.pay.PayResult;
 import com.base.api.ApiBaseController;
@@ -8,6 +9,7 @@ import com.base.api.MobileInfo;
 import com.base.api.annotation.ApiMethod;
 import com.base.pay.PayMethod;
 import com.base.pay.ali.AlipayConfig;
+import com.base.util.JSONUtils;
 import com.base.util.StringUtil;
 import com.item.dao.model.PayLog;
 import com.item.service.PayLogService;
@@ -27,8 +29,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -204,15 +208,26 @@ public class ApiUserPayController extends ApiBaseController{
 	@ApiOperation(value = "购物车下单", notes = "登陆")
 	@RequestMapping("/createShopCartOrder")
 	@ApiMethod(isLogin = true)
-	public PayResult createShopCartOrder(MobileInfo mobileInfo,
-								 @ApiParam(value = "商品id,以,相隔", required = true)String goodsIds,
-								 @ApiParam(value = "优惠券id", required = false)Integer couponId,
+	public List<PayResult> createShopCartOrder(MobileInfo mobileInfo,
+								 @ApiParam(value = "json参数", required = true)String data,
 								 @ApiParam(value = "地址id", required = true)Integer addressId){
-		PayResult payResult = new PayResult();
+		List<Map> mapList =JSONObject.parseArray(data, Map.class);
 		long code = System.currentTimeMillis();
-		String[] goodsIdArray=goodsIds.split(",");
-		for (String id:goodsIdArray){
-			Integer goodsId=Integer.valueOf(id);
+
+		UserAddress userAddress = userAddressService.selectByPrimaryKey(addressId);
+		if(null == userAddress){
+			throw new ApiException(MEnumError.ADDRESS_NOT_EXIST);
+		}
+		List<PayResult> results=new ArrayList<>();
+		for (Map map:mapList){
+			PayResult payResult = new PayResult();
+			Integer goodsId=Integer.valueOf((String)map.get("goodsId"));
+			String str =(String)map.get("couponId");
+			Integer couponId=null;
+			if(StringUtil.isNotBlank(str)){
+				couponId=Integer.valueOf(str);
+			}
+
 			GoodsExample goodsExample = new GoodsExample();
 			goodsExample.createCriteria().andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andTotalGreaterThanOrEqualTo(1).andIdEqualTo(goodsId);//.andStateEqualTo(1);
 			List<Goods> list = goodsService.selectByExample(goodsExample);
@@ -222,23 +237,6 @@ public class ApiUserPayController extends ApiBaseController{
 			}
 			Goods goods = list.get(0);
 			UserCoupon userCoupon = null;
-			//用户使用优惠券
-//			if(null != couponId){
-//				UserCouponExample userCouponExample = new UserCouponExample();
-//				userCouponExample.createCriteria().andEndTimeGreaterThanOrEqualTo(new Date()).andIdEqualTo(couponId).andStateEqualTo(1);
-//				List<UserCoupon> userCouponList = userCouponService.selectByExample(userCouponExample);
-//				if(null == userCouponList || list.size() ==0){
-//					throw new ApiException(MEnumError.COUPON_TYPE_EXIST);
-//				}
-//				userCoupon = userCouponList.get(0);
-//			}
-
-
-			UserAddress userAddress = userAddressService.selectByPrimaryKey(addressId);
-			if(null == userAddress){
-				throw new ApiException(MEnumError.ADDRESS_NOT_EXIST);
-			}
-
 			Order order = new Order();
 
 			//订单号生成规则：时间戳加商品编号
@@ -251,8 +249,6 @@ public class ApiUserPayController extends ApiBaseController{
 			order.setOrgId(goods.getOrgId());
 			order.setGoodsPrice(goods.getPrice());
 			order.setGoodsCost(goods.getCost());
-			//优惠券
-
 			BigDecimal finalPrice = null;
 			if(null == userCoupon){
 				//没有优惠券
@@ -296,11 +292,102 @@ public class ApiUserPayController extends ApiBaseController{
 			}
 
 			payResult.setId(order.getId().toString());
+			results.add(payResult);
+
+		}
+		return results;
+
+
+			//用户使用优惠券
+//			if(null != couponId){
+//				UserCouponExample userCouponExample = new UserCouponExample();
+//				userCouponExample.createCriteria().andEndTimeGreaterThanOrEqualTo(new Date()).andIdEqualTo(couponId).andStateEqualTo(1);
+//				List<UserCoupon> userCouponList = userCouponService.selectByExample(userCouponExample);
+//				if(null == userCouponList || list.size() ==0){
+//					throw new ApiException(MEnumError.COUPON_TYPE_EXIST);
+//				}
+//				userCoupon = userCouponList.get(0);
+//			}
+
+
+
+			//优惠券
+
+
+	}
+
+
+	@ApiOperation(value = "商城购物车支付", notes = "登陆")
+	@RequestMapping("/buyShopCartPay")
+	@ApiMethod(isLogin = true)
+	public PayResult buyPay(MobileInfo mobileInfo,
+							@ApiParam(value = "支付方式:1:支付宝 2:微信", required = true)Integer platform,
+							@ApiParam(value = "订单id,以,相隔", required = true)String orderIds){
+		if (platform == null){
+			throw new ApiException("platform");
+		}
+		if (orderIds == null){
+			throw new ApiException("orderId");
+		}
+		List<PayLog> logList=new ArrayList<>();
+		BigDecimal price=BigDecimal.ZERO;
+		String[] orderArray=orderIds.split(",");
+		for (String id:orderArray){
+			Integer orderId=Integer.valueOf(id);
+			Order order = orderService.selectByPrimaryKey(orderId);
+			if (order == null){
+				throw new ApiException(MEnumError.WM_ORDER_NOTEXISTS);
+			}
+			order.setPayType(platform);
+			orderService.updateByPrimaryKeySelective(order);
+			PayLog log = new PayLog();
+			log.setOrderId(order.getId());
+			log.setUserId(mobileInfo.getUserid());
+			log.setState(0);
+			log.setMoney(order.getPrice());
+			log.setParam(MPaidangPayType.NORMAL_BUY.name());
+			payLogService.insertSelective(log);
+
+			price.add(order.getPrice());
+			logList.add(log);
+
+
+		}
+
+		PayResult result = new PayResult();
+		result.setPlatform(platform);
+		switch (platform) {
+			case 1:
+				//支付宝
+				result.setId(logList.get(0).toString()+"_"+ MPaidangPayType.NORMAL_BUY.name());
+				result.setMoney(price.toString());
+				result.setBackUrl(PayMethod.urlToUrl(AlipayConfig.notify_url));
+				break;
+			case 2:
+				//微信
+				String wxId = PayMethod.wxPrepayId(price, logList.get(0).getId().toString(), "订单支付",MPaidangPayType.NORMAL_BUY);
+				if (StringUtil.isBlank(wxId)){
+					throw new ApiException(MEnumError.SERVER_BUSY_ERROR);
+				}
+				result.setId(wxId);
+				break;
+			default:
+				throw new ApiException(MEnumError.PAY_TYPE_ERRPR);
 		}
 
 
+		return result;
 
-		return payResult;
+
+
+
+
+//		if (order.getState() != 2){
+//			throw new ApiException(MEnumError.WM_ORDER_NOTEXISTS);
+//		}
+
+
+
 
 	}
 
