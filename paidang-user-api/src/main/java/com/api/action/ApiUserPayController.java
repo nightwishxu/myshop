@@ -329,6 +329,7 @@ public class ApiUserPayController extends ApiBaseController{
 		if (orderIds == null){
 			throw new ApiException("orderId");
 		}
+		String logIds="";
 		List<PayLog> logList=new ArrayList<>();
 		BigDecimal price=BigDecimal.ZERO;
 		String[] orderArray=orderIds.split(",");
@@ -350,7 +351,7 @@ public class ApiUserPayController extends ApiBaseController{
 
 			price.add(order.getPrice());
 			logList.add(log);
-
+			logIds+=log.getId();
 
 		}
 
@@ -359,13 +360,13 @@ public class ApiUserPayController extends ApiBaseController{
 		switch (platform) {
 			case 1:
 				//支付宝
-				result.setId(logList.get(0).toString()+"_"+ MPaidangPayType.NORMAL_BUY.name());
+				result.setId(logIds+"_"+ MPaidangPayType.NORMAL_BUY.name());
 				result.setMoney(price.toString());
 				result.setBackUrl(PayMethod.urlToUrl(AlipayConfig.notify_url));
 				break;
 			case 2:
 				//微信
-				String wxId = PayMethod.wxPrepayId(price, logList.get(0).getId().toString(), "订单支付",MPaidangPayType.NORMAL_BUY);
+				String wxId = PayMethod.wxPrepayId(price, logIds, "订单支付",MPaidangPayType.NORMAL_BUY);
 				if (StringUtil.isBlank(wxId)){
 					throw new ApiException(MEnumError.SERVER_BUSY_ERROR);
 				}
