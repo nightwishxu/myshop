@@ -118,7 +118,7 @@ public class ApiUserPayController extends ApiBaseController{
 		order.setShipPhone(userAddress.getPhone());
 		order.setShipAddress(userAddress.getArea()+userAddress.getAddress());
 		order.setRefState(0);
-		if(null != couponId){
+		if(null != userCoupon){
 			order.setCouponValue(userCoupon.getFull());
 		}
 		order.setCouponId(couponId);
