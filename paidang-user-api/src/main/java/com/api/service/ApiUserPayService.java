@@ -139,7 +139,7 @@ public class ApiUserPayService {
     public PayResult buyShopCartPay(MobileInfo mobileInfo, Integer platform, String orderIds){
         String logIds="";
         List<PayLog> logList=new ArrayList<>();
-        BigDecimal price=BigDecimal.ZERO;
+        BigDecimal price=new BigDecimal(0);
         String[] orderArray=orderIds.split(",");
         for (String id:orderArray){
             Integer orderId=Integer.valueOf(id);
@@ -156,10 +156,9 @@ public class ApiUserPayService {
             log.setMoney(order.getPrice());
             log.setParam(MPaidangPayType.NORMAL_BUY.name());
             payLogService.insertSelective(log);
-
-            price.add(order.getPrice());
+            price=price.add(order.getPrice());
             logList.add(log);
-            logIds+=log.getId();
+            logIds+=log.getId()+"_";
 
         }
 
