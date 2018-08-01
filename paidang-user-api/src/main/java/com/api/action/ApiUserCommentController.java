@@ -2,17 +2,21 @@ package com.api.action;
 
 import com.api.view.userComment.AppUserComment;
 import com.base.action.CoreController;
+import com.base.api.ApiException;
 import com.base.api.annotation.ApiMethod;
 import com.base.service.SensitivWordsService;
 import com.base.util.BeanUtils;
 import com.item.dao.model.UserComment;
 import com.item.dao.model.UserCommentExample;
 import com.item.service.UserCommentService;
+import com.paidang.dao.model.OrderExample;
+import com.paidang.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,6 +33,9 @@ public class ApiUserCommentController extends CoreController {
     @Autowired
     private SensitivWordsService sensitivWordsService;
 
+    @Autowired
+    private OrderService orderService;
+
     @ApiOperation(value = "新增用户评价", notes = "登陆")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiMethod(isLogin = true)
@@ -37,8 +44,7 @@ public class ApiUserCommentController extends CoreController {
         try {
             BeanUtils.copyProperties(appUserComment,userComment);
         } catch (Exception e) {
-            e.printStackTrace();
-            return msg(-1,"评价失败，请重新评价");
+           throw new ApiException("评价失败，请重新评价");
         }
         if (userComment.getShowName()==null){
             userComment.setShowName(0);
@@ -46,7 +52,15 @@ public class ApiUserCommentController extends CoreController {
         userComment.setStatus(1);
         //敏感词汇过滤
         userComment.setInfo(sensitivWordsService.relpSensitivWords(userComment.getInfo()));
-        return userCommentService.insert(userComment);
+        Integer result=userCommentService.insert(userComment);
+        if (result>0){
+            OrderExample example=new OrderExample();
+            example.createCriteria().andOrgIdEqualTo(userComment.getOrderId());
+            com.paidang.dao.model.Order order=new  com.paidang.dao.model.Order();
+            order.setCommentState(1);
+            orderService.updateByExampleSelective(order,example);
+        }
+        return result;
     }
 
 

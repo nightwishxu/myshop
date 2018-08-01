@@ -2,9 +2,6 @@ package com.paidang.dao.model;
 
 
 
-/**
- *
- */
 public class Order {
 
 	/**
@@ -68,7 +65,7 @@ public class Order {
 	private String video;
 
 	/**
-	 *订单状态-1已取消1待付款2已付款3已发货4确认收货
+	 *订单状态-1已取消1待付款2已付款3已发货4确认收货5已评价
 	 */
 	private Integer state;
 
@@ -173,7 +170,7 @@ public class Order {
 	private String backAddress;
 
 	/**
-	 *退款回寄收件人
+	 *
 	 */
 	private String backUser;
 
@@ -191,6 +188,11 @@ public class Order {
 	 *支付方式 1微信 2支付宝 3线下
 	 */
 	private Integer payType;
+
+	/**
+	 *评论状态0未评价，1已评价
+	 */
+	private Integer commentState;
 
 	public void setId(Integer id) {
 		this.id=id;
@@ -486,6 +488,14 @@ public class Order {
 
 	public Integer getPayType() {
 		return payType;
+	}
+
+	public void setCommentState(Integer commentState) {
+		this.commentState=commentState;
+	}
+
+	public Integer getCommentState() {
+		return commentState;
 	}
 
 }

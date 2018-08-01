@@ -39,6 +39,7 @@
         <result column="back_phone" property="backPhone" jdbcType="VARCHAR" />
         <result column="back_state" property="backState" jdbcType="TINYINT" />
         <result column="pay_type" property="payType" jdbcType="TINYINT" />
+        <result column="comment_state" property="commentState" jdbcType="INTEGER" />
     </resultMap>
 
     <sql id="Example_Where_Clause" >
@@ -102,7 +103,7 @@
     </sql>
 
     <sql id="Base_Column_List" >
-        id,code,user_id,goods_id,goods_name,goods_img,goods_source,org_id,goods_price,goods_cost,price,video,state,ref_state,pay_log_id,is_balance,create_time,modify_time,balance_time,pay_time,ship_user,ship_firm,ship_code,ship_address,ship_phone,coupon_id,coupon_value,coupon_info,is_del,refund_reason,refund_not_verify_reason,back_code,back_address,back_user,back_phone,back_state,pay_type
+        id,code,user_id,goods_id,goods_name,goods_img,goods_source,org_id,goods_price,goods_cost,price,video,state,ref_state,pay_log_id,is_balance,create_time,modify_time,balance_time,pay_time,ship_user,ship_firm,ship_code,ship_address,ship_phone,coupon_id,coupon_value,coupon_info,is_del,refund_reason,refund_not_verify_reason,back_code,back_address,back_user,back_phone,back_state,pay_type,comment_state
     </sql>
 
     <select id="selectByExample" resultMap="BaseResultMap" >
@@ -152,7 +153,7 @@
         coupon_info,is_del,refund_reason,
         refund_not_verify_reason,back_code,back_address,
         back_user,back_phone,back_state,
-        pay_type
+        pay_type,comment_state
         )
         values (#{code,jdbcType=VARCHAR},#{userId,jdbcType=INTEGER},
         #{goodsId,jdbcType=INTEGER},#{goodsName,jdbcType=VARCHAR},#{goodsImg,jdbcType=VARCHAR},
@@ -166,7 +167,7 @@
         #{couponInfo,jdbcType=VARCHAR},#{isDel,jdbcType=TINYINT},#{refundReason,jdbcType=VARCHAR},
         #{refundNotVerifyReason,jdbcType=VARCHAR},#{backCode,jdbcType=VARCHAR},#{backAddress,jdbcType=VARCHAR},
         #{backUser,jdbcType=VARCHAR},#{backPhone,jdbcType=VARCHAR},#{backState,jdbcType=TINYINT},
-        #{payType,jdbcType=TINYINT}
+        #{payType,jdbcType=TINYINT},#{commentState,jdbcType=INTEGER}
         )
     </insert>
 
@@ -281,6 +282,9 @@
             <if test="payType != null" >
                 pay_type,
             </if>
+            <if test="commentState != null" >
+                comment_state,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="code != null" >
@@ -390,6 +394,9 @@
             </if>
             <if test="payType != null" >
                 #{payType,jdbcType=TINYINT},
+            </if>
+            <if test="commentState != null" >
+                #{commentState,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>
@@ -515,6 +522,9 @@
             <if test="record.payType != null" >
                 pay_type = #{record.payType,jdbcType=TINYINT},
             </if>
+            <if test="record.commentState != null" >
+                comment_state = #{record.commentState,jdbcType=INTEGER},
+            </if>
         </set>
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
@@ -559,7 +569,8 @@
         back_user = #{backUser,jdbcType=VARCHAR},
         back_phone = #{backPhone,jdbcType=VARCHAR},
         back_state = #{backState,jdbcType=TINYINT},
-        pay_type = #{payType,jdbcType=TINYINT}
+        pay_type = #{payType,jdbcType=TINYINT},
+        comment_state = #{commentState,jdbcType=INTEGER}
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
         </if>
@@ -676,6 +687,9 @@
             <if test="payType != null" >
                 pay_type = #{payType,jdbcType=TINYINT},
             </if>
+            <if test="commentState != null" >
+                comment_state = #{commentState,jdbcType=INTEGER},
+            </if>
         </set>
         where id = #{id}
     </update>
@@ -717,7 +731,8 @@
         back_user = #{backUser,jdbcType=VARCHAR},
         back_phone = #{backPhone,jdbcType=VARCHAR},
         back_state = #{backState,jdbcType=TINYINT},
-        pay_type = #{payType,jdbcType=TINYINT}
+        pay_type = #{payType,jdbcType=TINYINT},
+        comment_state = #{commentState,jdbcType=INTEGER}
         where id = #{id}
     </update>
 

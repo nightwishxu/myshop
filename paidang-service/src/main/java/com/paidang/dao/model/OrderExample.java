@@ -2484,7 +2484,67 @@ public class OrderExample {
 			return (Criteria) this;
 		}
 
-}
+		public Criteria andCommentStateIsNull() {
+			addCriterion("comment_state is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCommentStateIsNotNull() {
+			addCriterion("comment_state is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andCommentStateEqualTo(Integer value) {
+			addCriterion("comment_state =", value, "commentState");
+			return (Criteria) this;
+		}
+
+		public Criteria andCommentStateNotEqualTo(Integer value) {
+			addCriterion("comment_state <>", value, "commentState");
+			return (Criteria) this;
+		}
+
+		public Criteria andCommentStateGreaterThan(Integer value) {
+			addCriterion("comment_state >", value, "commentState");
+			return (Criteria) this;
+		}
+
+		public Criteria andCommentStateGreaterThanOrEqualTo(Integer value) {
+			addCriterion("comment_state >=", value, "commentState");
+			return (Criteria) this;
+		}
+
+		public Criteria andCommentStateLessThan(Integer value) {
+			addCriterion("comment_state <", value, "commentState");
+			return (Criteria) this;
+		}
+
+		public Criteria andCommentStateLessThanOrEqualTo(Integer value) {
+			addCriterion("comment_state <=", value, "commentState");
+			return (Criteria) this;
+		}
+
+		public Criteria andCommentStateIn(List<Integer> values) {
+			addCriterion("comment_state in", values, "commentState");
+			return (Criteria) this;
+		}
+
+		public Criteria andCommentStateNotIn(List<Integer> values) {
+			addCriterion("comment_state not in", values, "commentState");
+			return (Criteria) this;
+		}
+
+		public Criteria andCommentStateBetween(Integer value1, Integer value2) {
+			addCriterion("comment_state between", value1, value2, "commentState");
+			return (Criteria) this;
+		}
+
+		public Criteria andCommentStateNotBetween(Integer value1, Integer value2) {
+			addCriterion("comment_state not between", value1, value2, "commentState");
+			return (Criteria) this;
+		}
+
+	}
 
 	public static class Criteria extends GeneratedCriteria {
 
@@ -2523,7 +2583,7 @@ public class OrderExample {
 		}
 
 		public boolean isNoValue() {
-		return noValue;
+			return noValue;
 		}
 
 		public boolean isSingleValue() {
