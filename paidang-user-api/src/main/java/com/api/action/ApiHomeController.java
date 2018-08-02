@@ -575,12 +575,16 @@ public class ApiHomeController extends ApiBaseController {
     @ApiMethod(isLogin = true, isPage = true)
     public List<AppMyStoreGoods> myStoreGoodsList(MobileInfo mobileInfo,
                                                   PageLimit pageLimit,
-                                                  @ApiParam(value = "状态 0全部 1待付款 3待收货 4完成(确认收货) 5退款", required = true) Integer orderState) {
+                                                  @ApiParam(value = "状态 0全部 1待付款 3待收货 4完成(确认收货) 5退款", required = true) Integer orderState
+            ,@ApiParam(value = "评价状态0未评价，1已经评价", required = true)Integer commentState) {
+//        MobileInfo mobileInfo=new MobileInfo();
+//        mobileInfo.setUserid(userId);
         Map<String, Object> map = new HashMap<String, Object>();
         List<AppMyStoreGoods> list = new ArrayList<AppMyStoreGoods>();
         map.put("user_id", mobileInfo.getUserid());
         map.put("is_del", 0);
         map.put("orderState", orderState);
+        map.put("commentState", commentState);
         PaginationSupport.byPage(pageLimit.getPage(), pageLimit.getLimit(), false);
         //List<GoodsEx> goodsList = goodsService.selectMyGoodsList(map);
         List<OrderEx> goodsList = orderService.selectMyStoreOrderList(map);
@@ -593,7 +597,7 @@ public class ApiHomeController extends ApiBaseController {
                 //真实状态
                 record.setState(ex.getState());
             }
-
+            record.setCommentState(ex.getCommentState());
             record.setId(ex.getId());
             record.setGoodsId(ex.getGoodsId());
             record.setImages(ex.getGoodsImg());

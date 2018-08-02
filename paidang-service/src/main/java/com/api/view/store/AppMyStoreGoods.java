@@ -56,6 +56,9 @@ public class  AppMyStoreGoods {
     @ApiModelProperty(value = "拒绝理由")
     private String refundNotVerifyReason;
 
+    @ApiModelProperty(value = "评价状态 0未评价1已评价")
+    private Integer commentState;
+
     public String getRefundNotVerifyReason() {
         return refundNotVerifyReason;
     }
@@ -246,5 +249,13 @@ public class  AppMyStoreGoods {
 
     public void setExpressId(Integer expressId) {
         this.expressId = expressId;
+    }
+
+    public Integer getCommentState() {
+        return commentState;
+    }
+
+    public void setCommentState(Integer commentState) {
+        this.commentState = commentState;
     }
 }

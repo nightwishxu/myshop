@@ -104,6 +104,9 @@
     <if test="orderState == 2">
        and A.ref_state = 0
     </if>
+    <if test="commentState !=null and orderState==4 ">
+        and A.comment_state=#{commentState}
+    </if>
     order by A.create_time desc
   </select>
 
