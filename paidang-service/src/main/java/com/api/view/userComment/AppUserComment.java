@@ -28,7 +28,7 @@ public class AppUserComment {
     /**
      *用户名
      */
-    @ApiModelProperty(value="用户名",required = true)
+    @ApiModelProperty(value="用户名")
     private String userName;
 
     /**
@@ -40,13 +40,13 @@ public class AppUserComment {
     /**
      *商品名称
      */
-    @ApiModelProperty(value="商品名称",required = true)
+    @ApiModelProperty(value="商品名称")
     private String goodsName;
 
     /**
      *机构id
      */
-    @ApiModelProperty(value="机构id",required = true)
+    @ApiModelProperty(value="机构id")
     private Integer orgId;
 
     /**
