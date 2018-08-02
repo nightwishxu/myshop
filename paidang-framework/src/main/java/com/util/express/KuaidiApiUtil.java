@@ -20,6 +20,35 @@ public class KuaidiApiUtil {
     private static final String API_CUSTOMER = "5FBA04A8FDB4B9E7998A7ABF7FB851C1";
     private static final String PUSH_URL = "expressPush";
 
+
+    /**
+     * 快递公司map集合
+     */
+    private static Map<String, String> comMap;
+
+    /**
+     * 默认构造函数
+     */
+    static {
+        comMap = new HashMap<String, String>();
+        comMap.put("yuantong", "yuantong");
+        comMap.put("yunda", "yunda");
+        comMap.put("huitongkuaidi", "huitongkuaidi");
+        comMap.put("zhongtong", "zhongtong");
+        comMap.put("shentong", "shentong");
+        comMap.put("ems", "ems");
+        comMap.put("中通速递", "zhongtong");
+        comMap.put("邮政速递", "ems");
+        comMap.put("圆通速递", "yuantong");
+        comMap.put("韵达快运", "yunda");
+        comMap.put("韵达速递", "yunda");
+        comMap.put("汇通快运", "huitongkuaidi");
+        comMap.put("百世汇通", "huitongkuaidi");
+        comMap.put("申通快递", "shentong");
+        comMap.put("顺丰", "shunfeng");
+    }
+
+
     /**
      * 快递查询
      * @param code
@@ -37,7 +66,7 @@ public class KuaidiApiUtil {
 
     public static KuaidiResult query(String code){
         KuaidiParam kuaidiParam = new KuaidiParam();
-        kuaidiParam.setCom(COM.toLowerCase());
+        kuaidiParam.setCom("yunda");
         kuaidiParam.setNum(code);
         String param = JSONUtils.serialize(kuaidiParam);
         Map<String,Object> params = new HashMap<>();
@@ -75,7 +104,7 @@ public class KuaidiApiUtil {
     }
 
     public static void main(String[] args) {
-        KuaidiResult result = query("238202762214");
+        KuaidiResult result = query("3904588208684");
         System.out.println(result.toString());
     }
 }
