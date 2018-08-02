@@ -23,6 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import com.paidang.dao.model.Order;
+
+import java.util.Date;
+import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "/api/userComment", produces = { "application/json;charset=UTF-8" }, method = RequestMethod.POST)
@@ -47,28 +52,45 @@ public class ApiUserCommentController extends CoreController {
 
     @ApiOperation(value = "新增用户评价", notes = "登陆")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @ApiMethod(isLogin = true)
-    public Object add(AppUserComment appUserComment){
+    @ApiMethod(isLogin = false)
+    public Object add(@ApiParam(value = "用户id", required = true)Integer userId,
+                      @ApiParam(value = "评论", required = true)String info,
+                      @ApiParam(value = "商品id", required = true)Integer goodsId,
+                      @ApiParam(value = "机构id", required = true)Integer orgId,
+                      @ApiParam(value = "订单id", required = true)Integer orderId,
+                      @ApiParam(value = "图片", required = false)String img,
+                      @ApiParam(value = "评分1-5", required = true)Integer score
+                      ){
         UserComment userComment=new UserComment();
-        try {
-            BeanUtils.copyProperties(appUserComment,userComment);
-        } catch (Exception e) {
-           throw new ApiException("评价失败，请重新评价");
+
+        OrderExample example=new OrderExample();
+        example.createCriteria().andIdEqualTo(orderId).andStateEqualTo(4).andCommentStateNotEqualTo(1);
+        List<Order> orders=orderService.selectByExample(example);
+        if (orders==null || orders.size()==0){
+            throw new ApiException("该订单不是未评价订单");
         }
+        Date date=new Date();
+        userComment.setInfo(info);
+        userComment.setStatus(1);
+        userComment.setScore(score);
+        userComment.setShowName(0);
+        userComment.setUserId(userId);
+        userComment.setGoodsId(goodsId);
+        userComment.setOrgId(orgId);
+        userComment.setOrderId(orderId);
+        userComment.setImg(img);
+        userComment.setCreateTime(date);
         if (userComment.getShowName()==null){
             userComment.setShowName(0);
         }
-        userComment.setStatus(1);
         //敏感词汇过滤
         if (StringUtils.isNotBlank(userComment.getInfo())){
-            userComment.setInfo(sensitivWordsService.relpSensitivWords(userComment.getInfo()));
+            userComment.setInfo(sensitivWordsService.relpSensitivWords(info));
         }
-        userComment.setGoodsName(goodsService.selectByPrimaryKey(userComment.getGoodsId()).getName());
-        userComment.setUserName(userService.selectByPrimaryKey(userComment.getUserId()).getName());
+        userComment.setGoodsName(goodsService.selectByPrimaryKey(orders.get(0).getGoodsId()).getName());
+        userComment.setUserName(userService.selectByPrimaryKey(userId).getName());
         Integer result=userCommentService.insert(userComment);
         if (result>0){
-            OrderExample example=new OrderExample();
-            example.createCriteria().andOrgIdEqualTo(userComment.getOrderId());
             com.paidang.dao.model.Order order=new  com.paidang.dao.model.Order();
             order.setCommentState(1);
             orderService.updateByExampleSelective(order,example);
@@ -110,6 +132,15 @@ public class ApiUserCommentController extends CoreController {
         criteria.andOrgIdEqualTo(orgId);
         criteria.andStatusEqualTo(1);
         return userCommentService.selectByExample(example);
+    }
+
+    @ApiOperation(value = "test", notes = "登陆")
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    @ApiMethod(isLogin = false)
+    public Object test(@ApiParam(value = "评论", required = true)String info){
+        System.out.println(info);
+        System.out.println("过滤="+sensitivWordsService.relpSensitivWords(info));
+        return sensitivWordsService.relpSensitivWords(info);
     }
 
 }
