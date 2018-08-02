@@ -3,6 +3,7 @@ package com.api.action;
 import com.api.view.userComment.AppUserComment;
 import com.base.action.CoreController;
 import com.base.api.ApiException;
+import com.base.api.MobileInfo;
 import com.base.api.annotation.ApiMethod;
 import com.base.service.SensitivWordsService;
 import com.base.util.BeanUtils;
@@ -52,8 +53,8 @@ public class ApiUserCommentController extends CoreController {
 
     @ApiOperation(value = "新增用户评价", notes = "登陆")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    @ApiMethod(isLogin = false)
-    public Object add(@ApiParam(value = "用户id", required = true)Integer userId,
+    @ApiMethod(isLogin = true)
+    public Object add(MobileInfo mobileInfo,
                       @ApiParam(value = "评论", required = true)String info,
                       @ApiParam(value = "商品id", required = true)Integer goodsId,
                       @ApiParam(value = "机构id", required = true)Integer orgId,
@@ -74,7 +75,7 @@ public class ApiUserCommentController extends CoreController {
         userComment.setStatus(1);
         userComment.setScore(score);
         userComment.setShowName(0);
-        userComment.setUserId(userId);
+        userComment.setUserId(mobileInfo.getUserid());
         userComment.setGoodsId(goodsId);
         userComment.setOrgId(orgId);
         userComment.setOrderId(orderId);
@@ -88,7 +89,7 @@ public class ApiUserCommentController extends CoreController {
             userComment.setInfo(sensitivWordsService.relpSensitivWords(info));
         }
         userComment.setGoodsName(goodsService.selectByPrimaryKey(orders.get(0).getGoodsId()).getName());
-        userComment.setUserName(userService.selectByPrimaryKey(userId).getName());
+        userComment.setUserName(userService.selectByPrimaryKey(mobileInfo.getUserid()).getName());
         Integer result=userCommentService.insert(userComment);
         if (result>0){
             com.paidang.dao.model.Order order=new  com.paidang.dao.model.Order();
