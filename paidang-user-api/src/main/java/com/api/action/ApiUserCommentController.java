@@ -17,6 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +60,9 @@ public class ApiUserCommentController extends CoreController {
         }
         userComment.setStatus(1);
         //敏感词汇过滤
-        userComment.setInfo(sensitivWordsService.relpSensitivWords(userComment.getInfo()));
+        if (StringUtils.isNotBlank(userComment.getInfo())){
+            userComment.setInfo(sensitivWordsService.relpSensitivWords(userComment.getInfo()));
+        }
         userComment.setGoodsName(goodsService.selectByPrimaryKey(userComment.getGoodsId()).getName());
         userComment.setUserName(userService.selectByPrimaryKey(userComment.getUserId()).getName());
         Integer result=userCommentService.insert(userComment);
