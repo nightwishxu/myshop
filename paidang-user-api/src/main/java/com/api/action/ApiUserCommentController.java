@@ -9,7 +9,9 @@ import com.base.util.BeanUtils;
 import com.item.dao.model.UserComment;
 import com.item.dao.model.UserCommentExample;
 import com.item.service.UserCommentService;
+import com.item.service.UserService;
 import com.paidang.dao.model.OrderExample;
+import com.paidang.service.GoodsService;
 import com.paidang.service.OrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
@@ -36,6 +38,12 @@ public class ApiUserCommentController extends CoreController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private GoodsService goodsService;
+
     @ApiOperation(value = "新增用户评价", notes = "登陆")
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiMethod(isLogin = true)
@@ -52,6 +60,8 @@ public class ApiUserCommentController extends CoreController {
         userComment.setStatus(1);
         //敏感词汇过滤
         userComment.setInfo(sensitivWordsService.relpSensitivWords(userComment.getInfo()));
+        userComment.setGoodsName(goodsService.selectByPrimaryKey(userComment.getGoodsId()).getName());
+        userComment.setUserName(userService.selectByPrimaryKey(userComment.getUserId()).getName());
         Integer result=userCommentService.insert(userComment);
         if (result>0){
             OrderExample example=new OrderExample();
