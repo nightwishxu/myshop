@@ -85,7 +85,11 @@ function myRegister() {
 
 }
 
-$(function(){	
+$(function(){
+    if(sys!='org'){
+        $("#register").hide()
+	}
+
 	// 请求上次存储的Cookies
 	var account = sy.getCookie(sys+"_account");
 	
@@ -157,7 +161,7 @@ var loginFun = function() {
 							</div>
 							<div class="mb2"><a class="act-but submit" href="javascript:;" style="color: #FFFFFF" onclick="loginFun()">登录</a></div>
 						</form>
-						<a onclick="myRegister()"  style="color: red;size: A4">没有账号？请先注册</a>
+						<a id="register" onclick="myRegister()"  style="color: red;size: A4">没有账号？请先注册</a>
 					</div>
 				</div>
 			</div>

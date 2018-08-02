@@ -18,6 +18,14 @@
             // $("#type").val(type);
             $("#source").val(source);
         });
+        $.extend($.fn.validatebox.defaults.rules, {
+            equals: {
+                validator: function(value,param){
+                    return value == $(param[0]).val();
+                },
+                message: '输入的密码不匹配!'
+            }
+        });
         var submitForm = function($dialog, $pjq) {
             if ($('form').form('validate')) {
                 var obj=sy.serializeObject($('form'));
@@ -35,6 +43,8 @@
                     if (result.code == 0) {
                        // $grid.datagrid('reload');
                         $dialog.dialog('destroy');
+                        $pjq.messager.e('注册成功');
+
                     } else {
                         $pjq.messager.e('添加失败,'+result.msg);
                     }
@@ -84,6 +94,20 @@
                 <th style="width:100px;">账号：</th>
                 <td>
                     <input class="easyui-textbox" id = "account" name="account"  data-options="required:true" style="width:100%" missingMessage="请输入账号"/>
+                </td>
+            </tr>
+            <tr>
+                <th style="width:100px;">密码：</th>
+                <td>
+                    <input class="easyui-textbox" type="password" id = "password" name="password"  data-options="required:true" style="width:100%" missingMessage="请输入账号"/>
+                </td>
+            </tr>
+
+            <tr>
+                <th style="width:100px;">确认密码：</th>
+                <td>
+                    <input class="easyui-textbox" type="password" id = "confirmPassword" name="confirmPassword"  data-options="required:true" style="width:100%" missingMessage="请输入账号"
+                           validType="equals['#password']"/>
                 </td>
             </tr>
             <tr>
