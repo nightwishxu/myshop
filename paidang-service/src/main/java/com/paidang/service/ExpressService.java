@@ -2,6 +2,7 @@ package com.paidang.service;
 
 import com.base.support.LogKit;
 import com.base.util.DateUtil;
+import com.item.service.MessageService;
 import com.paidang.dao.ExpressMapper;
 import com.paidang.dao.GoodsMapper;
 import com.paidang.dao.OrderMapper;
@@ -34,6 +35,9 @@ public class ExpressService {
 	private UserGoodsService userGoodsService;
 	@Autowired
 	private OrderMapper orderMapper;
+
+	@Autowired
+	private MessageService messageService;
 
 	public int countByExample(ExpressExample example) {
 		return this.expressMapper.countByExample(example);
@@ -107,16 +111,26 @@ public class ExpressService {
 	 * 定时查询
 	 */
 	public void queryAuto(){
+		//TODO 签收或者派送中，推送消息
 		List<Express> expresses = this.selectUnReceive();
 		for (Express express : expresses){
-			KuaidiResult result = KuaidiApiUtil.query(express.getExpressCode());
+			KuaidiResult result = KuaidiApiUtil.query(express.getExpressName(),express.getExpressCode());
 			express.setModifyTime(new Date());
 			if (result != null){
+
 				express.setExpressState(result.getState());
 				express.setExpressData(result.toString());
+				List<Integer> userId=new ArrayList<>();
+				userId.add(express.getSourceId());
 				if (result.getState() == 3){
 					//已签收
 					expressOk(express);
+					messageService.pushToList(userId,"您的快递已经被签收",1,"");
+				}else if (result.getState()==5){
+
+					//订单正在派件中
+					//messageService.pushToSingleAccount();
+					 messageService.pushToList(userId,"您的快递正在派送过程中",1,"");
 				}
 			}
 			//更新快递状态
@@ -179,7 +193,7 @@ public class ExpressService {
 		expressExample.createCriteria().andTypeEqualTo(6);//所有的机构申请取回快递
 		List<Express> expresses = this.selectByExample(expressExample);
 		for (Express express:expresses) {
-			KuaidiResult result = KuaidiApiUtil.query(express.getExpressCode());
+			KuaidiResult result = KuaidiApiUtil.query(express.getExpressName(),express.getExpressCode());
 			if (result != null){
 				express.setExpressState(result.getState());
 				express.setExpressData(result.toString());
@@ -199,7 +213,7 @@ public class ExpressService {
 		expressExample.createCriteria().andTypeIn(new ArrayList<Integer>(){{add(4);add(5);}});//所有寄给当户的快递记录
 		List<Express> expresses = this.selectByExample(expressExample);
 		for (Express express:expresses) {
-			KuaidiResult result = KuaidiApiUtil.query(express.getExpressCode());
+			KuaidiResult result = KuaidiApiUtil.query(express.getExpressName(),express.getExpressCode());
 			if (result != null){
 				express.setExpressState(result.getState());
 				express.setExpressData(result.toString());

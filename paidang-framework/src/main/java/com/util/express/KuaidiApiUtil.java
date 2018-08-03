@@ -7,6 +7,7 @@ import com.base.util.JSONUtils;
 import com.util.express.core.KuaidiParam;
 import com.util.express.core.KuaidiResult;
 import com.util.express.core.MD5;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,9 +65,13 @@ public class KuaidiApiUtil {
 //        return null;
 //    }
 
-    public static KuaidiResult query(String code){
+    public static KuaidiResult query(String com,String code){
         KuaidiParam kuaidiParam = new KuaidiParam();
-        kuaidiParam.setCom("yunda");
+        if (StringUtils.isBlank(com)){
+            kuaidiParam.setCom(COM.toLowerCase());
+        }else {
+            kuaidiParam.setCom(comMap.get(com).toLowerCase());
+        }
         kuaidiParam.setNum(code);
         String param = JSONUtils.serialize(kuaidiParam);
         Map<String,Object> params = new HashMap<>();
@@ -104,7 +109,7 @@ public class KuaidiApiUtil {
     }
 
     public static void main(String[] args) {
-        KuaidiResult result = query("3904588208684");
+        KuaidiResult result = query("yunda","3904588208684");
         System.out.println(result.toString());
     }
 }

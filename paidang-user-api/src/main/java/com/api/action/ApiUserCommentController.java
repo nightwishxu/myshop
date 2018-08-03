@@ -57,7 +57,6 @@ public class ApiUserCommentController extends CoreController {
     public Object add(MobileInfo mobileInfo,
                       @ApiParam(value = "评论", required = true)String info,
                       @ApiParam(value = "商品id", required = true)Integer goodsId,
-                      @ApiParam(value = "机构id", required = true)Integer orgId,
                       @ApiParam(value = "订单id", required = true)Integer orderId,
                       @ApiParam(value = "图片", required = false)String img,
                       @ApiParam(value = "评分1-5", required = true)Integer score
@@ -77,7 +76,7 @@ public class ApiUserCommentController extends CoreController {
         userComment.setShowName(0);
         userComment.setUserId(mobileInfo.getUserid());
         userComment.setGoodsId(goodsId);
-        userComment.setOrgId(orgId);
+        userComment.setOrgId(orders.get(0).getOrgId());
         userComment.setOrderId(orderId);
         userComment.setImg(img);
         userComment.setCreateTime(date);
