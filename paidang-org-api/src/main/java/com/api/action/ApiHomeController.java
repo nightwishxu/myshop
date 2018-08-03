@@ -44,7 +44,18 @@ public class ApiHomeController extends ApiBaseController{
 	@Autowired
 	private UserNotifyService userNotifyService;
 
-	
+
+	/**
+	 *test
+	 */
+	@ApiOperation(value = "test",notes="登陆")
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	@ApiMethod(isLogin = false)
+	public Object test(String info){
+		return "Hello,"+info;
+	}
+
+
 	/**
 	 * 修改个人资料
 	 * */
