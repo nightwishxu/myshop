@@ -105,7 +105,7 @@ public class GoodsController extends CoreController{
 		if (goods.getId() == null){
 			goods.getImg();
 			goods.setIsOnline(1);//1上架0下架
-			goods.setIsVerfiy(2);//1审核中2通过3不通过
+			goods.setIsVerfiy(1);//1审核中2通过3不通过
 			goods.setSource(source);//1平台2机构3服务商
 			goods.setState(1);//(针对竞拍)- 0已失效 1有效；现后台只能上传3万以下物品，且不是拍卖，是直接买卖
 			goods.setSoldOut(0);//已售
