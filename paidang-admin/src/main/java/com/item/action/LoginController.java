@@ -91,18 +91,18 @@ public class LoginController extends CoreController{
 
 
 	@RequestMapping("register")
+	@ResponseBody
 	public String register(HttpSession session, String role, ModelMap model,PawnOrg pawnOrg){
-		System.err.println(MD5Util.MD5Encode("1","UTF-8"));
 		model.put("sysName", "");
 		PawnOrgExample example=new PawnOrgExample();
 		PawnOrgExample.Criteria criteria=example.createCriteria();
 		criteria.andAccountEqualTo(pawnOrg.getAccount());
 		List<PawnOrg> list=pawnOrgService.selectByExample(example);
 		if (list!=null && list.size()>0){
-			return msg(-1,"该账号已被注册请重新注册！");
+			return JSONUtils.serialize(new Ret(1, "该账号已被注册请重新注册！"));
 		}
 		pawnOrg.setCreateTime(new Date());
-		pawnOrg.setPassword(MD5Util.MD5Encode("1","UTF-8"));
+		pawnOrg.setPassword(MD5Util.MD5Encode(pawnOrg.getPassword(),"UTF-8"));
 		if (pawnOrg.getType()==1){
 			pawnOrg.setRoleCode("org_admin");
 		}else if (pawnOrg.getType()==3){
@@ -110,7 +110,7 @@ public class LoginController extends CoreController{
 		}
 
 		pawnOrgService.insert(pawnOrg);
-		return "sys/commonLogin";
+		return msg(0,"注册成功");
 	}
 
 

@@ -45,6 +45,8 @@
                     if (result.code == 0) {
                        // $grid.datagrid('reload');
                         $dialog.dialog('destroy');
+                        $pjq.messager.e('注册成功');
+
                     } else {
                         $pjq.messager.e('添加失败,'+result.msg);
                     }
@@ -108,7 +110,7 @@
                 <th style="width:100px;">确认密码：</th>
                 <td>
                     <input class="easyui-textbox" type="password" id = "confirmPassword" name="confirmPassword"  data-options="required:true" style="width:100%" missingMessage="请输入账号"
-                           validType="equals['#pwd']"/>
+                           validType="equals['#password']"/>
                 </td>
             </tr>
 
