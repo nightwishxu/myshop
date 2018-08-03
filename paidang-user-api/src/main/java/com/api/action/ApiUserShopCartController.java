@@ -88,7 +88,7 @@ public class ApiUserShopCartController extends CoreController {
     @ApiMethod(isLogin = false)
     public Object updateCart(MobileInfo mobileInfo,@ApiParam(value = "商品id", required = true)Integer goodsId,@ApiParam(value = "商品数量", required = true)Integer num) {
         if (num==0){
-            return msg(-1,"数量不能为0");
+            throw new ApiException(-1,"数量不能为0");
         }
         ShopCartExample entity=new ShopCartExample();
         ShopCartExample.Criteria criteria=entity.createCriteria();
@@ -97,7 +97,7 @@ public class ApiUserShopCartController extends CoreController {
         List<ShopCart> list=shopCartService.selectByExample(entity);
         Goods goods=goodsService.selectByPrimaryId(goodsId);
         if (goods==null){
-            return msg(-1,"该商品不存在！");
+            throw new ApiException(-1,"该商品不存在！");
         }
         if(goods.getIsOnline()==0){
             return msg(-1,"该商品已经下架！");
@@ -109,9 +109,9 @@ public class ApiUserShopCartController extends CoreController {
 
             Integer currentNum=shopCart.getNum();
             if (num>0 &&(currentNum+num)>goods.getTotal()){
-                return msg(-1,"该商品库存不足！");
+                throw new ApiException(-1,"该商品库存不足！");
             }else if (num<0 && Math.abs(num)>currentNum){
-                return msg(-1,"购物车中没有足够商品！");
+                throw new ApiException(-1,"购物车中没有足够商品！");
             }
             shopCart.setNum(shopCart.getNum()+num);
             if (shopCart.getNum()==0){
@@ -121,7 +121,7 @@ public class ApiUserShopCartController extends CoreController {
             }
         }else {
             if (num>goods.getTotal()){
-                return msg(-1,"库存不足");
+                throw new ApiException(-1,"库存不足");
             }
             //购物车没有商品新增
             ShopCart shopCart=new ShopCart();
