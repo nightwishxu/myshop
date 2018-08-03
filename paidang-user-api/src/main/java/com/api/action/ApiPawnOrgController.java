@@ -2,6 +2,7 @@ package com.api.action;
 
 import com.base.api.annotation.ApiMethod;
 import com.item.dao.model.UserComment;
+import com.paidang.dao.model.PawnOrg;
 import com.paidang.service.PawnOrgService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description:
  */
 @RestController
-@RequestMapping(value = "/api/pawnOrg", produces = { "application/json;charset=UTF-8" }, method = RequestMethod.POST)
+@RequestMapping(value = "/api/pawnOrg", produces = {"application/json;charset=UTF-8"}, method = RequestMethod.POST)
 @Api(tags = "店铺详情")
 public class ApiPawnOrgController {
 
@@ -28,7 +29,9 @@ public class ApiPawnOrgController {
     @ApiOperation(value = "店铺详情", notes = "不用登陆")
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ApiMethod(isLogin = false)
-    public Object get(@ApiParam(value = "机构id", required = true)Integer orgId){
-      return pawnOrgService.selectByPrimaryKey(orgId);
+    public Object get(@ApiParam(value = "机构id", required = true) Integer orgId) {
+        PawnOrg pawnOrg = pawnOrgService.selectByPrimaryKey(orgId);
+        pawnOrg.setPassword(null);
+        return pawnOrg;
     }
 }
