@@ -23,4 +23,13 @@ public interface GoodsMapperEx {
     List<GoodsEx> selectMyAucList(Map<String, Object> map);
 
     GoodsEx selectByPrimaryId(Integer id);
+
+    /**
+     * 获取销量前三商品
+     * @param orgId
+     * @return
+     */
+    List<GoodsEx> getMostThreeGoods(Integer orgId);
+
+    List<GoodsEx> findList(GoodsEx goodsEx);
 }

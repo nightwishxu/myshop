@@ -93,4 +93,17 @@
          LEFT JOIN p_pawn_cate c on g.cate_code = c.code
         where g.id = #{id}
     </select>
+
+
+    <select id="getMostThreeGoods" resultMap="BaseResultMap">
+        SELECT * from p_goods where org_id=#{orgId} and is_online=1 and is_verfiy=2 order by sold_out desc limit 3
+    </select>
+
+
+    <select id="findList" parameterType="com.paidang.daoEx.model.GoodsEx" resultType="com.paidang.daoEx.model.GoodsEx">
+      SELECT  g.*,g.name as orgName from p_goods g LEFT join p_pawn_org po on g.org_id=po.id where g.name LIKE CONCAT('%','${name}','%')
+      and g.is_online = 1 and g.is_verfiy = 2
+       order by g.create_time desc
+    </select>
+
 </mapper>

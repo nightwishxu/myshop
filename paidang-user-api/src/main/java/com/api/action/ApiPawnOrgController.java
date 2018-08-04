@@ -2,7 +2,10 @@ package com.api.action;
 
 import com.base.api.annotation.ApiMethod;
 import com.item.dao.model.UserComment;
+import com.paidang.dao.model.Goods;
+import com.paidang.dao.model.GoodsExample;
 import com.paidang.dao.model.PawnOrg;
+import com.paidang.service.GoodsService;
 import com.paidang.service.PawnOrgService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +29,9 @@ public class ApiPawnOrgController {
     @Autowired
     private PawnOrgService pawnOrgService;
 
+    @Autowired
+    private GoodsService goodsService;
+
     @ApiOperation(value = "店铺详情", notes = "不用登陆")
     @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ApiMethod(isLogin = false)
@@ -34,4 +40,39 @@ public class ApiPawnOrgController {
         pawnOrg.setPassword(null);
         return pawnOrg;
     }
+
+
+    /**
+     * 店铺销量前三的商品
+     */
+
+    @ApiOperation(value = "店铺销量前3商品", notes = "不用登陆")
+    @RequestMapping(value = "/getMostThreeGoods", method = RequestMethod.POST)
+    @ApiMethod(isLogin = false)
+    public Object getMostThreeGoods(@ApiParam(value = "机构id", required = true) Integer orgId) {
+        return goodsService.getMostThreeGoods(orgId);
+    }
+
+
+    /**
+     * 获取该店铺所有商品的api
+     */
+    @ApiOperation(value = "店铺所有商品", notes = "不用登陆")
+    @RequestMapping(value = "/getGoodsByOrg", method = RequestMethod.POST)
+    @ApiMethod(isLogin = false)
+    public Object getGoodsByOrg(@ApiParam(value = "机构id", required = true) Integer orgId) {
+        GoodsExample goodsExample=new GoodsExample();
+        goodsExample.createCriteria().andOrgIdEqualTo(orgId).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2);
+        goodsExample.setOrderByClause("sold_out desc");
+        return goodsService.selectByExample(goodsExample);
+
+    }
+
+
+
+
+//    GoodsExample goodsExample=new GoodsExample();
+//        goodsExample.createCriteria().andOrgIdEqualTo(orgId).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2);
+//        goodsExample.setOrderByClause("sold_out desc");
+
 }

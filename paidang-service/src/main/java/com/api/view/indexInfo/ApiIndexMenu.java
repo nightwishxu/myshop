@@ -28,6 +28,12 @@ public class ApiIndexMenu {
     @ApiModelProperty(value="商品类型 ")
     private String goodsType;
 
+    @ApiModelProperty(value="机构id ")
+    private Integer orgId;
+
+    @ApiModelProperty(value="机构名称 ")
+    private String orgName;
+
     public Integer getId() {
         return id;
     }
@@ -114,5 +120,21 @@ public class ApiIndexMenu {
 
     public void setGoodsType(String goodsType) {
         this.goodsType = goodsType;
+    }
+
+    public Integer getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(Integer orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
     }
 }

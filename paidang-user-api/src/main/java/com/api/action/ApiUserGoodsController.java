@@ -81,6 +81,12 @@ public class ApiUserGoodsController extends ApiBaseController {
     @Autowired
     private AdService adService;
 
+    @Autowired
+    private PawnOrgService pawnOrgService;
+
+    @Autowired
+    private VideoOnlineService videoOnlineService;
+
     public enum MGoodsCateList {
         SCPZB("1","奢侈品珠宝"),
         sb("2","手表"),
@@ -760,12 +766,15 @@ public class ApiUserGoodsController extends ApiBaseController {
     public List<ApiIndexMenu> searchIndexMenu(MobileInfo mobileInfo,
                                               @ApiParam(value="name",required = true)String name){
         List<ApiIndexMenu> ret = new ArrayList<ApiIndexMenu>();
-        GoodsExample example = new GoodsExample();
-        example.createCriteria().andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andNameLike("%"+name+"%");
-        example.setOrderByClause("create_time desc");
-        List<Goods> goodsList = goodsService.selectByExample(example);
+//        GoodsExample example = new GoodsExample();
+//        example.createCriteria().andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andNameLike("%"+name+"%");
+//        example.setOrderByClause("create_time desc");
+//        List<Goods> goodsList = goodsService.selectByExample(example);
+        GoodsEx goodsEx=new GoodsEx();
+        goodsEx.setName(name);
+        List<GoodsEx> goodsList=goodsService.findList(goodsEx);
         Map<String, Object> map = new HashMap<String, Object>();
-        for(Goods ex : goodsList){
+        for(GoodsEx ex : goodsList){
             ApiIndexMenu c = new ApiIndexMenu();
             /*if(ex.getPrice().compareTo(new BigDecimal(30000)) == -1){
                 //如果他的价格不满三万则是最新绝当商品
@@ -812,6 +821,8 @@ public class ApiUserGoodsController extends ApiBaseController {
             c.setTitle(ex.getName());
             c.setPrice(ex.getPrice()+"");
             c.setState(2);
+            c.setOrgId(ex.getOrgId());
+            c.setOrgName(ex.getOrgName());
             ret.add(c);
         }
         return ret;
@@ -833,5 +844,26 @@ public class ApiUserGoodsController extends ApiBaseController {
             ret.add(c);
         }
         return ret;
+    }
+
+
+    @ApiOperation(value="店铺搜索 ", notes = "不登录")
+    @RequestMapping("/searchIndexOrg")
+    @ApiMethod(isPage = false, isLogin = false)
+    public Object searchIndexOrg(@ApiParam(value="name",required = true)String name){
+        PawnOrgExample pawnOrgExample=new PawnOrgExample();
+        pawnOrgExample.createCriteria().andNameLike("%"+name+"%");
+        pawnOrgExample.setOrderByClause("create_time desc");
+        return pawnOrgService.selectByExample(pawnOrgExample);
+    }
+
+    @ApiOperation(value="视频搜索 ", notes = "不登录")
+    @RequestMapping("/searchIndexVideo")
+    @ApiMethod(isPage = false, isLogin = false)
+    public Object searchIndexVideo(@ApiParam(value="name",required = true)String name){
+        VideoOnlineExample example=new VideoOnlineExample();
+        example.createCriteria().andTitleLike("%"+name+"%");
+        example.setOrderByClause("create_time desc");
+        return videoOnlineService.selectByExample(example);
     }
 }

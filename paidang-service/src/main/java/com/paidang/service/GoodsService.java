@@ -99,4 +99,12 @@ public class GoodsService {
 	public int updateCreatTime(Goods record) {
 		return this.goodsMapperEx.updateCreatTime(record);
 	}
+
+	public List<GoodsEx> getMostThreeGoods(Integer orgId){
+		return goodsMapperEx.getMostThreeGoods(orgId);
+	}
+
+	public List<GoodsEx> findList(GoodsEx goodsEx){
+		return goodsMapperEx.findList(goodsEx);
+	}
 }
