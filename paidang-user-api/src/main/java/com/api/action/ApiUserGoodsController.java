@@ -852,8 +852,8 @@ public class ApiUserGoodsController extends ApiBaseController {
     @ApiMethod(isPage = false, isLogin = false)
     public Object searchIndexOrg(@ApiParam(value="name",required = true)String name){
         PawnOrgExample pawnOrgExample=new PawnOrgExample();
-        pawnOrgExample.createCriteria().andNameLike("%"+name+"%");
-        pawnOrgExample.setOrderByClause("create_time desc");
+        pawnOrgExample.createCriteria().andNameLike("%"+name+"%").andStateEqualTo(1);
+       // pawnOrgExample.setOrderByClause("create_time desc");
         return pawnOrgService.selectByExample(pawnOrgExample);
     }
 
