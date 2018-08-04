@@ -9,7 +9,10 @@ import com.base.pay.PayMethod;
 import com.base.pay.ali.AlipayConfig;
 import com.base.util.StringUtil;
 import com.item.dao.model.PayLog;
+import com.item.dao.model.ShopCart;
+import com.item.dao.model.ShopCartExample;
 import com.item.service.PayLogService;
+import com.item.service.ShopCartService;
 import com.paidang.dao.model.*;
 import com.paidang.service.GoodsService;
 import com.paidang.service.OrderService;
@@ -45,6 +48,9 @@ public class ApiUserPayService {
     private UserAddressService userAddressService;
     @Autowired
     private UserCouponService userCouponService;
+
+    @Autowired
+    private ShopCartService shopCartService;
 
     @Transactional(readOnly = false,rollbackFor = Exception.class)
     public List<PayResult> createShopCartOrder(MobileInfo mobileInfo, String data, Integer addressId){
@@ -130,6 +136,19 @@ public class ApiUserPayService {
 
             payResult.setId(order.getId().toString());
             results.add(payResult);
+            ShopCartExample example=new ShopCartExample();
+            example.createCriteria().andGoodsIdEqualTo(goodsId).andUserIdEqualTo(mobileInfo.getUserid());
+            List<ShopCart> shopCarts=shopCartService.selectByExample(example);
+            if (shopCarts==null || shopCarts.size()==0){
+                throw new ApiException(-1,"购物车商品不存在");
+            }
+            ShopCart cart=shopCarts.get(0);
+            if(cart.getNum()==1){
+                shopCartService.deleteByPrimaryKey(shopCarts.get(0).getId());
+            }else if (cart.getNum()>1){
+                cart.setNum(cart.getNum()-1);
+                shopCartService.updateByPrimaryKeySelective(cart);
+            }
 
         }
         return results;
