@@ -8,6 +8,13 @@
 
     </style>
     <script type="text/javascript">
+        $.messager.e = function(){
+            if(arguments.length == 1){
+                layer.msg(arguments[0],{icon: 11});
+            }else{
+                layer.msg(arguments[1],{icon: 11});
+            }
+        }
         var id = "${id}";
         <%--var type = "${type}";--%>
         var source = "${source}";
@@ -39,18 +46,24 @@
                 obj.img = $('#img').getFileId();
                 obj.businessLicense=$('#businessLicense').getFileId();
 
+
+                layer.msg('注册成功',{icon: 11},function () {
+                    $dialog.dialog('destroy')
+                });
                 $.post(url, obj, function(result) {
                     if (result.code == 0) {
-                       // $grid.datagrid('reload');
-                        $dialog.dialog('destroy');
-                        $pjq.messager.e('注册成功');
-
+                        layer.msg('注册成功',{icon: 11},function () {
+                            $dialog.dialog('destroy')
+                        });
                     } else {
-                        $pjq.messager.e('添加失败,'+result.msg);
+                        layer.msg('添加失败,'+result.msg,{icon: 11});
                     }
                 }, 'json');
             }
         };
+        function des($dialog) {
+            $dialog.dialog('destroy')
+        }
         $(function() {
             editor = new HtmlEditor('#info');
 //            $('#cateCode').combobox({

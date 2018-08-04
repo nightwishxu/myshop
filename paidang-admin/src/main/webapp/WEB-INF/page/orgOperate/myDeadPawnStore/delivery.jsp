@@ -38,6 +38,23 @@
     <input id="id" name="id" type="hidden" />
     <div style="padding:15px;font-size: 12px">
         <table style="table-layout:fixed;" border="0" cellspacing="0" class="formtable">
+
+            <th style="width:100px;">快递公司：</th>
+            <td>
+                <%--<input id = "cateCode" name="cateCode"  data-options="required:true" style="width:100%" missingMessage="请选择商品分类"/>--%>
+                <select id="shipFirm" class="easyui-combobox" name="shipFirm" style="width:100%;" data-options="editable:false">
+                    <option value="顺丰快递">顺丰快递</option>
+                    <option value="中通速递">中通速递</option>
+                    <option value="邮政速递">邮政速递</option>
+                    <option value="圆通速递">圆通速递</option>
+                    <option value="韵达快运">韵达快运</option>
+                    <option value="韵达速递">韵达速递</option>
+                    <option value="汇通快运">汇通快运</option>
+                    <option value="百世汇通">百世汇通</option>
+                    <option value="申通快递">申通快递</option>
+                </select>
+            </td>
+
             <tr>
                 <th style="width:100px;">快递单号：</th>
                 <td>

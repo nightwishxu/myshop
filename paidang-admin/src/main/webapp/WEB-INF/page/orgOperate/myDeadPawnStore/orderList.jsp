@@ -92,7 +92,7 @@
             grid = $('#grid').datagrid({
                 url : sy.contextPath + '/order/orgOrderList?goodsSource='+goodsSource,
                 columns : [ [ {
-                    width : $(this).width() * 0.05,
+                    width : $(this).width() * 0.08,
                     title : '订单号',
                     field : 'code',
                     align : 'center'
@@ -108,12 +108,17 @@
                     align : 'center',
                 },  {
                     width : $(this).width() * 0.05,
+                    title : '快递公司',
+                    field : 'shipFirm',
+                    align : 'center'
+                }, {
+                    width : $(this).width() * 0.05,
                     title : '快递单号',
                     field : 'shipCode',
                     align : 'center'
                 },
                     {
-                    width : $(this).width() * 0.05,
+                    width : $(this).width() * 0.02,
                     title : '收件人姓名',
                     field : 'shipUser',
                     align : 'center'

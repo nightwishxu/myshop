@@ -47,6 +47,7 @@ public class KuaidiApiUtil {
         comMap.put("百世汇通", "huitongkuaidi");
         comMap.put("申通快递", "shentong");
         comMap.put("顺丰", "shunfeng");
+        comMap.put("顺丰快递", "shunfeng");
     }
 
 
