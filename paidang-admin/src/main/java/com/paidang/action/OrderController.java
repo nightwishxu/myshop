@@ -134,7 +134,7 @@ public class OrderController extends CoreController{
 		express.setFid(c.getId());
 		//express.setType(4);
 		express.setType(3);
-		express.setExpressName(MExpressAddress.xfAddress);
+		express.setExpressName(order.getShipFirm());
 		express.setExpressCode(c.getShipCode());
 		express.setPostName(org.getName());
 		express.setPostPhone(org.getPhone());
