@@ -1,17 +1,15 @@
 package com.paidang.service;
 
-import com.base.support.LogKit;
 import com.base.util.DateUtil;
 import com.item.service.MessageService;
 import com.paidang.dao.ExpressMapper;
-import com.paidang.dao.GoodsMapper;
 import com.paidang.dao.OrderMapper;
 import com.paidang.dao.UserGoodsMapper;
 import com.paidang.dao.model.*;
 import com.paidang.daoEx.ExpressMapperEx;
 import com.paidang.daoEx.model.ExpressEx;
 import com.util.PaidangConst;
-import com.util.express.KuaidiApiUtil;
+import com.util.KuaidiApiUtil;
 import com.util.express.core.KuaidiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

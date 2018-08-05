@@ -1,7 +1,12 @@
 package com.base.service;
 
+import com.alibaba.fastjson.JSONObject;
+import com.item.dao.model.Code;
+import com.item.dao.model.CodeExample;
+import com.item.service.CodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,8 +15,7 @@ import javax.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 敏感词库 初始化缓存
@@ -27,6 +31,12 @@ public class SensitivWordsService {
     private static final String PATH = "/static/templates/SensitivWords.txt"; // 词库路径
     
     private static Set<String> keySet = new HashSet<String>();
+
+    public  static List<String> expressList;
+    public  static Map<String, String> expressMap;
+
+    @Autowired
+    CodeService codeService;
     
     /**
      * 加载敏感词
@@ -38,12 +48,28 @@ public class SensitivWordsService {
         logger.info("[内存数据]-开始加载敏感词数据任务");
         try {
             readSensitiveWordFile();
+            loadData();
             logger.info("[内存数据]-敏感词数据任务加载完成");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         
+    }
+
+    public void loadData() {
+        expressList=new ArrayList<>();
+        expressMap=new HashMap<>();
+        CodeExample example = new CodeExample();
+        example.createCriteria().andCodeEqualTo("express");
+        List<Code> codes = codeService.selectByExample(example);
+        Code code = codes.get(0);
+        Map<String, String> map = (Map) JSONObject.parse(code.getValue());
+        expressMap.putAll(map);
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            expressList.add(entry.getKey());
+        }
+
     }
     
     private void readSensitiveWordFile() throws Exception {
