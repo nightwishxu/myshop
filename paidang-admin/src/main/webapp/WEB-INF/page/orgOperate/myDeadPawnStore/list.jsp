@@ -132,7 +132,13 @@
                     title : '出售价格',
                     field : 'price',
                     align : 'center',
-                }, /*{
+                }, {
+                    width : $(this).width() * 0.15,
+                    title : '审核信息',
+                    field : 'refuseInfo',
+                    align : 'center',
+                }
+                , /*{
                     width : $(this).width() * 0.15,
                     title : '出售',
                     field : 'soldPrice',

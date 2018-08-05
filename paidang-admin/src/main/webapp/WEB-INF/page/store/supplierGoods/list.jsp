@@ -13,7 +13,7 @@
                 title : '添加商品',
                 width : 800,
                 height : 600,
-                url : sy.contextPath + '/go?path=store/pawnGoods/edit&type='+type+'&source='+source,
+                url : sy.contextPath + '/go?path=store/supplierGoods/edit&type='+type+'&source='+source,
                 buttons : [ {
                     text : '确定',
                     handler : function() {
@@ -102,7 +102,7 @@
         $(function() {
             grid = $('#grid').datagrid({
                 //url : sy.contextPath + '/goods/serviceList?type='+type+'&source='+source,
-                url : sy.contextPath + '/goods/serviceAdminList?type='+2+'&source='+2,
+                url : sy.contextPath + '/goods/serviceAdminList?type='+2+'&source='+4,
                 columns : [ [   {
                     width : $(this).width() * 0.15,
                     title : '类别',

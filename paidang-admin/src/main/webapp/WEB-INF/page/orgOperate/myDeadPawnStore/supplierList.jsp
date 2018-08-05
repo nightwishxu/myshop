@@ -6,14 +6,17 @@
     <script type="text/javascript">
         var grid;
         var index;
-        var type = "${type}";
-        var source = "${source}"
+//     var type = ${type}
+//     var type = 1;
+        var type = 2;
+//      var source = "${source}"
+        var source = 4;
         var addFun = function() {
             var dialog = parent.sy.modalDialog({
                 title : '添加商品',
                 width : 800,
                 height : 600,
-                url : sy.contextPath + '/go?path=store/pawnGoods/edit&type='+type+'&source='+source,
+                url : sy.contextPath + '/go?path=orgOperate/myDeadPawnStore/edit&type='+type+'&source='+source,
                 buttons : [ {
                     text : '确定',
                     handler : function() {
@@ -33,7 +36,7 @@
                 title : '修改',
                 width : 800,
                 height : 600,
-                url : sy.contextPath + '/go?path=store/pawnGoods/edit&id=' + rows[0].id,
+                url : sy.contextPath + '/go?path=orgOperate/myDeadPawnStore/supplierEdit&id=' + rows[0].id,
                 buttons : [ {
                     text : '确定',
                     handler : function() {
@@ -68,25 +71,6 @@
             });
         };
 
-        var creditsFun = function() {
-            var rows = grid.datagrid('getSelections');
-            if (rows.length != 1) {
-                parent.$.messager.w('请选择一条记录进行查看！');
-                return;
-            }
-
-            var url = sy.contextPath + '/go.do?path=serviceOrg/serviceOrgEdit&id=' + rows[0].id;
-            var dialog = parent.sy.modalDialog({
-                title : '添加机构',
-                width:sy.width-150,
-                height:sy.height-100,
-                //width : 800,
-                //	height : 620,
-                url : url
-            });
-            index = dialog.selector.substring(12);
-            console.log(dialog.selector.substring(12));
-        };
 
         function resize(width,height){
             if (index){
@@ -101,14 +85,13 @@
 
         $(function() {
             grid = $('#grid').datagrid({
-                //url : sy.contextPath + '/goods/serviceList?type='+type+'&source='+source,
-                url : sy.contextPath + '/goods/serviceAdminList?type='+2+'&source='+2,
-                columns : [ [   {
-                    width : $(this).width() * 0.15,
+                url : sy.contextPath + '/goods/serviceList?type='+type+'&source='+source,
+                columns : [ [    {
+                    width : $(this).width() * 0.08,
                     title : '类别',
                     field : 'cateCode',
                     align : 'center',
-                    formatter : function (v,r,i) {
+                    formatter : function(v,r,i){
                         if(v == 1){
                             return '钟表';
                         }else if(v == 2){
@@ -147,9 +130,15 @@
                 }, {
                     width : $(this).width() * 0.15,
                     title : '出售价格',
-                    field : 'cost',
+                    field : 'price',
                     align : 'center',
                 }, {
+                    width : $(this).width() * 0.15,
+                    title : '审核信息',
+                    field : 'refuseInfo',
+                    align : 'center',
+                }
+                , /*{
                     width : $(this).width() * 0.15,
                     title : '出售',
                     field : 'soldPrice',
@@ -172,11 +161,6 @@
                     title : '状态',
                     field : 'estate',
                     align : 'center',
-                }, {
-                    width : $(this).width() * 0.15,
-                    title : '审核信息',
-                    field : 'refuseInfo',
-                    align : 'center',
                 },{
                     width : $(this).width() * 0.15,
                     title : '操作',
@@ -193,96 +177,96 @@
                             }
                         }
                     }
-                },{
-                    width : $(this).width() * 0.2,
-                    title : '是否设置未推荐',
-                    field : 'isSuggest',
+                },*/{
+                    width : $(this).width() * 0.15,
+                    title : '是否售出',
+                    field : 'soldOut',
                     align : 'center',
-                    formatter : function(v,r,i){
-                        if(v == 0){
-                            return '<a href="javascript:void(0);" onclick="setIndex(\''+r.id+'\',1);" class="button button-warning" title="设置为首页推荐">设置为首页推荐</a>';
-                        }else if(v == 1){
-                            return '<a href="javascript:void(0);" onclick="setIndex(\''+r.id+'\',0);" class="button button-default" title="取消首页推荐">取消首页推荐</a>';
+                    formatter : function (v,r,i){
+                        if(r.soldOut && r.soldOut == 1){
+                            return '<a href="javascript:void(0);"  title="已售出">已售出</a>';
+                        }else {
+                            return '<a href="javascript:void(0);"  title="未售出">未售出</a>';
                         }
                     }
-                },{
+                }, {
                     width: $(this).width() * 0.15,
                     title: '查看详情',
                     field: 'check',
                     align: 'center',
                     formatter : function (v,r,i){
                         if(r.id){
-                            return '<a href="javascript:void(0);" onclick="check(\''+r.id+'\');" title="点击查看详情">详情</a>';
+                            return '<a href="javascript:void(0);" class="button button-default" onclick="check(\''+r.id+'\');" title="点击查看详情">详情</a>';
                         }
                     }
-                }
+                }/*, {
+                        width: $(this).width() * 0.15,
+                        title: '平台利息',
+                        field: 'platformState',
+                        align: 'center',
+                        formatter : function (v,r,i){
+                            if(r.platformState == 0){
+                                return '<a href="javascript:void(0);" class="button button-warning" onclick="platformInterest(\''+r.id+'\');" title="缴纳平台利息">缴纳平台利息</a>';
+                            }else if(r.platformState == 1)
+                                return '<a href="javascript:void(0);" class="button button-default" title="已缴纳">已缴纳</a>';
+                        }
+                    }*/
                 ] ]
             });
         });
 
-            function changeS(id,v) {
-                var url = sy.contextPath + '/goods/changeState?v='+v+'&id='+id;
-                if(v==2){
-                    //审核不通过需要填写原因
-                    var dialog = parent.sy.modalDialog({
-                        title : '审核不通过原因',
-                        width : 600,
-                        height : 150,
-                        url : sy.contextPath + '/go?path=store/pawnGoods/refuse&v='+v+'&id='+id,
-                        buttons : [ {
-                            text : '确定',
-                            handler : function() {
-                                dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
-                            }
-                        } ]
-                    });
-                }else {
-                    $.post(url, function() {
-                        grid.datagrid('reload');
-                    }, 'json');
-                }
+        function platformInterest(id){
+            if(id === "" || id ==null){
+                alert("id只能是数字");
+                return;
+            }
+            if(!isNaN(id)){
+               /* $.post(sy.contextPath + '/goods/findById',{id:id}, function(result) {
+                    console.log(result);
+                }, 'json');*/
+            }else{
+                alert("id只能是数字");
+                return;
+            }
+        }
 
-            };
-            function SoldOut(id) {
-                var url = sy.contextPath + '/goods/soldOut?&id='+id;
-                $.post(url, function() {
-                    grid.datagrid('reload');
-                }, 'json');
-            };
+        function changeS(id,v) {
+            var url = sy.contextPath + '/goods/changeState?v='+v+'&id='+id;
+            $.post(url, function() {
+                grid.datagrid('reload');
+            }, 'json');
+        };
+        function SoldOut(id) {
+            var url = sy.contextPath + '/goods/soldOut?&id='+id;
+            $.post(url, function() {
+                grid.datagrid('reload');
+            }, 'json');
+        };
 
 
-//            $('#type').combobox({
-//                onSelect: function(rec){
-//                    grid.datagrid('load',sy.serializeObject($('#searchForm')));
-//                }
-//            });
+        //            $('#type').combobox({
+        //                onSelect: function(rec){
+        //                    grid.datagrid('load',sy.serializeObject($('#searchForm')));
+        //                }
+        //            });
 
         function check(id) {
             var dialog = parent.sy.modalDialog({
                 title : '查看详情',
                 width : 800,
                 height : 600,
-                url : sy.contextPath + '/go.do?path=store/pawnGoods/detils&id='+id,
-                buttons : [ {
+                url : sy.contextPath + '/go?path=orgOperate/myDeadPawnStore/detail&id='+id,
+               /* buttons : [ {
                     text : '确定',
                     handler : function() {
                         dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
                     }
-                } ]
+                } ]*/
             });
         };
 
         function SaveData(data) {
             var url = sy.contextPath + '/serviceOrg/update';
-            $.post(url, data, function() {
-                grid.datagrid('reload');
-            }, 'json');
-        }
-
-        function setIndex(id,isSuggest){
-            var data = {id : id,
-                isSuggest : isSuggest};
-            var url = sy.contextPath + '/goods/save';
             $.post(url, data, function() {
                 grid.datagrid('reload');
             }, 'json');
@@ -298,11 +282,11 @@
             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fa-search-minus'" onclick="$('#searchForm input').val('');grid.datagrid('load',{});">重置过滤</a>
         </div>
     </form>
-    <%--<div class="tbbutton">
+    <div class="tbbutton">
         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fa-plus-circle',plain:true" onclick="addFun();">添加</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fa-pencil',plain:true" onclick="editFun();">修改</a>
         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fa-trash',plain:true" onclick="delFun();">删除</a>
-    </div>--%>
+    </div>
 </div>
 <table id="grid" data-options="fit:true,border:false"></table>
 </body>
