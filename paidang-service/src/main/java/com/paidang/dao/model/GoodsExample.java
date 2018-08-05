@@ -1974,6 +1974,76 @@ public class GoodsExample {
 			return (Criteria) this;
 		}
 
+		public Criteria andRefuseInfoIsNull() {
+			addCriterion("refuse_info is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoIsNotNull() {
+			addCriterion("refuse_info is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoEqualTo(String value) {
+			addCriterion("refuse_info =", value, "refuseInfo");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoNotEqualTo(String value) {
+			addCriterion("refuse_info <>", value, "refuseInfo");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoGreaterThan(String value) {
+			addCriterion("refuse_info >", value, "refuseInfo");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoGreaterThanOrEqualTo(String value) {
+			addCriterion("refuse_info >=", value, "refuseInfo");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoLessThan(String value) {
+			addCriterion("refuse_info <", value, "refuseInfo");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoLessThanOrEqualTo(String value) {
+			addCriterion("refuse_info <=", value, "refuseInfo");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoLike(String value) {
+			addCriterion("refuse_info like", value, "refuseInfo");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoNotLike(String value) {
+			addCriterion("refuse_info not like", value, "refuseInfo");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoIn(List<String> values) {
+			addCriterion("refuse_info in", values, "refuseInfo");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoNotIn(List<String> values) {
+			addCriterion("refuse_info not in", values, "refuseInfo");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoBetween(String value1, String value2) {
+			addCriterion("refuse_info between", value1, value2, "refuseInfo");
+			return (Criteria) this;
+		}
+
+		public Criteria andRefuseInfoNotBetween(String value1, String value2) {
+			addCriterion("refuse_info not between", value1, value2, "refuseInfo");
+			return (Criteria) this;
+		}
+
 	}
 
 	public static class Criteria extends GeneratedCriteria {

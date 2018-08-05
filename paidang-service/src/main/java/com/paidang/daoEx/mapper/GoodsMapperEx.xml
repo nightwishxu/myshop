@@ -56,7 +56,7 @@
 
     <update id="changeStateByPrimaryKey" >
         update p_goods
-        set is_verfiy = #{isVerfiy,jdbcType=TINYINT} + 1
+        set is_verfiy = #{isVerfiy,jdbcType=TINYINT} + 1,refuse_info=#{refuseInfo}
         where id = #{id}
     </update>
 
@@ -101,7 +101,13 @@
 
 
     <select id="findList" parameterType="com.paidang.daoEx.model.GoodsEx" resultType="com.paidang.daoEx.model.GoodsEx">
-      SELECT  g.*,g.name as orgName from p_goods g LEFT join p_pawn_org po on g.org_id=po.id where g.name LIKE CONCAT('%','${name}','%')
+      SELECT  g.*,po.name as orgName,po.introduction as orgIntroduction from p_goods g LEFT join p_pawn_org po on g.org_id=po.id where 1=1
+      <if test="name!=null and name!=''">
+          and g.name LIKE CONCAT('%','${name}','%')
+      </if>
+        <if test="id!=null ">
+            and g.id=#{id}
+        </if>
       and g.is_online = 1 and g.is_verfiy = 2
        order by g.create_time desc
     </select>

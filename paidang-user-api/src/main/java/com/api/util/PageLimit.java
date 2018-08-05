@@ -25,5 +25,5 @@ public class PageLimit {
 	public void setLimit(Integer limit) {
 		this.limit = limit;
 	}
-	
+
 }

@@ -27,6 +27,7 @@ import com.item.service.AdService;
 import com.item.service.FocusService;
 import com.paidang.dao.model.*;
 import com.paidang.daoEx.model.GoodsAuctionEx;
+import com.paidang.daoEx.model.GoodsEx;
 import com.paidang.daoEx.model.VideoOnlineEx;
 import com.paidang.service.*;
 import com.util.PaidangConst;
@@ -248,7 +249,10 @@ public class ApiStoreController extends ApiBaseController {
     @ApiMethod(isLogin = false)
     public AppStoreGoodsDetail storeGoodsDetail(@ApiParam(value="id",required = true) Integer id){
         AppStoreGoodsDetail appStoreGoodsDetail = new AppStoreGoodsDetail();
-        Goods ex = goodsService.selectByPrimaryKey(id);
+        GoodsEx goodsEx=new GoodsEx();
+        goodsEx.setId(id);
+        List<GoodsEx>  exList= goodsService.findList(goodsEx);
+        GoodsEx ex=exList.get(0);
         appStoreGoodsDetail.setId(ex.getId());
         appStoreGoodsDetail.setImages(ex.getImgs());
         appStoreGoodsDetail.setTitle(ex.getName());
@@ -256,6 +260,9 @@ public class ApiStoreController extends ApiBaseController {
         appStoreGoodsDetail.setAuthPrice(ex.getCost()+"");
         appStoreGoodsDetail.setDeclare(ex.getInfo());
         appStoreGoodsDetail.setGoodsDescription(getPage(id,1));
+        appStoreGoodsDetail.setOrgId(ex.getOrgId());
+        appStoreGoodsDetail.setOrgName(ex.getOrgName());
+        appStoreGoodsDetail.setOrgIntroduction(ex.getOrgIntroduction());
         return appStoreGoodsDetail;
     }
 

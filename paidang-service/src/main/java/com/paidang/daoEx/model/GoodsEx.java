@@ -27,6 +27,8 @@ public class GoodsEx extends Goods {
     private String myPrice;
     //机构名称
     private String orgName;
+    //机构简介
+    private String orgIntroduction;
 
     public BigDecimal getSoldPrice() {
         return soldPrice;
@@ -98,5 +100,13 @@ public class GoodsEx extends Goods {
 
     public void setOrgName(String orgName) {
         this.orgName = orgName;
+    }
+
+    public String getOrgIntroduction() {
+        return orgIntroduction;
+    }
+
+    public void setOrgIntroduction(String orgIntroduction) {
+        this.orgIntroduction = orgIntroduction;
     }
 }

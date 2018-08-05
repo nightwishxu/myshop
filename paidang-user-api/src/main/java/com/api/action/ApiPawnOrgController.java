@@ -1,6 +1,8 @@
 package com.api.action;
 
+import com.api.util.PageLimit;
 import com.base.api.annotation.ApiMethod;
+import com.base.dialect.PaginationSupport;
 import com.item.dao.model.UserComment;
 import com.paidang.dao.model.Goods;
 import com.paidang.dao.model.GoodsExample;
@@ -60,19 +62,20 @@ public class ApiPawnOrgController {
     @ApiOperation(value = "店铺所有商品", notes = "不用登陆")
     @RequestMapping(value = "/getGoodsByOrg", method = RequestMethod.POST)
     @ApiMethod(isLogin = false)
-    public Object getGoodsByOrg(@ApiParam(value = "机构id", required = true) Integer orgId) {
+    public Object getGoodsByOrg(@ApiParam(value = "机构id", required = true) Integer orgId, PageLimit pageLimit,@ApiParam(value = "搜索类型0全部1新品", required = false)Integer type) {
+        if (type==null){
+            type=0;
+        }
+        PaginationSupport.byPage(pageLimit.getPage(), pageLimit.getLimit(),false);
         GoodsExample goodsExample=new GoodsExample();
         goodsExample.createCriteria().andOrgIdEqualTo(orgId).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2);
-        goodsExample.setOrderByClause("sold_out desc");
+        if (type==1){
+            goodsExample.setOrderByClause("create_time desc");
+        } else {
+            goodsExample.setOrderByClause("sold_out desc");
+        }
         return goodsService.selectByExample(goodsExample);
 
     }
-
-
-
-
-//    GoodsExample goodsExample=new GoodsExample();
-//        goodsExample.createCriteria().andOrgIdEqualTo(orgId).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2);
-//        goodsExample.setOrderByClause("sold_out desc");
 
 }

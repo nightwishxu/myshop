@@ -217,9 +217,27 @@
 
             function changeS(id,v) {
                 var url = sy.contextPath + '/goods/changeState?v='+v+'&id='+id;
-                $.post(url, function() {
-                    grid.datagrid('reload');
-                }, 'json');
+                console.debug(url)
+                if(v==2){
+                    //审核不通过需要填写原因
+                    var dialog = parent.sy.modalDialog({
+                        title : '审核不通过原因',
+                        width : 600,
+                        height : 150,
+                        url : sy.contextPath + '/go?path=store/pawnGoods/refuse&v='+v+'&id='+id,
+                        buttons : [ {
+                            text : '确定',
+                            handler : function() {
+                                dialog.find('iframe').get(0).contentWindow.submitForm(dialog, grid, parent.$);
+                            }
+                        } ]
+                    });
+                }else {
+                    $.post(url, function() {
+                        grid.datagrid('reload');
+                    }, 'json');
+                }
+
             };
             function SoldOut(id) {
                 var url = sy.contextPath + '/goods/soldOut?&id='+id;

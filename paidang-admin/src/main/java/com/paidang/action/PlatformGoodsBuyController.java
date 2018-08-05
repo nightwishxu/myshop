@@ -90,7 +90,7 @@ public class PlatformGoodsBuyController extends CoreController{
 
 	@RequestMapping("/changeState")
 	@ResponseBody
-		public String changeState(Integer id,Integer v,PlatformGoodsBuyEx platform){
+		public String changeState(Integer id,Integer v,PlatformGoodsBuyEx platform,String refuseInfo){
 			platform.setId(id);
 			platform.setState(v);
 			if(platform.getState() != 2){

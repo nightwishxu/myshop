@@ -31,6 +31,7 @@
         <result column="sort_order" property="sortOrder" jdbcType="INTEGER" />
         <result column="is_suggest" property="isSuggest" jdbcType="TINYINT" />
         <result column="spec" property="spec" jdbcType="VARCHAR" />
+        <result column="refuse_info" property="refuseInfo" jdbcType="VARCHAR" />
     </resultMap>
 
     <resultMap id="ResultMapWithBLOBs" type="com.paidang.dao.model.Goods" extends="BaseResultMap" >
@@ -98,7 +99,7 @@
     </sql>
 
     <sql id="Base_Column_List" >
-        id,source,type,cate_code,org_id,goods_id,name,cost,price,total,sold_out,is_online,is_verfiy,imgs,img,width,height,create_time,modify_time,state,max_aution_id,max_auction,user_id,platform_rate,platform_money,platform_state,sort_order,is_suggest,spec
+        id,source,type,cate_code,org_id,goods_id,name,cost,price,total,sold_out,is_online,is_verfiy,imgs,img,width,height,create_time,modify_time,state,max_aution_id,max_auction,user_id,platform_rate,platform_money,platform_state,sort_order,is_suggest,spec,refuse_info
     </sql>
 
     <sql id="Blob_Column_List" >
@@ -168,7 +169,8 @@
         create_time,modify_time,state,
         max_aution_id,max_auction,user_id,
         platform_rate,platform_money,platform_state,
-        sort_order,is_suggest,spec
+        sort_order,is_suggest,spec,
+        refuse_info
         )
         values (#{source,jdbcType=TINYINT},#{type,jdbcType=TINYINT},
         #{cateCode,jdbcType=INTEGER},#{orgId,jdbcType=INTEGER},#{goodsId,jdbcType=INTEGER},
@@ -179,7 +181,8 @@
         #{createTime,jdbcType=TIMESTAMP},#{modifyTime,jdbcType=TIMESTAMP},#{state,jdbcType=TINYINT},
         #{maxAutionId,jdbcType=INTEGER},#{maxAuction,jdbcType=DECIMAL},#{userId,jdbcType=INTEGER},
         #{platformRate,jdbcType=DECIMAL},#{platformMoney,jdbcType=DECIMAL},#{platformState,jdbcType=TINYINT},
-        #{sortOrder,jdbcType=INTEGER},#{isSuggest,jdbcType=TINYINT},#{spec,jdbcType=VARCHAR}
+        #{sortOrder,jdbcType=INTEGER},#{isSuggest,jdbcType=TINYINT},#{spec,jdbcType=VARCHAR},
+        #{refuseInfo,jdbcType=VARCHAR}
         )
     </insert>
 
@@ -273,6 +276,9 @@
             <if test="spec != null" >
                 spec,
             </if>
+            <if test="refuseInfo != null" >
+                refuse_info,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides="," >
             <if test="source != null" >
@@ -361,6 +367,9 @@
             </if>
             <if test="spec != null" >
                 #{spec,jdbcType=VARCHAR},
+            </if>
+            <if test="refuseInfo != null" >
+                #{refuseInfo,jdbcType=VARCHAR},
             </if>
         </trim>
     </insert>
@@ -465,6 +474,9 @@
             <if test="record.spec != null" >
                 spec = #{record.spec,jdbcType=VARCHAR},
             </if>
+            <if test="record.refuseInfo != null" >
+                refuse_info = #{record.refuseInfo,jdbcType=VARCHAR},
+            </if>
         </set>
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
@@ -502,7 +514,8 @@
         platform_state = #{platformState,jdbcType=TINYINT},
         sort_order = #{sortOrder,jdbcType=INTEGER},
         is_suggest = #{isSuggest,jdbcType=TINYINT},
-        spec = #{spec,jdbcType=VARCHAR}
+        spec = #{spec,jdbcType=VARCHAR},
+        refuse_info = #{refuseInfo,jdbcType=VARCHAR}
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
         </if>
@@ -538,7 +551,8 @@
         platform_state = #{platformState,jdbcType=TINYINT},
         sort_order = #{sortOrder,jdbcType=INTEGER},
         is_suggest = #{isSuggest,jdbcType=TINYINT},
-        spec = #{spec,jdbcType=VARCHAR}
+        spec = #{spec,jdbcType=VARCHAR},
+        refuse_info = #{refuseInfo,jdbcType=VARCHAR}
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
         </if>
@@ -634,6 +648,9 @@
             <if test="spec != null" >
                 spec = #{spec,jdbcType=VARCHAR},
             </if>
+            <if test="refuseInfo != null" >
+                refuse_info = #{refuseInfo,jdbcType=VARCHAR},
+            </if>
         </set>
         where id = #{id}
     </update>
@@ -668,7 +685,8 @@
         platform_state = #{platformState,jdbcType=TINYINT},
         sort_order = #{sortOrder,jdbcType=INTEGER},
         is_suggest = #{isSuggest,jdbcType=TINYINT},
-        spec = #{spec,jdbcType=VARCHAR}
+        spec = #{spec,jdbcType=VARCHAR},
+        refuse_info = #{refuseInfo,jdbcType=VARCHAR}
         where id = #{id}
     </update>
 
@@ -701,7 +719,8 @@
         platform_state = #{platformState,jdbcType=TINYINT},
         sort_order = #{sortOrder,jdbcType=INTEGER},
         is_suggest = #{isSuggest,jdbcType=TINYINT},
-        spec = #{spec,jdbcType=VARCHAR}
+        spec = #{spec,jdbcType=VARCHAR},
+        refuse_info = #{refuseInfo,jdbcType=VARCHAR}
         where id = #{id}
     </update>
 

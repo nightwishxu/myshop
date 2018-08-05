@@ -2,6 +2,9 @@ package com.paidang.dao.model;
 
 
 
+/**
+ *
+ */
 public class Goods {
 
 	/**
@@ -153,6 +156,11 @@ public class Goods {
 	 *规格
 	 */
 	private String spec;
+
+	/**
+	 *审核不通过原因
+	 */
+	private String refuseInfo;
 
 	public void setId(Integer id) {
 		this.id=id;
@@ -392,6 +400,14 @@ public class Goods {
 
 	public String getSpec() {
 		return spec;
+	}
+
+	public void setRefuseInfo(String refuseInfo) {
+		this.refuseInfo=refuseInfo == null ? refuseInfo : refuseInfo.trim();
+	}
+
+	public String getRefuseInfo() {
+		return refuseInfo;
 	}
 
 }
