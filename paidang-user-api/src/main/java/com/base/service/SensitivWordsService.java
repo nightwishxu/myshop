@@ -32,11 +32,6 @@ public class SensitivWordsService {
     
     private static Set<String> keySet = new HashSet<String>();
 
-    public  static List<String> expressList;
-    public  static Map<String, String> expressMap;
-
-    @Autowired
-    CodeService codeService;
     
     /**
      * 加载敏感词
@@ -48,7 +43,6 @@ public class SensitivWordsService {
         logger.info("[内存数据]-开始加载敏感词数据任务");
         try {
             readSensitiveWordFile();
-            loadData();
             logger.info("[内存数据]-敏感词数据任务加载完成");
         } catch (Exception e) {
             // TODO Auto-generated catch block
@@ -57,20 +51,7 @@ public class SensitivWordsService {
         
     }
 
-    public void loadData() {
-        expressList=new ArrayList<>();
-        expressMap=new HashMap<>();
-        CodeExample example = new CodeExample();
-        example.createCriteria().andCodeEqualTo("express");
-        List<Code> codes = codeService.selectByExample(example);
-        Code code = codes.get(0);
-        Map<String, String> map = (Map) JSONObject.parse(code.getValue());
-        expressMap.putAll(map);
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            expressList.add(entry.getKey());
-        }
 
-    }
     
     private void readSensitiveWordFile() throws Exception {
         Set<String> set = new HashSet<String>();;
