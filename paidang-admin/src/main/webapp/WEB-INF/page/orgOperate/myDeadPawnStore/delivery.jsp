@@ -11,6 +11,12 @@
         var id = "${id}";
         $(function() {
                 $("#id").val(id);
+            var url=sy.contextPath + '/system/expressList';
+            $.post(url, obj, function(result) {
+                if (result.code == 0) {
+                    console.debug("result="+result)
+                }
+            }, 'json');
             }
         )
 
