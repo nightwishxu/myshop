@@ -70,6 +70,12 @@
                 </td>
             </tr>
             <tr>
+                <th style="width:100px;">商品规格：</th>
+                <td>
+                    <input class="easyui-textbox" id = "spec" name="spec"  data-options="editable:false" style="width:100%" readonly="readonly" missingMessage="商品名称"/>
+                </td>
+            </tr>
+            <tr>
                 <th style="width:100px;">组图：</th>
                 <td>
                     <div id = "imgs" name="imgs"  type="file" multi="true" fileCountLimit="6" showImage="true" fileType="jpg,png,mp4" fileSize="200MB" buttonText="组图"></div>

@@ -125,6 +125,13 @@
             </tr>
 
             <tr>
+                <th style="width:100px;">规格：</th>
+                <td >
+                    <input class="easyui-textbox" id = "spec" name = "spec"  data-options="required:true" style="width:100%" missingMessage="请输入商品规格"/>
+                </td>
+            </tr>
+
+            <tr>
                 <%--<th style="width:100px;">详情：</th>
                 <td colspan="3">
                     <textarea id="info" name="info"></textarea>

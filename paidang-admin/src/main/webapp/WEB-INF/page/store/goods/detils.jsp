@@ -80,6 +80,13 @@
                     <input class="easyui-numberbox" id = "sortOrder" name="sortOrder"  data-options="required:true" style="width:100%" missingMessage="请输入排序"/>
                 </td>
             </tr>
+
+            <tr>
+                <th style="width:100px;">商品规格：</th>
+                <td>
+                    <input class="easyui-textbox" id = "spec" name="spec"  data-options="editable:false" style="width:100%" readonly="readonly" missingMessage="商品名称"/>
+                </td>
+            </tr>
             <tr>
                 <th style="width:100px;">组图：</th>
                 <td>
