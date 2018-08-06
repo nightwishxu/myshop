@@ -7,7 +7,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @param
@@ -15,12 +17,12 @@ import java.util.List;
  * @Date: 2018/8/6 14:53
  * @Description:
  */
-@RequestMapping("system")
+@RequestMapping("cache")
 @Controller
 @LoginFilter
-public class SystemController {
+public class CacheController {
 
-    @RequestMapping("/expressList")
+    @RequestMapping(value = "/expressList",produces = "application/json;charset=UTF-8")
     @ResponseBody
     public Object list(){
         return CacheService.expressList;
