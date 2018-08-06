@@ -5,6 +5,7 @@ import com.base.http.HttpUtil;
 import com.base.support.LogKit;
 import com.base.util.JSONUtils;
 import com.item.service.CodeService;
+import com.paidang.service.CacheService;
 import com.util.express.core.KuaidiParam;
 import com.util.express.core.KuaidiResult;
 import com.util.express.core.MD5;
@@ -72,7 +73,7 @@ public class KuaidiApiUtil {
         if (StringUtils.isBlank(com)){
             kuaidiParam.setCom(COM.toLowerCase());
         }else {
-            kuaidiParam.setCom(comMap.get(com).toLowerCase());
+            kuaidiParam.setCom(CacheService.expressMap.get(com).toLowerCase());
         }
         kuaidiParam.setNum(code);
         String param = JSONUtils.serialize(kuaidiParam);
