@@ -1,13 +1,25 @@
 package com.paidang.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.base.spring.SpringContextUtil;
+import com.item.dao.CodeMapper;
+import com.item.dao.SysDictMapper;
+import com.item.dao.UserMapper;
 import com.item.dao.model.Code;
 import com.item.dao.model.CodeExample;
+import com.item.dao.model.SysDict;
+import com.item.dao.model.SysDictExample;
 import com.item.service.CodeService;
+import com.paidang.dao.GoodsMapper;
+import com.paidang.dao.model.Goods;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -21,16 +33,18 @@ import java.util.Map;
  * @Date: 2018/8/6 08:29
  * @Description:
  */
-@Service
+@Component
+@Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true)
 public class CacheService {
 
     private final static Logger logger = LoggerFactory.getLogger(CacheService.class);
 
-    public  static List<String> expressList;
-    public  static Map<String, String> expressMap;
+    public  static List<String> expressList=new ArrayList<>();
+    public  static Map<String, String> expressMap=new HashMap<>();
+
 
     @Autowired
-    CodeService codeService;
+    private SysDictMapper sysDictMapper;
 
     @PostConstruct
     public void load() {
@@ -46,19 +60,19 @@ public class CacheService {
 
     }
 
-    public void loadData() {
-        expressList=new ArrayList<>();
-        expressMap=new HashMap<>();
-        CodeExample example = new CodeExample();
-        example.createCriteria().andCodeEqualTo("express");
-        List<Code> codes = codeService.selectByExample(example);
-        Code code = codes.get(0);
-        Map<String, String> map = (Map) JSONObject.parse(code.getValue());
+    public  void loadData() {
+        SysDictExample example = new SysDictExample();
+        example.createCriteria().andTypeEqualTo("express").andLabelNameEqualTo("express");
+        List<SysDict> dicts = sysDictMapper.selectByExample(example);
+        SysDict dict = dicts.get(0);
+        Map<String, String> map = (Map) JSONObject.parse(dict.getValue());
+        expressMap.clear();
+        expressList.clear();
         expressMap.putAll(map);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             expressList.add(entry.getKey());
         }
 
     }
-
+    
 }
