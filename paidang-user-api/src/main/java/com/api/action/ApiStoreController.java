@@ -252,6 +252,9 @@ public class ApiStoreController extends ApiBaseController {
         GoodsEx goodsEx=new GoodsEx();
         goodsEx.setId(id);
         List<GoodsEx>  exList= goodsService.findList(goodsEx);
+        if (exList==null || exList.size()==0){
+            throw new ApiException(-1,"该商品不存在");
+        }
         GoodsEx ex=exList.get(0);
         appStoreGoodsDetail.setId(ex.getId());
         appStoreGoodsDetail.setImages(ex.getImgs());
