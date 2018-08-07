@@ -20,6 +20,7 @@ import com.base.api.MobileInfo;
 import com.base.api.annotation.ApiMethod;
 import com.base.dao.model.Ret;
 import com.base.dialect.PaginationSupport;
+import com.base.util.BeanUtils;
 import com.base.util.DateUtil;
 import com.base.util.StringUtil;
 import com.item.dao.model.*;
@@ -31,6 +32,7 @@ import com.item.service.UserService;
 import com.paidang.dao.model.*;
 import com.paidang.daoEx.model.ExpressEx;
 import com.paidang.daoEx.model.GoodsEx;
+import com.paidang.daoEx.model.PawnOrgEx;
 import com.paidang.daoEx.model.UserGoodsEx;
 import com.paidang.service.*;
 import com.sun.prism.impl.Disposer;
@@ -854,7 +856,34 @@ public class ApiUserGoodsController extends ApiBaseController {
         PawnOrgExample pawnOrgExample=new PawnOrgExample();
         pawnOrgExample.createCriteria().andNameLike("%"+name+"%").andStateEqualTo(1);
        // pawnOrgExample.setOrderByClause("create_time desc");
-        return pawnOrgService.selectByExample(pawnOrgExample);
+        List<PawnOrg> list=pawnOrgService.selectByExample(pawnOrgExample);
+
+        if (list!=null && list.size()>0){
+            List<PawnOrgEx> exList=new ArrayList<>(list.size());
+            for(PawnOrg org:list){
+                PawnOrgEx ex=new PawnOrgEx();
+                try {
+                    BeanUtils.copyProperties(org,ex);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                List<GoodsEx> goodsExList=goodsService.getMostThreeGoods(ex.getId());
+                String img="";
+                for (int i=0;i<goodsExList.size();i++){
+                    if (StringUtil.isNotBlank(goodsExList.get(i).getImg())){
+                        if (i!=goodsExList.size()-1){
+                            img+=goodsExList.get(i).getImg()+",";
+                        }else {
+                            img+=goodsExList.get(i).getImg();
+                        }
+                    }
+                }
+                ex.setGoodsImgs(img);
+                exList.add(ex);
+            }
+            return exList;
+        }
+        return list;
     }
 
     @ApiOperation(value="视频搜索 ", notes = "不登录")

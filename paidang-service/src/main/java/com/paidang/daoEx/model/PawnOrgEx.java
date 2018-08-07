@@ -16,6 +16,9 @@ public class PawnOrgEx extends PawnOrg {
     //该机构在平台成功典当的单数
     private String dealAmount;
 
+    //机构商品照片
+    private String goodsImgs;
+
 
     public String getOrgUserPhone() {
         return orgUserPhone;
@@ -39,5 +42,13 @@ public class PawnOrgEx extends PawnOrg {
 
     public void setDealAmount(String dealAmount) {
         this.dealAmount = dealAmount;
+    }
+
+    public String getGoodsImgs() {
+        return goodsImgs;
+    }
+
+    public void setGoodsImgs(String goodsImgs) {
+        this.goodsImgs = goodsImgs;
     }
 }
