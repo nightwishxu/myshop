@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -80,6 +81,16 @@ public class ApiUserPayService {
             }
             Goods goods = list.get(0);
             UserCoupon userCoupon = null;
+            //用户使用优惠券
+            if(null != couponId){
+                UserCouponExample userCouponExample = new UserCouponExample();
+                userCouponExample.createCriteria().andEndTimeGreaterThanOrEqualTo(new Date()).andIdEqualTo(couponId).andStateEqualTo(1);
+                List<UserCoupon> userCouponList = userCouponService.selectByExample(userCouponExample);
+                if(null == userCouponList || list.size() ==0){
+                    throw new ApiException(MEnumError.COUPON_TYPE_EXIST);
+                }
+                userCoupon = userCouponList.get(0);
+            }
             Order order = new Order();
 
             //订单号生成规则：时间戳加商品编号
