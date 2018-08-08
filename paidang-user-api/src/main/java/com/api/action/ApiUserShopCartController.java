@@ -33,7 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/userShopCart", produces = { "application/json;charset=UTF-8" }, method = RequestMethod.POST)
 @Api(tags = "用户购物车(用户端)")
-public class ApiUserShopCartController extends CoreController {
+public class ApiUserShopCartController extends ApiBaseController {
 
     @Autowired
     private JedisTemplate jedisTemplate;
@@ -100,7 +100,7 @@ public class ApiUserShopCartController extends CoreController {
             throw new ApiException(-1,"该商品不存在！");
         }
         if(goods.getIsOnline()==0){
-            return msg(-1,"该商品已经下架！");
+            throw new ApiException(-1,"该商品已经下架！");
         }
         if (list!=null && list.size()>0){
 

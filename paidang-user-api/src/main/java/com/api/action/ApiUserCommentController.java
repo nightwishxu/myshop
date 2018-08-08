@@ -2,6 +2,7 @@ package com.api.action;
 
 import com.api.view.userComment.AppUserComment;
 import com.base.action.CoreController;
+import com.base.api.ApiBaseController;
 import com.base.api.ApiException;
 import com.base.api.MobileInfo;
 import com.base.api.annotation.ApiMethod;
@@ -33,7 +34,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/userComment", produces = { "application/json;charset=UTF-8" }, method = RequestMethod.POST)
 @Api(tags = "用户评价(用户端)")
-public class ApiUserCommentController extends CoreController {
+public class ApiUserCommentController extends ApiBaseController {
 
 
     @Autowired

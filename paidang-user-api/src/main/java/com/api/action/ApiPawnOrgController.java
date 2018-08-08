@@ -1,6 +1,7 @@
 package com.api.action;
 
 import com.api.util.PageLimit;
+import com.base.api.ApiBaseController;
 import com.base.api.annotation.ApiMethod;
 import com.base.dialect.PaginationSupport;
 import com.item.dao.model.UserComment;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/api/pawnOrg", produces = {"application/json;charset=UTF-8"}, method = RequestMethod.POST)
 @Api(tags = "店铺详情")
-public class ApiPawnOrgController {
+public class ApiPawnOrgController extends ApiBaseController {
 
     @Autowired
     private PawnOrgService pawnOrgService;
