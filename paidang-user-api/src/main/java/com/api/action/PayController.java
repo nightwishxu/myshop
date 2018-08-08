@@ -504,77 +504,79 @@ public class PayController extends CoreController {
 			// 重新查找订单状态信息
 			BigDecimal tradeStatus = null;
 			Integer userId = null;
-			try {
-				payLog = payLogService.selectByPrimaryKey(Long.parseLong(out_trade_no));
-				tradeStatus = new BigDecimal(payLog.getState());
-				userId = payLog.getUserId();
-			} catch (Exception e) {
-				logger.info("$$$$支付更新没找到记录或找到多条!——商户订单号:" + out_trade_no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
-			}
+			String[] nos=out_trade_no.split(",");
+			for (String no:nos){
+				try {
+					payLog = payLogService.selectByPrimaryKey(Long.parseLong(no));
+					tradeStatus = new BigDecimal(payLog.getState());
+					userId = payLog.getUserId();
+				} catch (Exception e) {
+					logger.info("$$$$支付更新没找到记录或找到多条!——商户订单号:" + no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
+				}
 
-			if (tradeStatus.intValue() == 0) {
-				payLog.setState(9);
-				payLog.setModifyTime(new Date());
-				payLog.setPlatform(payPlatform); // 1支付宝2银联3微信
-				payLog.setRealPay(total);
-				payLog.setTradeNo(trade_no);
-				payLog.setBuyer(buyerEmail);
-				payLogService.updateByPrimaryKeySelective(payLog);
-
-				tradeStatus = new BigDecimal(9);
-			}
-
-			if (tradeStatus.intValue() == 9) {
-				if (total.compareTo(payLog.getMoney()) < 0) {
-					payLog.setState(-1);
+				if (tradeStatus.intValue() == 0) {
+					payLog.setState(9);
+					payLog.setModifyTime(new Date());
+					payLog.setPlatform(payPlatform); // 1支付宝2银联3微信
+					payLog.setRealPay(total);
+					payLog.setTradeNo(trade_no);
+					payLog.setBuyer(buyerEmail);
 					payLogService.updateByPrimaryKeySelective(payLog);
-					return;
-				}
-				
-				Order order = orderService.selectByPrimaryKey(payLog.getOrderId());
-				if (order == null){
-					logger.info("$$$$业务订单没有找到!——订单号:" + payLog.getOrderId() + ";交易号:" + trade_no + ",交易状态:" + trade_status);
-					return;
-				}
-				
-				if (order.getState() != 1){
-					logger.info("$$$$业务订单状态错误!——订单号:" + payLog.getOrderId() + ";交易号:" + trade_no + ",交易状态:" + trade_status);
-					return;
-				}
-				Order orderUpdate = orderService.selectByPrimaryKey(payLog.getOrderId());
-				orderUpdate.setState(2);
-				orderUpdate.setPayTime(new Date());
-				int update = orderService.updateByPrimaryKeySelective(orderUpdate);
-				if (update == 0) {
-					logger.info("$$$$业务订单没有更新成功!——商户订单号:" + out_trade_no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
-				}
-				Goods goods = goodsService.selectByPrimaryKey(order.getGoodsId());
 
-				//商品
-				Goods goodsUpdate = new Goods();
-				goodsUpdate.setId(order.getGoodsId());
-				goodsUpdate.setState(-1);
-				goodsUpdate.setIsOnline(0);
-				update = goodsService.updateByPrimaryKeySelective(goodsUpdate);
-				if (update == 0) {
-					logger.info("$$$$商品没有更新成功!——商户订单号:" + out_trade_no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
+					tradeStatus = new BigDecimal(9);
 				}
-				//藏品更新
-				if (goods.getSource() == 2){
-					//绝当品归属权
-					UserGoods userGoods = new UserGoods();
-					userGoods.setId(goods.getGoodsId());
-					userGoods.setBelongType(1);
-					userGoods.setBelongId(order.getUserId());
-					update = userGoodsService.updateByPrimaryKeySelective(userGoods);
-					if (update == 0) {
-						logger.info("$$$$藏品没有更新成功!——商户订单号:" + out_trade_no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
+
+				if (tradeStatus.intValue() == 9) {
+					if (total.compareTo(payLog.getMoney()) < 0) {
+						payLog.setState(-1);
+						payLogService.updateByPrimaryKeySelective(payLog);
+						return;
 					}
-				}
 
-				/**
-				 * 用户余额日志  --暂时不用
-				 */
+					Order order = orderService.selectByPrimaryKey(payLog.getOrderId());
+					if (order == null){
+						logger.info("$$$$业务订单没有找到!——订单号:" + payLog.getOrderId() + ";交易号:" + trade_no + ",交易状态:" + trade_status);
+						return;
+					}
+
+					if (order.getState() != 1){
+						logger.info("$$$$业务订单状态错误!——订单号:" + payLog.getOrderId() + ";交易号:" + trade_no + ",交易状态:" + trade_status);
+						return;
+					}
+					Order orderUpdate = orderService.selectByPrimaryKey(payLog.getOrderId());
+					orderUpdate.setState(2);
+					orderUpdate.setPayTime(new Date());
+					int update = orderService.updateByPrimaryKeySelective(orderUpdate);
+					if (update == 0) {
+						logger.info("$$$$业务订单没有更新成功!——商户订单号:" + no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
+					}
+					Goods goods = goodsService.selectByPrimaryKey(order.getGoodsId());
+
+					//商品
+					Goods goodsUpdate = new Goods();
+					goodsUpdate.setId(order.getGoodsId());
+					goodsUpdate.setState(-1);
+					goodsUpdate.setIsOnline(0);
+					update = goodsService.updateByPrimaryKeySelective(goodsUpdate);
+					if (update == 0) {
+						logger.info("$$$$商品没有更新成功!——商户订单号:" + no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
+					}
+					//藏品更新
+					if (goods.getSource() == 2){
+						//绝当品归属权
+						UserGoods userGoods = new UserGoods();
+						userGoods.setId(goods.getGoodsId());
+						userGoods.setBelongType(1);
+						userGoods.setBelongId(order.getUserId());
+						update = userGoodsService.updateByPrimaryKeySelective(userGoods);
+						if (update == 0) {
+							logger.info("$$$$藏品没有更新成功!——商户订单号:" + no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
+						}
+					}
+
+					/**
+					 * 用户余额日志  --暂时不用
+					 */
 //				UserBalanceLog userBalanceLog = new UserBalanceLog();
 //				userBalanceLog.setAmount(total);
 //				userBalanceLog.setType(2);
@@ -586,11 +588,13 @@ public class PayController extends CoreController {
 //				userBalanceLog.setInfo("消费:"+total.toString());
 //				userBalanceLogService.insert(userBalanceLog);
 
-				payLog.setState(10);
-				update = payLogService.updateByPrimaryKeySelective(payLog);
-				if (update == 0) {
-					logger.info("$$$$支付流水没有更新成功!——商户订单号:" + out_trade_no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
+					payLog.setState(10);
+					update = payLogService.updateByPrimaryKeySelective(payLog);
+					if (update == 0) {
+						logger.info("$$$$支付流水没有更新成功!——商户订单号:" + no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
+					}
 				}
+
 			}
 		}
 	}
