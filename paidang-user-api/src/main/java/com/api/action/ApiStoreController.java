@@ -518,6 +518,10 @@ public class ApiStoreController extends ApiBaseController {
                                          @ApiParam(value="id",required = true) Integer id)throws Exception{
         AppJdGoods c = new AppJdGoods();
         Goods goods = goodsService.selectByPrimaryKey(id);
+        if (goods==null){
+            throw new ApiException(-1,"商品不存在");
+        }
+        PawnOrg pawnOrg=pawnOrgService.selectByPrimaryKey(goods.getOrgId());
 //        GoodsAuctionExample goodsAuctionExample = new GoodsAuctionExample();
 //        goodsAuctionExample.createCriteria().andGoodsIdEqualTo(id);
 //        goodsAuctionExample.setOrderByClause("price asc,create_time desc");
@@ -549,6 +553,9 @@ public class ApiStoreController extends ApiBaseController {
         c.setTime(second+"");
         c.setGoodsAuctionList(list);
         c.setContent(getPage(id,1));
+        c.setOrgId(pawnOrg.getId());
+        c.setOrgName(pawnOrg.getName());
+        c.setOrgIntroduction(pawnOrg.getIntroduction());
         return c;
     }
 

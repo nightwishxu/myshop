@@ -27,6 +27,13 @@ public class AppJdGoods {
     @ApiModelProperty(value="物品描述")
     private String content;
 
+    @ApiModelProperty(value="机构id")
+    private Integer orgId;
+    @ApiModelProperty(value="机构名称")
+    private String orgName;
+    @ApiModelProperty(value="机构介绍")
+    private String orgIntroduction;
+
     public Integer getId() {
         return id;
     }
@@ -89,5 +96,29 @@ public class AppJdGoods {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Integer getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(Integer orgId) {
+        this.orgId = orgId;
+    }
+
+    public String getOrgName() {
+        return orgName;
+    }
+
+    public void setOrgName(String orgName) {
+        this.orgName = orgName;
+    }
+
+    public String getOrgIntroduction() {
+        return orgIntroduction;
+    }
+
+    public void setOrgIntroduction(String orgIntroduction) {
+        this.orgIntroduction = orgIntroduction;
     }
 }

@@ -208,20 +208,20 @@ public class ApiUserPayController extends ApiBaseController{
 
 	@ApiOperation(value = "购物车下单", notes = "登陆")
 	@RequestMapping("/createShopCartOrder")
-	@ApiMethod(isLogin = false)
-	public List<PayResult> createShopCartOrder( Integer userId,
+	@ApiMethod(isLogin = true)
+	public List<PayResult> createShopCartOrder( MobileInfo mobileInfo,
 								 @ApiParam(value = "json参数", required = true)String data,
 								 @ApiParam(value = "地址id", required = true)Integer addressId){
-		MobileInfo mobileInfo=new MobileInfo();
-		mobileInfo.setUserid(userId);
+//		MobileInfo mobileInfo=new MobileInfo();
+//		mobileInfo.setUserid(userId);
 		return apiUserPayService.createShopCartOrder(mobileInfo,data,addressId);
 	}
 
 
 	@ApiOperation(value = "商城购物车支付", notes = "登陆")
 	@RequestMapping("/buyShopCartPay")
-	@ApiMethod(isLogin = false)
-	public PayResult buyShopCartPay(Integer userId,
+	@ApiMethod(isLogin = true)
+	public PayResult buyShopCartPay(MobileInfo mobileInfo,
 							@ApiParam(value = "支付方式:1:支付宝 2:微信", required = true)Integer platform,
 							@ApiParam(value = "订单id,以,相隔", required = true)String orderIds){
 		if (platform == null){
@@ -230,8 +230,8 @@ public class ApiUserPayController extends ApiBaseController{
 		if (orderIds == null){
 			throw new ApiException("orderIds不能为空");
 		}
-		MobileInfo mobileInfo=new MobileInfo();
-		mobileInfo.setUserid(userId);
+//		MobileInfo mobileInfo=new MobileInfo();
+//		mobileInfo.setUserid(userId);
 		return apiUserPayService.buyShopCartPay(mobileInfo,platform,orderIds);
 
 
@@ -243,17 +243,17 @@ public class ApiUserPayController extends ApiBaseController{
 
 	}
 
-	public static void main(String[] args) {
-		List<Map<String,String>> list=new ArrayList<>();
-		Map<String,String> map=new HashMap<>();
-		map.put("goodsId","800");
-		Map<String,String> map1=new HashMap<>();
-		map1.put("goodsId","802");
-		//map.put("goodsId","");
-		list.add(map);
-		list.add(map1);
-		System.out.println(JSONUtils.serialize(list));
-	}
+//	public static void main(String[] args) {
+//		List<Map<String,String>> list=new ArrayList<>();
+//		Map<String,String> map=new HashMap<>();
+//		map.put("goodsId","800");
+//		Map<String,String> map1=new HashMap<>();
+//		map1.put("goodsId","802");
+//		//map.put("goodsId","");
+//		list.add(map);
+//		list.add(map1);
+//		System.out.println(JSONUtils.serialize(list));
+//	}
 
 
 

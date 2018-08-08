@@ -158,26 +158,27 @@
                     field: 'phone',
                     align: 'center',
                 }, {
-                        width: $(this).width() * 0.05,
-                        title: '状态',
-                        field: 'state',
-                        align: 'center',
+                    width: $(this).width() * 0.05,
+                    title: '状态',
+                    field: 'stateInfo',
+                    align: 'center'
                 },{
-                        width : $(this).width() * 0.05,
-                        title : '操作',
-                        field : 'state',
-                        align : 'center',
-                        formatter : function (v,r,i) {
-                            if(r.id){
-                                if(v == 2){
-                                    return '<a href="javascript:void(0);" onclick="changeS(\''+r.id+'\',\''+v+'\');" class="button button-warning" title="审核中">审核</a>';
-                                }else if(v == 1){
-                                    return '<a href="javascript:void(0);" onclick="changeS(\''+r.id+'\',\''+v+'\');" class="button button-default" title="启用">启用</a>';
-                                }else if(v == 0){
-                                    return '<a href="javascript:void(0);" onclick="changeS(\''+r.id+'\',\''+v+'\');" class="button button-warning" title="禁用">禁用</a>';
-                                }
+                    width : $(this).width() * 0.05,
+                    title : '操作',
+                    field : 'state',
+                    align : 'center',
+                    formatter : function (v,r,i) {
+                        console.error("v="+v)
+                        if(r.id){
+                            if(v == 2){
+                                return '<a href="javascript:void(0);" onclick="changeS(\''+r.id+'\',\''+v+'\');" class="button button-warning" title="审核中">审核</a>';
+                            }else if(v == 1){
+                                return '<a href="javascript:void(0);" onclick="changeS(\''+r.id+'\',\''+v+'\');" class="button button-default" title="启用">启用</a>';
+                            }else if(v == 0){
+                                return '<a href="javascript:void(0);" onclick="changeS(\''+r.id+'\',\''+v+'\');" class="button button-warning" title="禁用">禁用</a>';
                             }
                         }
+                    }
                 }, {
                         width: $(this).width() * 0.1,
                         title: '创建时间',
@@ -221,6 +222,14 @@
                     }
                 }]
             });
+        };
+
+
+        function changeS(id,v) {
+            var url = sy.contextPath + '/pawnOrg/changeState?v='+v+'&id='+id;
+            $.post(url, function() {
+                grid.datagrid('reload');
+            }, 'json');
         };
 
         function SaveData(data) {

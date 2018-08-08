@@ -9,6 +9,7 @@ public class GoodsAuctionEx extends GoodsAuction {
     private String maxPrice;
     private String userName;
 
+
     public String getMaxPrice() {
         return maxPrice;
     }

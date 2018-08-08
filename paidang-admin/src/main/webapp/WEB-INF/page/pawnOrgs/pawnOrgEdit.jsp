@@ -52,6 +52,7 @@
     <form id="form" method="post">
         <input name="id" type="hidden" />
         <input name="fid" type="hidden" />
+        <input name="type" value="1" type="hidden" />
         <div style="padding:15px;font-size: 12px">
             <table style="table-layout:fixed;" border="0" cellspacing="0" class="formtable">
                 <tr>
