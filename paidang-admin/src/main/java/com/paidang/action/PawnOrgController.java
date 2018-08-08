@@ -10,6 +10,7 @@ import com.base.dialect.PaginationSupport;
 import com.base.dao.model.Ret;
 import com.base.dao.model.Grid;
 import com.base.security.util.UserUtils;
+import com.paidang.daoEx.model.GoodsEx;
 import com.paidang.daoEx.model.PawnOrgEx;
 import com.util.PaidangConst;
 import org.springframework.stereotype.Controller;
@@ -64,7 +65,8 @@ public class PawnOrgController extends CoreController{
 			pawnOrg.setRoleCode(PaidangConst.ORG_ROLE);
 			pawnOrg.setPassword(Md5.md5("1"));
 			pawnOrg.setBalance(BigDecimal.ZERO);
-			pawnOrg.setType(1);
+			pawnOrg.setState(2);
+			//pawnOrg.setType(1);
     		pawnOrgService.insert(pawnOrg);
     	}else{
     		pawnOrgService.updateByPrimaryKeySelective(pawnOrg);
@@ -111,4 +113,22 @@ public class PawnOrgController extends CoreController{
     	}
        	return ok();
     }
+
+	@RequestMapping("/changeState")
+	@ResponseBody
+	public String changeState(Integer id,Integer v){
+    	PawnOrg pawnOrg=new PawnOrg();
+    	pawnOrg.setId(id);
+    	Integer state=null;
+    	if (v==0){
+    		state=1;
+		}else if(v==1){
+    		state=0;
+		}else if(v==2 || v==null){
+    		state=1;
+		}
+		pawnOrg.setState(state);
+		pawnOrgService.changeState(pawnOrg);
+		return ok();
+	}
 }

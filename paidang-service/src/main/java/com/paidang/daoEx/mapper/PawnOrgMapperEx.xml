@@ -16,7 +16,14 @@
 
   <select id="selectList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
       select
-      *
+      *,
+      (CASE state
+      WHEN 0 then '禁用'
+      WHEN 1 then '启用'
+      WHEN 2 then '审核中'
+      WHEN null then '审核中'
+      ELSE '状态未知'
+      END ) stateInfo
       from p_pawn_org
       where 1=1
       <if test="name != null and name !=''">
@@ -44,6 +51,10 @@
         ORDER BY org.create_time DESC ;
     </select>
 
+
+    <update id="changeState">
+        update p_pawn_org set state =#{state} where id=#{id}
+    </update>
 
   
 </mapper>

@@ -108,4 +108,8 @@ public class PawnOrgService {
 	public PawnOrgEx selectById(String orgUserId){
 		return pawnOrgMapperEx.selectById(orgUserId);
 	}
+
+	public Integer changeState(PawnOrg pawnOrg){
+		return pawnOrgMapperEx.changeState(pawnOrg);
+	}
 }

@@ -19,6 +19,10 @@ public class PawnOrgEx extends PawnOrg {
     //机构商品照片
     private String goodsImgs;
 
+    private String stateInfo;
+
+
+
 
     public String getOrgUserPhone() {
         return orgUserPhone;
@@ -50,5 +54,14 @@ public class PawnOrgEx extends PawnOrg {
 
     public void setGoodsImgs(String goodsImgs) {
         this.goodsImgs = goodsImgs;
+    }
+
+
+    public String getStateInfo() {
+        return stateInfo;
+    }
+
+    public void setStateInfo(String stateInfo) {
+        this.stateInfo = stateInfo;
     }
 }

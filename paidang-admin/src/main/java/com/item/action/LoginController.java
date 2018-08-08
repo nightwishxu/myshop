@@ -108,7 +108,7 @@ public class LoginController extends CoreController{
 		}else if (pawnOrg.getType()==3){
 			pawnOrg.setRoleCode("supplier_admin");
 		}
-
+		pawnOrg.setState(2);
 		pawnOrgService.insert(pawnOrg);
 		return msg(0,"注册成功");
 	}

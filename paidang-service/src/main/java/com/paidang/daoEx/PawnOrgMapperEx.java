@@ -1,5 +1,6 @@
 package com.paidang.daoEx;
 
+import com.paidang.dao.model.PawnOrg;
 import com.paidang.daoEx.model.PawnOrgEx;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,4 +18,5 @@ public interface PawnOrgMapperEx {
 
     PawnOrgEx selectById(@Param("orgUserId") String orgUserId);
 
+    Integer changeState(PawnOrg pawnOrg);
 }
