@@ -32,6 +32,9 @@
       <if test="goodsSource == 3">
         and A.goods_source = 2
       </if>
+      <if test="goodsSource == 4">
+        and A.goods_source = 4
+      </if>
       <if test="goodsName != null and goodsName !=''">
         and A.goods_name like '%${goodsName}%'
       </if>
