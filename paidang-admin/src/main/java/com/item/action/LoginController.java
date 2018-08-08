@@ -35,10 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Controller
@@ -124,10 +121,25 @@ public class LoginController extends CoreController{
 		if (group == null){
 			return JSONUtils.serialize(new Ret(1, "登录错误L10000,联系管理员"));
 		}
+
+		if (Objects.equals(system,"org")){
+			PawnOrgExample example=new PawnOrgExample();
+			example.createCriteria().andAccountEqualTo(account);
+			List<PawnOrg> orgs=pawnOrgService.selectByExample(example);
+			if (orgs!=null && orgs.size()>0){
+				if (!Objects.equals(orgs.get(0).getState(),1)){
+					return JSONUtils.serialize(new Ret(1, "该账户审核未通过或被禁用"));
+				}
+			}
+
+		}
+
 		Principal principal = UserUtils.getPrincipal();
+
 		if (principal != null){
 			return msg(0,group.getUrl());
 		}
+
 
 		UsernamePasswordToken token = new UsernamePasswordToken(account, new Md5Hash(pwd).toHex(), system);
 		try {
@@ -141,6 +153,7 @@ public class LoginController extends CoreController{
 		if (principal == null){
 			return JSONUtils.serialize(new Ret(1, "用户名或密码不正确"));
 		}
+
 
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", principal.getId());
