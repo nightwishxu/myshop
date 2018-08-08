@@ -504,7 +504,7 @@ public class PayController extends CoreController {
 			// 重新查找订单状态信息
 			BigDecimal tradeStatus = null;
 			Integer userId = null;
-			String[] nos=out_trade_no.split(",");
+			String[] nos=out_trade_no.split("-");
 			for (String no:nos){
 				try {
 					payLog = payLogService.selectByPrimaryKey(Long.parseLong(no));

@@ -188,10 +188,10 @@ public class ApiUserPayService {
             payLogService.insertSelective(log);
             price=price.add(order.getPrice());
             logList.add(log);
-            logIds+=log.getId()+",";
+            logIds+=log.getId()+"-";
 
         }
-        boolean flag=logIds.charAt(logIds.length()-1)==',';
+        boolean flag=logIds.charAt(logIds.length()-1)=='-';
         if (flag){
             logIds=logIds.substring(0,logIds.length()-1);
         }
