@@ -93,7 +93,7 @@
             <th style="width:100px;">快递公司：</th>
             <td>
                 <%--<input id = "cateCode" name="cateCode"  data-options="required:true" style="width:100%" missingMessage="请选择商品分类"/>--%>
-                <select id="shipFirm" class="easyui-combobox" name="shipFirm" style="width:100%;" data-options="editable:false">
+                <select id="shipFirm" class="easyui-combobox" name="shipFirm" style="width:100%;" data-options="required:true,editable:false">
                     <%--<option value="顺丰快递">顺丰快递</option>--%>
                     <%--<option value="中通速递">中通速递</option>--%>
                     <%--<option value="邮政速递">邮政速递</option>--%>

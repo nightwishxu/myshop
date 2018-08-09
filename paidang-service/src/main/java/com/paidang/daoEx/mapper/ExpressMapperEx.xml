@@ -42,5 +42,32 @@
       </if>
       order by A.create_time desc
   </select>
+    
+    <select id="findUnReceived"  resultMap="BaseResultMap">
+        SELECT
+            id,
+            source,
+            source_id,
+            fid,
+            type,
+            express_name,
+            express_code,
+            express_state,
+            post_name,
+            post_phone,
+            receive_name,
+            receive_phone,
+            recevice_address,
+            modify_time,
+            create_time
+        FROM
+            p_express
+        WHERE
+            ( express_state != 3 AND express_state != 4 )
+            OR express_state IS NULL
+            AND (
+            modify_time IS NULL
+            OR modify_time &lt;= #{modifyTime})
+    </select>
   
 </mapper>

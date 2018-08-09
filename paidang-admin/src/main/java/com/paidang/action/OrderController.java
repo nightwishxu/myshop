@@ -124,7 +124,7 @@ public class OrderController extends CoreController{
 			order.setShipFirm(order.getShipFirm());
 			orderService.updateState(order);
 			//？
-		order.setShipFirm(MExpressAddress.xfAddress);
+		//order.setShipFirm(MExpressAddress.xfAddress);
 		Order c = orderService.selectByPrimaryKey(order.getId());
 		PawnOrg org = pawnOrgService.selectByPrimaryKey(c.getOrgId());
 

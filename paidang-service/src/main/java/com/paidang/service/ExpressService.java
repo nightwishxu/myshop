@@ -14,10 +14,7 @@ import com.util.express.core.KuaidiResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ExpressService {
@@ -97,12 +94,15 @@ public class ExpressService {
 	 * 未签收快递
 	 * @return
 	 */
-	public List<Express> selectUnReceive(){
-		ExpressExample example = new ExpressExample();
-		example.or().andExpressStateNotBetween(3,4).andModifyTimeLessThanOrEqualTo(DateUtil.addMinute(new Date(),-PaidangConst.EXPRESS_QUERY_TIME));
-		example.or().andExpressStateNotBetween(3,4).andModifyTimeIsNull();
-		example.setOrderByClause("create_time desc");
-		return this.expressMapper.selectByExample(example);
+	public List<ExpressEx> selectUnReceive(){
+//		ExpressExample example = new ExpressExample();
+//		example.or().andExpressStateNotBetween(3,4).andModifyTimeLessThanOrEqualTo(DateUtil.addMinute(new Date(),-PaidangConst.EXPRESS_QUERY_TIME));
+//		example.or().andExpressStateNotBetween(3,4).andModifyTimeIsNull();
+//		example.setOrderByClause("create_time desc");
+//		return this.expressMapper.selectByExample(example);
+		Map<String,Object> map=new HashMap<>();
+		map.put("modifyTime",DateUtil.addMinute(new Date(),-PaidangConst.EXPRESS_QUERY_TIME));
+		return expressMapperEx.findUnReceived(map);
 	}
 
 	/**
@@ -110,8 +110,8 @@ public class ExpressService {
 	 */
 	public void queryAuto(){
 		//TODO 签收或者派送中，推送消息
-		List<Express> expresses = this.selectUnReceive();
-		for (Express express : expresses){
+		List<ExpressEx> expresses = this.selectUnReceive();
+		for (ExpressEx express : expresses){
 			KuaidiResult result = KuaidiApiUtil.query(express.getExpressName(),express.getExpressCode());
 			express.setModifyTime(new Date());
 			if (result != null){
@@ -123,12 +123,12 @@ public class ExpressService {
 				if (result.getState() == 3){
 					//已签收
 					expressOk(express);
-					messageService.pushToList(userId,"您的快递已经被签收",1,"");
+					//messageService.pushToList(userId,"您的快递已经被签收",1,"");
 				}else if (result.getState()==5){
 
 					//订单正在派件中
 					//messageService.pushToSingleAccount();
-					 messageService.pushToList(userId,"您的快递正在派送过程中",1,"");
+					// messageService.pushToList(userId,"您的快递正在派送过程中",1,"");
 				}
 			}
 			//更新快递状态

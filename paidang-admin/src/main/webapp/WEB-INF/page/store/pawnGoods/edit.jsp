@@ -122,6 +122,10 @@
                 <td>
                     <input class="easyui-numberbox" id = "price" name="price"  data-options="required:true,precision:2,min:0,max:9999999999" style="width:100%" missingMessage="请输入成本"/>
                 </td>
+                <th style="width:100px;">排序：</th>
+                <td>
+                    <input class="easyui-numberbox" id = "sortOrder" name="sortOrder"  data-options="required:true" style="width:100%" missingMessage="请输入排序"/>
+                </td>
             </tr>
 
             <tr>

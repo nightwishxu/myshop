@@ -14,4 +14,6 @@ public interface ExpressMapperEx {
     List<ExpressEx> searchByName(@Param("keyword")String keyword,@Param("orgId")String orgId);
 
     List<ExpressEx> selectByGoods(Map<String, Object> map);
+
+    List<ExpressEx> findUnReceived(Map<String,Object> map);
 }
