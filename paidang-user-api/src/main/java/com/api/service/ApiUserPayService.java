@@ -103,6 +103,7 @@ public class ApiUserPayService {
             order.setOrgId(goods.getOrgId());
             order.setGoodsPrice(goods.getPrice());
             order.setGoodsCost(goods.getCost());
+            order.setCommentState(0);
             BigDecimal finalPrice = null;
             if(null == userCoupon){
                 //没有优惠券
