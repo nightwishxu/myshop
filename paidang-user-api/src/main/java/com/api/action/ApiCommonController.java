@@ -1,5 +1,6 @@
 package com.api.action;
 
+import com.paidang.service.CacheService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -48,6 +49,9 @@ public class ApiCommonController extends ApiBaseController{
 	private FeedbackService feedbackService;
 	@Autowired
 	private CodeService codeService;
+
+	@Autowired
+	private CacheService cacheService;
 	
 	private static final String[] DEVICE = new String[]{"android","ios"};
 	
@@ -216,4 +220,11 @@ public class ApiCommonController extends ApiBaseController{
     	}
     	return version;
     }
+
+	@ApiMethod
+	@RequestMapping(value="/express", method = RequestMethod.POST)
+	@ApiOperation(value = "物流公司获取", notes = "不需要登录")
+	public List<String> express(){
+		return CacheService.expressList;
+	}
 }
