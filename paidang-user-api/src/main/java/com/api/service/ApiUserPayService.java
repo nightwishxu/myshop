@@ -63,6 +63,8 @@ public class ApiUserPayService {
             throw new ApiException(MEnumError.ADDRESS_NOT_EXIST);
         }
         List<PayResult> results=new ArrayList<>();
+        Date date=new Date();
+        int i=0;
         for (Map map:mapList){
             PayResult payResult = new PayResult();
             Integer goodsId=Integer.valueOf((String)map.get("goodsId"));
@@ -94,7 +96,7 @@ public class ApiUserPayService {
             Order order = new Order();
 
             //订单号生成规则：时间戳加商品编号
-            order.setCode(code + goodsId.toString());
+            order.setCode((code+i) + goodsId.toString());
             order.setUserId(mobileInfo.getUserid());
             order.setGoodsId(goods.getId());
             order.setGoodsName(goods.getName());
@@ -104,7 +106,9 @@ public class ApiUserPayService {
             order.setGoodsPrice(goods.getPrice());
             order.setGoodsCost(goods.getCost());
             order.setCommentState(0);
+            order.setCreateTime(date);
             BigDecimal finalPrice = null;
+            i++;
             if(null == userCoupon){
                 //没有优惠券
                 finalPrice = goods.getPrice();

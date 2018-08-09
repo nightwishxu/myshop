@@ -30,6 +30,8 @@ public class GoodsEx extends Goods {
     //机构简介
     private String orgIntroduction;
 
+    private String orgLogo;
+
     public BigDecimal getSoldPrice() {
         return soldPrice;
     }
@@ -108,5 +110,13 @@ public class GoodsEx extends Goods {
 
     public void setOrgIntroduction(String orgIntroduction) {
         this.orgIntroduction = orgIntroduction;
+    }
+
+    public String getOrgLogo() {
+        return orgLogo;
+    }
+
+    public void setOrgLogo(String orgLogo) {
+        this.orgLogo = orgLogo;
     }
 }

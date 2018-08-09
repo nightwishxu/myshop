@@ -55,6 +55,8 @@ public class AppStoreGoodsDetail {
 	private String orgName;
 	@ApiModelProperty(value="机构简介")
 	private String orgIntroduction;
+	@ApiModelProperty(value="机构logo")
+	private String orgLogo;
 
 	public Integer getId() {
 		return id;
@@ -214,5 +216,13 @@ public class AppStoreGoodsDetail {
 
 	public void setOrgIntroduction(String orgIntroduction) {
 		this.orgIntroduction = orgIntroduction;
+	}
+
+	public String getOrgLogo() {
+		return orgLogo;
+	}
+
+	public void setOrgLogo(String orgLogo) {
+		this.orgLogo = orgLogo;
 	}
 }

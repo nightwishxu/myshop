@@ -266,6 +266,7 @@ public class ApiStoreController extends ApiBaseController {
         appStoreGoodsDetail.setOrgId(ex.getOrgId());
         appStoreGoodsDetail.setOrgName(ex.getOrgName());
         appStoreGoodsDetail.setOrgIntroduction(ex.getOrgIntroduction());
+        appStoreGoodsDetail.setOrgLogo(ex.getOrgLogo());
         return appStoreGoodsDetail;
     }
 
