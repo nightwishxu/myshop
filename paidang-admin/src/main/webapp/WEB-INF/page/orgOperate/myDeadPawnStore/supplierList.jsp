@@ -137,6 +137,11 @@
                     title : '审核信息',
                     field : 'refuseInfo',
                     align : 'center',
+                },{
+                    width : $(this).width() * 0.05,
+                    title : '排序',
+                    field : 'sortOrder',
+                    align : 'center',
                 }
                 , /*{
                     width : $(this).width() * 0.15,

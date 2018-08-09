@@ -58,6 +58,16 @@ public class UserComment {
 	private Integer score;
 
 	/**
+	 *物流评分
+	 */
+	private Integer expressScore;
+
+	/**
+	 *服务评分
+	 */
+	private Integer serviceScore;
+
+	/**
 	 *后台回复人ID
 	 */
 	private Integer replayUserId;
@@ -170,6 +180,22 @@ public class UserComment {
 
 	public Integer getScore() {
 		return score;
+	}
+
+	public void setExpressScore(Integer expressScore) {
+		this.expressScore=expressScore;
+	}
+
+	public Integer getExpressScore() {
+		return expressScore;
+	}
+
+	public void setServiceScore(Integer serviceScore) {
+		this.serviceScore=serviceScore;
+	}
+
+	public Integer getServiceScore() {
+		return serviceScore;
 	}
 
 	public void setReplayUserId(Integer replayUserId) {

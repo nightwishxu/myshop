@@ -60,7 +60,9 @@ public class ApiUserCommentController extends ApiBaseController {
                       @ApiParam(value = "商品id", required = true)Integer goodsId,
                       @ApiParam(value = "订单id", required = true)Integer orderId,
                       @ApiParam(value = "图片", required = false)String img,
-                      @ApiParam(value = "评分1-5", required = true)Integer score
+                      @ApiParam(value = "评分1-5", required = true)Integer score,
+                      @ApiParam(value = "物流评分1-5", required = true)Integer expressScore,
+                      @ApiParam(value = "服务评分1-5", required = true)Integer serviceScore
                       ){
         UserComment userComment=new UserComment();
 

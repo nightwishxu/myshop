@@ -744,6 +744,126 @@ public class UserCommentExample {
 			return (Criteria) this;
 		}
 
+		public Criteria andExpressScoreIsNull() {
+			addCriterion("express_score is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andExpressScoreIsNotNull() {
+			addCriterion("express_score is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andExpressScoreEqualTo(Integer value) {
+			addCriterion("express_score =", value, "expressScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andExpressScoreNotEqualTo(Integer value) {
+			addCriterion("express_score <>", value, "expressScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andExpressScoreGreaterThan(Integer value) {
+			addCriterion("express_score >", value, "expressScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andExpressScoreGreaterThanOrEqualTo(Integer value) {
+			addCriterion("express_score >=", value, "expressScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andExpressScoreLessThan(Integer value) {
+			addCriterion("express_score <", value, "expressScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andExpressScoreLessThanOrEqualTo(Integer value) {
+			addCriterion("express_score <=", value, "expressScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andExpressScoreIn(List<Integer> values) {
+			addCriterion("express_score in", values, "expressScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andExpressScoreNotIn(List<Integer> values) {
+			addCriterion("express_score not in", values, "expressScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andExpressScoreBetween(Integer value1, Integer value2) {
+			addCriterion("express_score between", value1, value2, "expressScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andExpressScoreNotBetween(Integer value1, Integer value2) {
+			addCriterion("express_score not between", value1, value2, "expressScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreIsNull() {
+			addCriterion("service_score is null");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreIsNotNull() {
+			addCriterion("service_score is not null");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreEqualTo(Integer value) {
+			addCriterion("service_score =", value, "serviceScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreNotEqualTo(Integer value) {
+			addCriterion("service_score <>", value, "serviceScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreGreaterThan(Integer value) {
+			addCriterion("service_score >", value, "serviceScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreGreaterThanOrEqualTo(Integer value) {
+			addCriterion("service_score >=", value, "serviceScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreLessThan(Integer value) {
+			addCriterion("service_score <", value, "serviceScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreLessThanOrEqualTo(Integer value) {
+			addCriterion("service_score <=", value, "serviceScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreIn(List<Integer> values) {
+			addCriterion("service_score in", values, "serviceScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreNotIn(List<Integer> values) {
+			addCriterion("service_score not in", values, "serviceScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreBetween(Integer value1, Integer value2) {
+			addCriterion("service_score between", value1, value2, "serviceScore");
+			return (Criteria) this;
+		}
+
+		public Criteria andServiceScoreNotBetween(Integer value1, Integer value2) {
+			addCriterion("service_score not between", value1, value2, "serviceScore");
+			return (Criteria) this;
+		}
+
 		public Criteria andReplayUserIdIsNull() {
 			addCriterion("replay_user_id is null");
 			return (Criteria) this;
