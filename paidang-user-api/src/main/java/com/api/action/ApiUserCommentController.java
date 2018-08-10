@@ -82,6 +82,8 @@ public class ApiUserCommentController extends ApiBaseController {
         userComment.setOrgId(orders.get(0).getOrgId());
         userComment.setOrderId(orderId);
         userComment.setImg(img);
+        userComment.setExpressScore(expressScore);
+        userComment.setServiceScore(serviceScore);
         userComment.setCreateTime(date);
         if (userComment.getShowName()==null){
             userComment.setShowName(0);
