@@ -29,6 +29,7 @@ import org.dom4j.util.UserDataDocumentFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.MEnumError;
@@ -81,6 +82,9 @@ public class ApiHomeController extends ApiBaseController {
     private ExpressService expressService;
     @Autowired
     private CodeService codeService;
+
+    @Autowired
+    private CacheService cacheService;
 
     /**
      * 个人资料
@@ -1226,5 +1230,14 @@ public class ApiHomeController extends ApiBaseController {
             ret.add(c);
         }
         return ret;
+    }
+
+    @ApiOperation(value = "物流公司信息", notes = "不需要登陆")
+    @RequestMapping(value = "/expressList", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiMethod(isLogin = false)
+    public List<String> expressList(MobileInfo mobileInfo) {
+        List<String> list=CacheService.expressList;
+        return list;
     }
 }
