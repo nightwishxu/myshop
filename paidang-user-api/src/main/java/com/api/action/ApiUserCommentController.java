@@ -119,24 +119,20 @@ public class ApiUserCommentController extends ApiBaseController {
     @RequestMapping(value = "/goodsCommentList", method = RequestMethod.POST)
     @ApiMethod(isLogin = false)
     public Object goodsCommentList(@ApiParam(value = "商品id", required = true)Integer goodsId){
-        UserCommentExample example=new UserCommentExample();
-        UserCommentExample.Criteria criteria=example.createCriteria();
-        example.setOrderByClause("create_time desc");
-        criteria.andGoodsIdEqualTo(goodsId);
-        criteria.andStatusEqualTo(1);
-        return userCommentService.selectByExample(example);
+        UserComment comment=new UserComment();
+        comment.setOrgId(goodsId);
+        comment.setExpressScore(1);
+        return userCommentService.findList(comment);
     }
 
     @ApiOperation(value = "机构评价列表", notes = "不需要登陆")
     @RequestMapping(value = "/getGoodsComment", method = RequestMethod.POST)
     @ApiMethod(isLogin = false)
     public Object getGoodsComment(@ApiParam(value = "机构id", required = true)Integer orgId){
-        UserCommentExample example=new UserCommentExample();
-        UserCommentExample.Criteria criteria=example.createCriteria();
-        example.setOrderByClause("create_time desc");
-        criteria.andOrgIdEqualTo(orgId);
-        criteria.andStatusEqualTo(1);
-        return userCommentService.selectByExample(example);
+        UserComment comment=new UserComment();
+        comment.setOrgId(orgId);
+        comment.setExpressScore(1);
+        return userCommentService.findList(comment);
     }
 
     @ApiOperation(value = "test", notes = "登陆")
