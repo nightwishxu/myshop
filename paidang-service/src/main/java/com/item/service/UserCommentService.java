@@ -2,6 +2,8 @@ package com.item.service;
 
 import java.util.List;
 
+import com.item.daoEx.UserCommentMapperEx;
+import com.item.daoEx.model.UserCommentEx;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,9 @@ import com.item.dao.model.UserCommentExample;
 public class UserCommentService {
 	@Autowired
 	private UserCommentMapper userCommentMapper;
+
+	@Autowired
+	private UserCommentMapperEx userCommentMapperEx;
 
 	public int countByExample(UserCommentExample example) {
 		return this.userCommentMapper.countByExample(example);
@@ -58,4 +63,7 @@ public class UserCommentService {
 		return this.userCommentMapper.insertSelective(record);
 	}
 
+	public List<UserCommentEx> findList(UserComment comment){
+		return userCommentMapperEx.findList(comment);
+	}
 }
