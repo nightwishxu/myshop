@@ -11,6 +11,37 @@
         var id = "${id}";
         $(function() {
                 $("#id").val(id);
+                var url=sy.contextPath + '/cache/expressList';
+                $.ajax({
+                    url:url,
+                    type:"GET",
+                    dataType:"text",
+                    success:function(data){
+                        console.log(data)
+                        var result=data.split(",")
+                        console.log(result[0])
+                        var option=""
+                        var data = [];
+                        for(var i=0; i<result.length; i++){
+                            console.log(result[i])
+                            var str=result[i].replace("[","")
+                            str=str.replace("]","")
+                            $("#shipFirm").append("<option value='"+str+"'>"+str+"</option>");
+                            // data.push({ "text": result[i], "id": result[i] });
+
+                        }
+                        $("#shipFirm").combobox({});
+
+                    },
+                    error:function(data,type, err){
+                        console.log(typeof data=='string')
+                        console.log(data)
+                        console.log("ajax错误类型："+type);
+                        console.log(err);
+                    }
+
+                });
+
             }
         )
 
@@ -36,6 +67,14 @@
     <input id="id" name="id" type="hidden" />
     <div style="padding:15px;font-size: 12px">
         <table style="table-layout:fixed;" border="0" cellspacing="0" class="formtable">
+            <tr>
+            <th style="width:100px;">快递公司：</th>
+            <td>
+                <%--<input id = "cateCode" name="cateCode"  data-options="required:true" style="width:100%" missingMessage="请选择商品分类"/>--%>
+                <select id="shipFirm" class="easyui-combobox" name="shipFirm" style="width:90%;" data-options="required:true,editable:false">
+                </select>
+            </td>
+            </tr>
             <tr>
                 <th style="width:100px;">快递单号：</th>
                 <td>

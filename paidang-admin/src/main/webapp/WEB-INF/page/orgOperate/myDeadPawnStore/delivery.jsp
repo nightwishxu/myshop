@@ -12,16 +12,6 @@
         $(function() {
                 $("#id").val(id);
             var url=sy.contextPath + '/cache/expressList';
-            // var obj
-            // $.post(url, obj, function(result) {
-            //     alert("1result="+result)
-            //     console.error("1result="+result)
-            //     if (result.code == 0) {
-            //         console.error("result="+result)
-            //     }
-            // }, 'json');
-
-
                 $.ajax({
                     url:url,
                     type:"GET",

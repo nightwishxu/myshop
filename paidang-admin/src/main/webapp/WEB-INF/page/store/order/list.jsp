@@ -310,8 +310,8 @@
     function delivery(id) {
         var dialog = parent.sy.modalDialog({
             title : '发货',
-            width : 500,
-            height : 200,
+            width : 600,
+            height : 400,
             url : sy.contextPath + '/go.do?path=store/order/deliveryAddress&id='+id,
             buttons : [ {
                 text : '确定',
