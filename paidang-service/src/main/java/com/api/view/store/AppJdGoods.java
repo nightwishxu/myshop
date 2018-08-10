@@ -34,6 +34,9 @@ public class AppJdGoods {
     @ApiModelProperty(value="机构介绍")
     private String orgIntroduction;
 
+    @ApiModelProperty(value="机构Logo")
+    private String orgLogo;
+
     public Integer getId() {
         return id;
     }
@@ -120,5 +123,13 @@ public class AppJdGoods {
 
     public void setOrgIntroduction(String orgIntroduction) {
         this.orgIntroduction = orgIntroduction;
+    }
+
+    public String getOrgLogo() {
+        return orgLogo;
+    }
+
+    public void setOrgLogo(String orgLogo) {
+        this.orgLogo = orgLogo;
     }
 }

@@ -109,7 +109,9 @@ public class GoodsController extends CoreController{
 			goods.setSource(source);//1平台2机构3服务商
 			goods.setState(1);//(针对竞拍)- 0已失效 1有效；现后台只能上传3万以下物品，且不是拍卖，是直接买卖
 			goods.setSoldOut(0);//已售
-			goods.setTotal(1);//库存
+			if (goods.getTotal()==null){
+				goods.setTotal(1);//库存
+			}
 			goods.setCost(goods.getPrice());
 			goods.setType(type);//1新品2绝当品
 			goods.setCateCode(cateCode);

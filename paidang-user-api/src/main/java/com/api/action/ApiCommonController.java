@@ -17,10 +17,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.api.MEnumError;
 import com.api.view.common.AppVersion;
@@ -223,6 +220,7 @@ public class ApiCommonController extends ApiBaseController{
 
 	@ApiMethod
 	@RequestMapping(value="/express", method = RequestMethod.POST)
+    @ResponseBody
 	@ApiOperation(value = "物流公司获取", notes = "不需要登录")
 	public List<String> express(){
 		return CacheService.expressList;

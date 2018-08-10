@@ -209,10 +209,10 @@
                 <td>
                     <input class="easyui-numberbox" id = "cost" name="cost"  data-options="required:true,precision:2,min:0,max:9999999999" style="width:100%" missingMessage="请输入成本"/>
                 </td>
-                <%--<th style="width:100px;" >库存：</th>
+                <th style="width:100px;" >库存：</th>
                 <td>
                     <input class="easyui-numberbox" id = "total" name = "total"  data-options="required:true,min:0" style="width:100%" missingMessage="请输入库存"/>
-                </td>--%>
+                </td>
             </tr>
             <tr>
                 <th style="width:100px;">售价：</th>

@@ -209,7 +209,8 @@ public class ApiStoreController extends ApiBaseController {
         return list2;
     }
 
-    /**
+    //TODO source 2机构 3平台自身 4供应商
+    /** 新品推荐 典当机构和平台
      * 认证商场热门列表
      */
     @ApiOperation(value = "认证商场热门列表", notes = "分页")
@@ -222,8 +223,8 @@ public class ApiStoreController extends ApiBaseController {
         GoodsExample goodsExample = new GoodsExample();
         //goodsExample.createCriteria().andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andSourceEqualTo(3).andTotalGreaterThanOrEqualTo(1);
 
-        goodsExample.or().andStateEqualTo(1).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andSourceEqualTo(3).andTypeEqualTo(1).andSoldOutEqualTo(0);
-        goodsExample.or().andStateEqualTo(1).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andSourceEqualTo(2).andTypeEqualTo(1).andSoldOutEqualTo(0);
+        goodsExample.or().andStateEqualTo(1).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andSourceEqualTo(3).andTotalGreaterThan(0);
+        goodsExample.or().andStateEqualTo(1).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andSourceEqualTo(4).andTotalGreaterThan(0);
         goodsExample.setOrderByClause("is_suggest desc,create_time desc");
         List<Goods> list = goodsService.selectByExample(goodsExample);
         for(Goods ex : list) {
@@ -371,7 +372,7 @@ public class ApiStoreController extends ApiBaseController {
     }
 
 
-    /**
+    /** 目前是淘宝贝是source 为2
      * 绝当商城列表
      */
     @ApiOperation(value = "绝当商城列表", notes = "不需要登陆")
@@ -386,7 +387,7 @@ public class ApiStoreController extends ApiBaseController {
         PaginationSupport.byPage(pageLimit.getPage(), pageLimit.getLimit(),
                 false);
         GoodsExample example = new GoodsExample();
-        GoodsExample.Criteria goodsExample = example.createCriteria().andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andTotalGreaterThanOrEqualTo(1).andTypeEqualTo(2).andSoldOutEqualTo(0);
+        GoodsExample.Criteria goodsExample = example.createCriteria().andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andTotalGreaterThanOrEqualTo(1).andTypeEqualTo(2).andSourceEqualTo(2);
         //goodsExample.andSourceEqualTo(3);
         if(StringUtil.isNotBlank(orgId)){
             goodsExample.andOrgIdEqualTo(Integer.parseInt(orgId));
@@ -557,6 +558,7 @@ public class ApiStoreController extends ApiBaseController {
         c.setOrgId(pawnOrg.getId());
         c.setOrgName(pawnOrg.getName());
         c.setOrgIntroduction(pawnOrg.getIntroduction());
+        c.setOrgLogo(pawnOrg.getOrgLogo());
         return c;
     }
 

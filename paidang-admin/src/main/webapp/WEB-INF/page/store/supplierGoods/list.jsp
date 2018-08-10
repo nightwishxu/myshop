@@ -172,6 +172,11 @@
                     title : '状态',
                     field : 'estate',
                     align : 'center',
+                },{
+                    width : $(this).width() * 0.05,
+                    title : '库存',
+                    field : 'total',
+                    align : 'center',
                 }, {
                     width : $(this).width() * 0.15,
                     title : '审核信息',

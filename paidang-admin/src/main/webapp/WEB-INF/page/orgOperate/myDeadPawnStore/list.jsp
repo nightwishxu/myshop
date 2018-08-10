@@ -139,6 +139,11 @@
                     align : 'center',
                 },{
                     width : $(this).width() * 0.05,
+                    title : '库存',
+                    field : 'total',
+                    align : 'center',
+                },{
+                    width : $(this).width() * 0.05,
                     title : '排序',
                     field : 'sortOrder',
                     align : 'center',

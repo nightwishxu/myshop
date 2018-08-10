@@ -33,10 +33,10 @@
                 var url=sy.contextPath + '/goods/serviceSave';
                 obj.img = $('#img').getFileId();
                 obj.imgs = $('#imgs').getFileId();
-                // if(!obj.img || !obj.imgs){
-                //     $pjq.messager.e("请上传商品的封面和组图");
-                //     return;
-                // }
+                if(!obj.img || !obj.imgs){
+                    $pjq.messager.e("请上传商品的封面和组图");
+                    return;
+                }
                 obj.info = editor.getHtml();
                 obj.source = source;
                 obj.type = 2
@@ -210,13 +210,13 @@
                 <td>
                     <input class="easyui-numberbox" id = "cost" name="cost"  data-options="required:true,precision:2,min:0,max:30000" style="width:100%" missingMessage="请输入成本，不能超过30000元"/>
                 </td>
-            </tr>
+            </tr>--%>
             <tr>
                 <th style="width:100px;" >库存：</th>
                 <td>
                     <input class="easyui-numberbox" id = "total" name = "total"  data-options="required:true,min:0" style="width:100%" missingMessage="请输入库存"/>
                 </td>
-            </tr>--%>
+            </tr>
             <tr>
                 <th style="width:100px;">售价：</th>
                 <td>
