@@ -120,7 +120,7 @@ public class ApiUserCommentController extends ApiBaseController {
     @ApiMethod(isLogin = false)
     public Object goodsCommentList(@ApiParam(value = "商品id", required = true)Integer goodsId){
         UserComment comment=new UserComment();
-        comment.setOrgId(goodsId);
+        comment.setGoodsId(goodsId);
         comment.setExpressScore(1);
         return userCommentService.findList(comment);
     }
