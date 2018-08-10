@@ -163,7 +163,7 @@
             <tr>
                 <th style="width:100px;">工商许可证图：</th>
                 <td>
-                    <div id = "businessLicense" name="businessLicense"  type="file" multi="false" showImage="true" fileType="jpg,png" fileSize="20MB" buttonText="店铺logo" ></div>
+                    <div id = "businessLicense" name="businessLicense"  type="file" multi="false" showImage="true" fileType="jpg,png" fileSize="20MB" buttonText="工商许可证图" ></div>
                 </td>
             </tr>
 
