@@ -25,6 +25,9 @@ public interface PaidangConst {
      */
     String ORG_ROLE = "org_admin";
 
+
+    String SUPPLIER_ROLE = "supplier_admin";
+
     /*
     * 用户赎当逾期滞纳利率   2.5‰（废弃，改由机构后台灵活设置）
     * */

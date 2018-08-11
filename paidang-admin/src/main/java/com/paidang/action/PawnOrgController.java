@@ -62,7 +62,11 @@ public class PawnOrgController extends CoreController{
     public String save(PawnOrg pawnOrg)throws Exception{
 
     	if (pawnOrg.getId() == null){
-			pawnOrg.setRoleCode(PaidangConst.ORG_ROLE);
+    		if(pawnOrg.getType()==1){
+				pawnOrg.setRoleCode(PaidangConst.ORG_ROLE);
+			}else if(pawnOrg.getType()==3){
+				pawnOrg.setRoleCode(PaidangConst.SUPPLIER_ROLE);
+			}
 			pawnOrg.setPassword(Md5.md5("1"));
 			pawnOrg.setBalance(BigDecimal.ZERO);
 			pawnOrg.setState(2);
