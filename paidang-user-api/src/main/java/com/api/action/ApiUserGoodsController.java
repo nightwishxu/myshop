@@ -825,6 +825,7 @@ public class ApiUserGoodsController extends ApiBaseController {
             c.setState(2);
             c.setOrgId(ex.getOrgId());
             c.setOrgName(ex.getOrgName());
+            c.setSource(ex.getSource());
             ret.add(c);
         }
         return ret;

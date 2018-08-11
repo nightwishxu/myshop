@@ -204,6 +204,7 @@ public class ApiStoreController extends ApiBaseController {
             record.setHeight(ex.getHeight());
             record.setAuthPrice(ex.getPrice()+"");
             record.setPrice(ex.getPrice()+"");
+            record.setSource(ex.getSource());
             list2.add(record);
         }
         return list2;
@@ -237,6 +238,7 @@ public class ApiStoreController extends ApiBaseController {
             record.setTitle(ex.getName());
             record.setPrice(ex.getPrice() + "");
             record.setAuthPrice(ex.getPrice()+"");
+            record.setSource(ex.getSource());
             list2.add(record);
         }
         return list2;
@@ -268,6 +270,7 @@ public class ApiStoreController extends ApiBaseController {
         appStoreGoodsDetail.setOrgName(ex.getOrgName());
         appStoreGoodsDetail.setOrgIntroduction(ex.getOrgIntroduction());
         appStoreGoodsDetail.setOrgLogo(ex.getOrgLogo());
+        appStoreGoodsDetail.setSource(ex.getSource());
         return appStoreGoodsDetail;
     }
 
@@ -412,7 +415,7 @@ public class ApiStoreController extends ApiBaseController {
         List<Goods> goodsList = goodsService.selectByExample(example);
         for(Goods ex : goodsList){
             AppStoreGoodsDetail c = new AppStoreGoodsDetail();
-
+                c.setSource(ex.getSource());
 
                 if(ex.getPrice().compareTo(new BigDecimal("30000")) == -1 || null == ex.getGoodsId()){
                     //普通绝当商品
