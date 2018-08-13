@@ -131,6 +131,9 @@ public class ApiUserShopCartController extends ApiBaseController {
             if (num>goods.getTotal()){
                 throw new ApiException(-1,"库存不足");
             }
+            if (num==0){
+                throw new ApiException(-1,"不能添加0数量商品");
+            }
             //购物车没有商品新增
             ShopCart shopCart=new ShopCart();
             shopCart.setGoodsId(goodsId);
