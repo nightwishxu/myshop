@@ -466,11 +466,11 @@ public class PayController extends CoreController {
 			} else {
 				logger.info("@@@@验证失败@@@@");
 			}
-			response.setContentType("text/xml;charset=uft-8");
+			response.setContentType("text/xml;charset=UTF-8");
 			response.getWriter().println(WEIXIN_RETURN_SUCCESS);
 		} catch (Exception e) {
 			logger.info("@@@@支付后业务逻辑异常" + e.getMessage() + "@@@@");
-			response.setContentType("text/xml;charset=uft-8");
+			response.setContentType("text/xml;charset=UTF-8");
 			response.getWriter().println(WEIXIN_RETURN_FAIL);
 		}
 
