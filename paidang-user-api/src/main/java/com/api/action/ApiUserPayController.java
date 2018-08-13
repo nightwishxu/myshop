@@ -24,6 +24,7 @@ import io.rong.RongCloud;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,6 +38,9 @@ import java.util.*;
 @RequestMapping(value="/api/userPay", produces = {"application/json;charset=UTF-8"}, method = RequestMethod.POST)
 @Api(tags = "支付接口")
 public class ApiUserPayController extends ApiBaseController{
+
+	private static final Logger logger = Logger.getLogger(ApiUserPayController.class);
+
 
 	@Autowired
 	private PayLogService payLogService;
@@ -59,6 +63,7 @@ public class ApiUserPayController extends ApiBaseController{
 								 @ApiParam(value = "商品id", required = true)Integer goodsId,
 								 @ApiParam(value = "优惠券id", required = false)Integer couponId,
 								 @ApiParam(value = "地址id", required = true)Integer addressId){
+		logger.info("下单");
 		PayResult payResult = new PayResult();
 
 		GoodsExample goodsExample = new GoodsExample();
