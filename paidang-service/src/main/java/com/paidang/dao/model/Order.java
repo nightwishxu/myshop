@@ -75,9 +75,9 @@ public class Order {
 	private Integer refState;
 
 	/**
-	 *支付流水
+	 *支付流水tradeNo
 	 */
-	private Integer payLogId;
+	private String payLogId;
 
 	/**
 	 *1已结算0未结算
@@ -306,11 +306,11 @@ public class Order {
 		return refState;
 	}
 
-	public void setPayLogId(Integer payLogId) {
-		this.payLogId=payLogId;
+	public void setPayLogId(String payLogId) {
+		this.payLogId=payLogId == null ? payLogId : payLogId.trim();
 	}
 
-	public Integer getPayLogId() {
+	public String getPayLogId() {
 		return payLogId;
 	}
 
