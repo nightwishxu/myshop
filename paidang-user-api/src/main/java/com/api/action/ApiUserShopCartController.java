@@ -21,6 +21,7 @@ import com.redis.RedisKeyUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +35,9 @@ import java.util.List;
 @RequestMapping(value = "/api/userShopCart", produces = { "application/json;charset=UTF-8" }, method = RequestMethod.POST)
 @Api(tags = "用户购物车(用户端)")
 public class ApiUserShopCartController extends ApiBaseController {
+
+
+    private static final Logger logger = Logger.getLogger(ApiUserShopCartController.class);
 
     @Autowired
     private JedisTemplate jedisTemplate;
@@ -87,8 +91,8 @@ public class ApiUserShopCartController extends ApiBaseController {
     @RequestMapping(value = "/updateCart", method = RequestMethod.POST)
     @ApiMethod(isLogin = true)
     public Object updateCart(MobileInfo mobileInfo,@ApiParam(value = "商品id", required = true)Integer goodsId,@ApiParam(value = "商品数量", required = true)Integer num) {
-        if (num==0){
-            throw new ApiException(-1,"数量不能为0");
+        if (num<=0){
+            throw new ApiException(-1,"数量不能小于0");
         }
         ShopCartExample entity=new ShopCartExample();
         ShopCartExample.Criteria criteria=entity.createCriteria();
@@ -107,13 +111,17 @@ public class ApiUserShopCartController extends ApiBaseController {
             //购物车有商品修改
             ShopCart shopCart=list.get(0);
 
-            Integer currentNum=shopCart.getNum();
-            if (num>0 &&(currentNum+num)>goods.getTotal()){
+//            Integer currentNum=shopCart.getNum();
+//            if (num>0 &&(currentNum+num)>goods.getTotal()){
+//                throw new ApiException(-1,"该商品库存不足！");
+//            }else if (num<0 && Math.abs(num)>currentNum){
+//                throw new ApiException(-1,"购物车中没有足够商品！");
+//            }
+
+            if (num>goods.getTotal()){
                 throw new ApiException(-1,"该商品库存不足！");
-            }else if (num<0 && Math.abs(num)>currentNum){
-                throw new ApiException(-1,"购物车中没有足够商品！");
             }
-            shopCart.setNum(shopCart.getNum()+num);
+            shopCart.setNum(num);
             if (shopCart.getNum()==0){
                return shopCartService.deleteByPrimaryKey(shopCart.getId());
             }else {
@@ -122,6 +130,9 @@ public class ApiUserShopCartController extends ApiBaseController {
         }else {
             if (num>goods.getTotal()){
                 throw new ApiException(-1,"库存不足");
+            }
+            if (num==0){
+                throw new ApiException(-1,"不能添加0数量商品");
             }
             //购物车没有商品新增
             ShopCart shopCart=new ShopCart();

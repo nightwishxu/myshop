@@ -8,10 +8,7 @@ import com.base.util.StringUtil;
 import com.base.web.annotation.LoginFilter;
 import com.item.dao.model.UserNotify;
 import com.item.service.UserNotifyService;
-import com.paidang.dao.model.Express;
-import com.paidang.dao.model.Order;
-import com.paidang.dao.model.OrderExample;
-import com.paidang.dao.model.PawnOrg;
+import com.paidang.dao.model.*;
 import com.paidang.daoEx.model.OrderEx;
 import com.paidang.service.ExpressService;
 import com.paidang.service.OrderService;
@@ -127,22 +124,29 @@ public class OrderController extends CoreController{
 		//order.setShipFirm(MExpressAddress.xfAddress);
 		Order c = orderService.selectByPrimaryKey(order.getId());
 		PawnOrg org = pawnOrgService.selectByPrimaryKey(c.getOrgId());
+		synchronized (order.getId()){
+			ExpressExample example=new ExpressExample();
+			example.createCriteria().andFidEqualTo(order.getId());
+			List<Express> list=expressService.selectByExample(example);
+			if (list!=null && list.size()>0){
+				return msg(-1,"该订单已有物流信息！");
+			}
+			Express express = new Express();
+			express.setSource(2);
+			express.setSourceId(c.getOrgId());
+			express.setFid(c.getId());
+			//express.setType(4);
+			express.setType(3);
+			express.setExpressName(order.getShipFirm());
+			express.setExpressCode(c.getShipCode());
+			express.setPostName(org.getName());
+			express.setPostPhone(org.getPhone());
+			express.setReceiveName(c.getShipUser());
+			express.setReceviceAddress(c.getShipUser());
+			express.setReceivePhone(c.getShipPhone());
+			expressService.insert(express);
 
-		Express express = new Express();
-		express.setSource(2);
-		express.setSourceId(c.getOrgId());
-		express.setFid(c.getId());
-		//express.setType(4);
-		express.setType(3);
-		express.setExpressName(order.getShipFirm());
-		express.setExpressCode(c.getShipCode());
-		express.setPostName(org.getName());
-		express.setPostPhone(org.getPhone());
-		express.setReceiveName(c.getShipUser());
-		express.setReceviceAddress(c.getShipUser());
-		express.setReceivePhone(c.getShipPhone());
-		expressService.insert(express);
-
+		}
 		return ok();
 	}
 
