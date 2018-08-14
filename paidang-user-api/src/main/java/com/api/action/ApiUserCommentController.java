@@ -93,7 +93,7 @@ public class ApiUserCommentController extends ApiBaseController {
             userComment.setInfo(sensitivWordsService.relpSensitivWords(info));
         }
         userComment.setGoodsName(goodsService.selectByPrimaryKey(orders.get(0).getGoodsId()).getName());
-        userComment.setUserName(userService.selectByPrimaryKey(mobileInfo.getUserid()).getName());
+        userComment.setUserName(userService.selectByPrimaryKey(mobileInfo.getUserid()).getNickName());
         Integer result=userCommentService.insert(userComment);
         if (result>0){
             com.paidang.dao.model.Order order=new  com.paidang.dao.model.Order();
