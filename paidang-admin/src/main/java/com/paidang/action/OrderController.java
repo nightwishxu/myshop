@@ -11,6 +11,7 @@ import com.item.service.UserNotifyService;
 import com.paidang.dao.model.*;
 import com.paidang.daoEx.model.OrderEx;
 import com.paidang.service.ExpressService;
+import com.paidang.service.GoodsService;
 import com.paidang.service.OrderService;
 import com.paidang.service.PawnOrgService;
 import com.util.MExpressAddress;
@@ -39,6 +40,8 @@ public class OrderController extends CoreController{
 	private ExpressService expressService;
 	@Autowired
 	private UserNotifyService userNotifyService;
+	@Autowired
+	private GoodsService goodsService;
     
     @RequestMapping("/all")
 	@ResponseBody 
@@ -82,7 +85,7 @@ public class OrderController extends CoreController{
     @RequestMapping("/save")
 	@ResponseBody 
     public String save(Order order,Integer goodsSource){
-		order.setShipFirm(MExpressAddress.xfAddress);
+		//order.setShipFirm(MExpressAddress.xfAddress);
     	if (order.getId() == null){
     		order.setIsBalance(0);
     		order.setUserId(0);
@@ -93,6 +96,16 @@ public class OrderController extends CoreController{
 			order.setRefState(0);
     		orderService.insert(order);
     	}else{
+    		Order od=orderService.selectByPrimaryKey(order.getId());
+			if (od.getState()== 2 && od.getRefState()== 3 ){
+				//已付款，同意退款
+				Goods goods=goodsService.selectByPrimaryKey(od.getGoodsId());
+				Goods gd=new Goods();
+				gd.setId(goods.getId());
+				gd.setTotal(goods.getTotal()+1);
+				gd.setSoldOut(goods.getSoldOut()-1);
+				goodsService.updateByPrimaryKeySelective(gd);
+			}
     		orderService.updateByPrimaryKeySelective(order);
     	}
        	return ok();
