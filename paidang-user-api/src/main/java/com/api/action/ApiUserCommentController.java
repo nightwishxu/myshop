@@ -12,6 +12,7 @@ import com.item.dao.model.UserComment;
 import com.item.dao.model.UserCommentExample;
 import com.item.service.UserCommentService;
 import com.item.service.UserService;
+import com.paidang.dao.model.Goods;
 import com.paidang.dao.model.OrderExample;
 import com.paidang.service.GoodsService;
 import com.paidang.service.OrderService;
@@ -92,7 +93,9 @@ public class ApiUserCommentController extends ApiBaseController {
         if (StringUtils.isNotBlank(userComment.getInfo())){
             userComment.setInfo(sensitivWordsService.relpSensitivWords(info));
         }
-        userComment.setGoodsName(goodsService.selectByPrimaryKey(orders.get(0).getGoodsId()).getName());
+        Goods goods=goodsService.selectByPrimaryKey(orders.get(0).getGoodsId());
+
+        userComment.setGoodsName(goods==null?"":goods.getName());
         userComment.setUserName(userService.selectByPrimaryKey(mobileInfo.getUserid()).getNickName());
         Integer result=userCommentService.insert(userComment);
         if (result>0){
