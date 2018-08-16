@@ -3,7 +3,7 @@
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ehcache.xsd" updateCheck="false"
 	monitoring="autodetect">
 
-	<diskStore path="java.io.tmpdir/ehcache" />
+	<diskStore path="java.io.tmpdir/ehcache/userApi/" />
 	
 	<!-- 集群配置
 	
