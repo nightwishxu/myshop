@@ -31,15 +31,15 @@
     </appender>
     
     <!-- 日志输出级别 -->
-    <root level="ERROR">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root> 
     <logger name="com.github" level="DEBUG" />
-    <logger name="org.springframework" level="WARN"/>
-    <logger name="org.aspectj.weaver" level="WARN"/>
-    <logger name="org.mybatis.spring" level="WARN"/>
-    <logger name="org.quartz" level="WARN"/>
-    <logger name="net.sf.ehcache" level="WARN"/>
-    <logger name="org.apache.commons.beanutils" level="WARN"/>
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="org.aspectj.weaver" level="INFO"/>
+    <logger name="org.mybatis.spring" level="INFO"/>
+    <logger name="org.quartz" level="INFO"/>
+    <logger name="net.sf.ehcache" level="INFO"/>
+    <logger name="org.apache.commons.beanutils" level="INFO"/>
 </configuration>
