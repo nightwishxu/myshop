@@ -37,6 +37,9 @@ public class AppJdGoods {
     @ApiModelProperty(value="机构Logo")
     private String orgLogo;
 
+    @ApiModelProperty(value="商品来源2机构3服务商4供应商")
+    private Integer source;
+
     public Integer getId() {
         return id;
     }
@@ -131,5 +134,13 @@ public class AppJdGoods {
 
     public void setOrgLogo(String orgLogo) {
         this.orgLogo = orgLogo;
+    }
+
+    public Integer getSource() {
+        return source;
+    }
+
+    public void setSource(Integer source) {
+        this.source = source;
     }
 }

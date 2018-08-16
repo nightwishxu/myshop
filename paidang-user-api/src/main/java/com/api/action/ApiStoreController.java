@@ -535,6 +535,7 @@ public class ApiStoreController extends ApiBaseController {
         //选出最高价
         BigDecimal maxPirce = null;
         List<GoodsAuctionEx> list = goodsAuctionService.selectByAuctionUser(map);
+        c.setSource(goods.getSource());
         c.setId(goods.getId());
         c.setImages(goods.getImgs());
         c.setGoodsName(goods.getName());
