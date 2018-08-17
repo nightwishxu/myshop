@@ -73,7 +73,9 @@ public class ApiUserPayController extends ApiBaseController{
 			throw new ApiException(MEnumError.GOODS_NOT_EXIST);
 		}
 		Goods goods = list.get(0);
-
+		if (goods.getSource()!=3 && couponId!=null){
+			throw new ApiException(-1,"该商品无法使用优惠券！");
+		}
 		UserCoupon userCoupon = null;
 		//用户使用优惠券
 		if(null != couponId){

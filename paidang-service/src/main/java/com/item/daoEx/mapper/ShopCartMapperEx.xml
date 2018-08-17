@@ -20,6 +20,7 @@
 	g.is_online AS isOnline,
 	g.spec AS spec,
 	po.NAME AS orgName,
+	g.source AS source,
 	po.org_logo AS orgLogo
 FROM
 	p_shop_cart sc
