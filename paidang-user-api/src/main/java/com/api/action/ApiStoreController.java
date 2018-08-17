@@ -179,8 +179,9 @@ public class ApiStoreController extends ApiBaseController {
         return list2;
     }
 
-    /**
-     * 绝当商场类型列表
+    //TODO source 2机构 3平台自身 4供应商
+    /** 新品推荐 典当机构和平台
+     * 认证商场热门列表
      */
     @ApiOperation(value = "绝当商场类型列表", notes = "分页")
     @RequestMapping("/storeJDGoodsLists")
@@ -191,8 +192,9 @@ public class ApiStoreController extends ApiBaseController {
         PaginationSupport.byPage(pageLimit.getPage(), pageLimit.getLimit(),false);
         List<AppStoreGoodsDetail> list2 = new ArrayList<AppStoreGoodsDetail>();
         GoodsExample goodsExample = new GoodsExample();
-        goodsExample.or().andCateCodeEqualTo(type).andStateEqualTo(1).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andSourceEqualTo(3).andTypeEqualTo(2);
-        goodsExample.or().andCateCodeEqualTo(type).andStateEqualTo(1).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andSourceEqualTo(2).andTypeEqualTo(2);
+        goodsExample.or().andStateEqualTo(1).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andSourceEqualTo(3).andTypeEqualTo(1).andSoldOutEqualTo(0);
+        goodsExample.or().andStateEqualTo(1).andIsOnlineEqualTo(1).andIsVerfiyEqualTo(2).andSourceEqualTo(2).andTypeEqualTo(1).andSoldOutEqualTo(0);
+        goodsExample.setOrderByClause("is_suggest desc,create_time desc");
         List<Goods> list = goodsService.selectByExample(goodsExample);
         for(Goods ex : list){
             AppStoreGoodsDetail record = new AppStoreGoodsDetail();
