@@ -177,7 +177,9 @@
 						if(r.refState == 0){
                             if (v == 1 || v == 2) {
                                 html += '<a href="javascript:void(0);" onclick="delivery(\'' + r.id + '\');" class="button button-warning" title="发货">发货</a>'
-                            } else {
+                            } else if(v == -1) {
+                                html += '<a href="javascript:void(0);" class="button button-default" title="已取消">已取消</a>';
+							} else {
                                 html += '<a href="javascript:void(0);" class="button button-default" title="已发货">已发货</a>';
                             }
 						}
