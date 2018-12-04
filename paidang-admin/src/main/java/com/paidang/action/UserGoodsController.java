@@ -1,5 +1,6 @@
 package com.paidang.action;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -408,6 +409,27 @@ public class UserGoodsController extends CoreController{
 		express.setReceviceAddress(userGoods.getPlatUserAddress());
 		expressService.insert(express);
 		return ok();
+	}
+
+
+	@RequestMapping("/sellList")
+	@ResponseBody
+	public Object sellList(Integer page, Integer rows, String name){
+		PaginationSupport.byPage(page, rows);
+		UserGoodsEx entity=new UserGoodsEx();
+		entity.setName(name);
+		List<UserGoodsEx> list=userGoodsService.findList(entity);
+		return page(list);
+	}
+
+	@RequestMapping("/settle")
+	@ResponseBody
+	public Object settle(Integer id, BigDecimal settleMoney,String sellRemark){
+		UserGoods entity=new UserGoods();
+		entity.setId(id);
+		entity.setSettleMoney(settleMoney);
+		entity.setSellRemark(sellRemark);
+		return userGoodsService.updateByPrimaryKey(entity);
 	}
 
 }

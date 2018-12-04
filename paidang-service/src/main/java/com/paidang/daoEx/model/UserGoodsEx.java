@@ -68,6 +68,10 @@ public class UserGoodsEx extends UserGoods {
     private Integer cnt;
 
     private Integer pawnId;
+    /**
+     * 订单状态-1已取消1待付款2已付款3已发货4确认收货5已评价
+     */
+    private Integer orderState;
 
     public Integer getPawnId() {
         return pawnId;

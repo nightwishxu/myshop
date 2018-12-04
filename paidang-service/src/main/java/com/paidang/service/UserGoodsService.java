@@ -121,4 +121,22 @@ public class UserGoodsService {
     public List<UserGoodsEx> selectTradeRecordList(Map<String, Object> map) {
 		return this.userGoodsMapperEx.selectTradeRecordList(map);
     }
+
+
+	/**
+	 *
+	 * @param id
+	 * @param num
+	 * @param type 0更新评论数1更新收藏数2更新点赞数3点击数4举报数
+	 * @return
+	 */
+	public Integer updateUserGoodsCount(Integer id,Integer num,Integer type){
+
+		return userGoodsMapperEx.updateUserGoodsCount(id,num,type);
+	}
+
+	public List<UserGoodsEx> findList(UserGoodsEx ex){
+		return userGoodsMapperEx.findList(ex);
+	}
+
 }

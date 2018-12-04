@@ -2,6 +2,7 @@ package com.paidang.daoEx;
 
 import com.paidang.dao.model.UserGoods;
 import com.paidang.daoEx.model.UserGoodsEx;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map; /**
@@ -33,4 +34,15 @@ public interface UserGoodsMapperEx {
     List<UserGoodsEx> selectCancelPawnList(Map<String, Object> map);
 
     List<UserGoodsEx> selectTradeRecordList(Map<String, Object> map);
+
+    /**
+     *
+     * @param id
+     * @param num
+     * @param type 0更新评论数1更新收藏数2更新点赞数
+     * @return
+     */
+    Integer updateUserGoodsCount(@Param("id")Integer id, @Param("num")Integer num, @Param("type")Integer type);
+
+    List<UserGoodsEx> findList(UserGoodsEx ex);
 }

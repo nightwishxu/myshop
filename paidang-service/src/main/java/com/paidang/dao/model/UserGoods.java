@@ -313,6 +313,96 @@ contentType:1普通2时间3图片4视频
 	 */
 	private java.math.BigDecimal sfProtectPrice;
 
+	/**
+	 *是否寄拍 0未寄拍1寄拍
+	 */
+	private Integer isSell;
+
+	/**
+	 *0未上架，1上架，2已卖出
+	 */
+	private Integer sellStatus;
+
+	/**
+	 *一口价
+	 */
+	private java.math.BigDecimal sellPrice;
+
+	/**
+	 *寄拍商品描述
+	 */
+	private String sellInfo;
+
+	/**
+	 *寄拍展示图片
+	 */
+	private String sellImgs;
+
+	/**
+	 *寄拍展示视频
+	 */
+	private String sellVideo;
+
+	/**
+	 *寄拍上架时间
+	 */
+	private java.util.Date sellStartTime;
+
+	/**
+	 *寄拍到期时间
+	 */
+	private java.util.Date sellEndTime;
+
+	/**
+	 *寄拍类别
+	 */
+	private String sellPawnCode;
+
+	/**
+	 *评论数
+	 */
+	private Integer commentCount;
+
+	/**
+	 *收藏数
+	 */
+	private Integer collectCount;
+
+	/**
+	 *点赞数
+	 */
+	private Integer praiseCount;
+
+	/**
+	 *点击数
+	 */
+	private Integer clickCount;
+
+	/**
+	 *举报数
+	 */
+	private Integer reportCount;
+
+	/**
+	 *是否赎回 0否 1是
+	 */
+	private Integer isRedeem;
+
+	/**
+	 *0未结算1结算
+	 */
+	private Integer settleStatus;
+
+	/**
+	 *结算金额
+	 */
+	private java.math.BigDecimal settleMoney;
+
+	/**
+	 *备注
+	 */
+	private String sellRemark;
+
 	public void setId(Integer id) {
 		this.id=id;
 	}
@@ -799,6 +889,150 @@ contentType:1普通2时间3图片4视频
 
 	public java.math.BigDecimal getSfProtectPrice() {
 		return sfProtectPrice;
+	}
+
+	public void setIsSell(Integer isSell) {
+		this.isSell=isSell;
+	}
+
+	public Integer getIsSell() {
+		return isSell;
+	}
+
+	public void setSellStatus(Integer sellStatus) {
+		this.sellStatus=sellStatus;
+	}
+
+	public Integer getSellStatus() {
+		return sellStatus;
+	}
+
+	public void setSellPrice(java.math.BigDecimal sellPrice) {
+		this.sellPrice=sellPrice;
+	}
+
+	public java.math.BigDecimal getSellPrice() {
+		return sellPrice;
+	}
+
+	public void setSellInfo(String sellInfo) {
+		this.sellInfo=sellInfo == null ? sellInfo : sellInfo.trim();
+	}
+
+	public String getSellInfo() {
+		return sellInfo;
+	}
+
+	public void setSellImgs(String sellImgs) {
+		this.sellImgs=sellImgs == null ? sellImgs : sellImgs.trim();
+	}
+
+	public String getSellImgs() {
+		return sellImgs;
+	}
+
+	public void setSellVideo(String sellVideo) {
+		this.sellVideo=sellVideo == null ? sellVideo : sellVideo.trim();
+	}
+
+	public String getSellVideo() {
+		return sellVideo;
+	}
+
+	public void setSellStartTime(java.util.Date sellStartTime) {
+		this.sellStartTime=sellStartTime;
+	}
+
+	public java.util.Date getSellStartTime() {
+		return sellStartTime;
+	}
+
+	public void setSellEndTime(java.util.Date sellEndTime) {
+		this.sellEndTime=sellEndTime;
+	}
+
+	public java.util.Date getSellEndTime() {
+		return sellEndTime;
+	}
+
+	public void setSellPawnCode(String sellPawnCode) {
+		this.sellPawnCode=sellPawnCode == null ? sellPawnCode : sellPawnCode.trim();
+	}
+
+	public String getSellPawnCode() {
+		return sellPawnCode;
+	}
+
+	public void setCommentCount(Integer commentCount) {
+		this.commentCount=commentCount;
+	}
+
+	public Integer getCommentCount() {
+		return commentCount;
+	}
+
+	public void setCollectCount(Integer collectCount) {
+		this.collectCount=collectCount;
+	}
+
+	public Integer getCollectCount() {
+		return collectCount;
+	}
+
+	public void setPraiseCount(Integer praiseCount) {
+		this.praiseCount=praiseCount;
+	}
+
+	public Integer getPraiseCount() {
+		return praiseCount;
+	}
+
+	public void setClickCount(Integer clickCount) {
+		this.clickCount=clickCount;
+	}
+
+	public Integer getClickCount() {
+		return clickCount;
+	}
+
+	public void setReportCount(Integer reportCount) {
+		this.reportCount=reportCount;
+	}
+
+	public Integer getReportCount() {
+		return reportCount;
+	}
+
+	public void setIsRedeem(Integer isRedeem) {
+		this.isRedeem=isRedeem;
+	}
+
+	public Integer getIsRedeem() {
+		return isRedeem;
+	}
+
+	public void setSettleStatus(Integer settleStatus) {
+		this.settleStatus=settleStatus;
+	}
+
+	public Integer getSettleStatus() {
+		return settleStatus;
+	}
+
+	public void setSettleMoney(java.math.BigDecimal settleMoney) {
+		this.settleMoney=settleMoney;
+	}
+
+	public java.math.BigDecimal getSettleMoney() {
+		return settleMoney;
+	}
+
+	public void setSellRemark(String sellRemark) {
+		this.sellRemark=sellRemark == null ? sellRemark : sellRemark.trim();
+	}
+
+	public String getSellRemark() {
+		return sellRemark;
 	}
 
 }

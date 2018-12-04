@@ -6,20 +6,25 @@ import com.alibaba.fastjson.JSONObject;
 import com.api.MErrorEnum;
 import com.api.MPawnMsg;
 import com.api.MPostExpressAddress;
+import com.api.service.ApiUserGoodsService;
 import com.api.util.PageLimit;
 import com.api.view.indexInfo.ApiIndexHotMenu;
 import com.api.view.indexInfo.ApiIndexMenu;
 import com.api.view.indexInfo.IndexInfo;
 import com.api.view.myGoods.AppLogisticsDetail;
 import com.api.view.myGoods.AppMyGoods;
+import com.api.view.pay.PayResult;
 import com.api.view.store.AppStoreBanner;
 import com.api.view.user.AppBXAddress;
 import com.base.api.ApiBaseController;
 import com.base.api.ApiException;
 import com.base.api.MobileInfo;
 import com.base.api.annotation.ApiMethod;
+import com.base.cache.redis.RedisClientPool;
+import com.base.cache.redis.ReditClient;
 import com.base.dao.model.Ret;
 import com.base.dialect.PaginationSupport;
+import com.base.service.SensitivWordsService;
 import com.base.util.BeanUtils;
 import com.base.util.DateUtil;
 import com.base.util.StringUtil;
@@ -30,11 +35,9 @@ import com.item.service.CodeService;
 import com.item.service.FocusService;
 import com.item.service.UserService;
 import com.paidang.dao.model.*;
-import com.paidang.daoEx.model.ExpressEx;
-import com.paidang.daoEx.model.GoodsEx;
-import com.paidang.daoEx.model.PawnOrgEx;
-import com.paidang.daoEx.model.UserGoodsEx;
+import com.paidang.daoEx.model.*;
 import com.paidang.service.*;
+import com.redis.JedisTemplate;
 import com.sun.prism.impl.Disposer;
 import com.util.PaidangConst;
 import io.swagger.annotations.Api;
@@ -47,6 +50,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @RestController
@@ -89,6 +93,20 @@ public class ApiUserGoodsController extends ApiBaseController {
     @Autowired
     private VideoOnlineService videoOnlineService;
 
+    @Autowired
+    private SensitivWordsService sensitivWordsService;
+
+    @Autowired
+    private CommentService commentService;
+
+    @Autowired
+    private JedisTemplate jedisTemplate;
+
+    @Autowired
+    private CommentReplyService commentReplyService;
+
+    @Autowired
+    private ApiUserGoodsService apiUserGoodsService;
     public enum MGoodsCateList {
         SCPZB("1","奢侈品珠宝"),
         sb("2","手表"),
@@ -896,4 +914,281 @@ public class ApiUserGoodsController extends ApiBaseController {
         example.setOrderByClause("create_time desc");
         return videoOnlineService.selectByExample(example);
     }
+
+
+    @ApiOperation(value="寄拍 ", notes = "登录")
+    @RequestMapping("/sellUserGoods")
+    @ApiMethod(isPage = false, isLogin = true)
+    public Object sellUserGoods(MobileInfo mobileInfo,@ApiParam(value="id",required = true)Integer id){
+        UserGoods userGoods=userGoodsService.selectByPrimaryKey(id);
+        if (userGoods==null){
+            throw new ApiException("该商品不存在");
+        }
+        if (userGoods.getGotoPawn()!=0){
+            throw new ApiException("该商品已典当");
+        }
+        if (userGoods.getGoSell()!=0){
+            throw new ApiException("该商品已申请卖给平台或已卖出");
+        }
+        if (userGoods.getPostState()!=3){
+            throw new ApiException("平台为确认收货");
+        }
+        if (userGoods.getPostState()==1){
+            throw new ApiException("该商品已寄拍");
+        }
+        if (userGoods.getAuthResult()==4){
+            UserGoods entity=new UserGoods();
+            entity.setId(id);
+            entity.setIsSell(1);
+            entity.setSellStatus(0);
+           return userGoodsService.updateByPrimaryKeySelective(entity);
+        }else {
+            throw new ApiException("鉴定结果未出或鉴定为赝品无法寄拍！");
+        }
+    }
+
+    @ApiOperation(value="寄拍首页 ", notes = "不登录")
+    @RequestMapping("/sellIndex")
+    @ApiMethod(isPage = true, isLogin = false)
+    public Object sellIndex(MobileInfo mobileInfo,@ApiParam(value="name",required = false)String name,PageLimit pageLimit){
+        PaginationSupport.byPage(pageLimit.getPage(), pageLimit.getLimit(), false);
+        UserGoodsExample example=new UserGoodsExample();
+        UserGoodsExample.Criteria criteria=example.createCriteria();
+        if (StringUtil.isNotBlank(name)){
+            criteria.andNameLike("%"+name+"%");
+        }
+        Date date=new Date();
+        criteria.andIsSellEqualTo(1).andSellStatusEqualTo(1).andSellEndTimeGreaterThan(date).andSellStartTimeLessThan(date);
+        example.setOrderByClause("sell_start_time desc");
+        List<UserGoods> list= userGoodsService.selectByExample(example);
+        return list;
+    }
+
+
+
+    @ApiOperation(value="寄拍我的", notes = "登录")
+    @RequestMapping("/mySell")
+    @ApiMethod(isPage = true, isLogin = true)
+    public Object mySell(MobileInfo mobileInfo,PageLimit pageLimit,@ApiParam(value="name",required = false)String name){
+        PaginationSupport.byPage(pageLimit.getPage(), pageLimit.getLimit(), false);
+        UserGoodsExample example=new UserGoodsExample();
+        UserGoodsExample.Criteria criteria=example.createCriteria();
+        if (StringUtil.isNotBlank(name)){
+            criteria.andNameLike(name);
+        }
+        criteria.andIsSellEqualTo(1).andUserIdEqualTo(mobileInfo.getUserid());
+        example.setOrderByClause("sell_start_time desc");
+        List<UserGoods> list= userGoodsService.selectByExample(example);
+        return list;
+    }
+
+
+    @ApiOperation(value="上架下架 ", notes = "登录")
+    @RequestMapping("/updateOnline")
+    @ApiMethod(isPage = false, isLogin = true)
+    public Object updateOnline(MobileInfo mobileInfo,@ApiParam(value="id",required = true)Integer id
+    ,@ApiParam(value="sellStatus 0未上架，1上架",required = true)Integer sellStatus){
+        UserGoods userGoods=userGoodsService.selectByPrimaryKey(id);
+        if (userGoods.getIsSell()==0){
+            throw new ApiException("该商品未寄拍请先寄拍！");
+        }
+        if (userGoods.getSellStatus()==2){
+            throw new ApiException("该商品已售出！");
+        }
+        if (sellStatus==1 && (StringUtil.isBlank(userGoods.getSellInfo()) || userGoods.getSellPrice() == null || StringUtil.isBlank(userGoods.getSellImgs()) ||
+        StringUtil.isBlank(userGoods.getSellVideo()))){
+            throw new ApiException("上架前请先完善商品寄拍信息！");
+        }
+        Date date=new Date();
+        UserGoods entity=new UserGoods();
+        entity.setId(id);
+        entity.setSellStatus(sellStatus);
+        //上架的话初次设置当前时间为上架时间或者上次上架已结束
+        if (sellStatus==1 && (userGoods.getSellEndTime()==null || date.compareTo(userGoods.getSellEndTime())>0)){
+            entity.setSellStartTime(date);
+            entity.setSellEndTime(DateUtil.addMonth(date,1));
+        }
+        return userGoodsService.updateByPrimaryKeySelective(entity);
+    }
+
+    @ApiOperation(value="编辑 ", notes = "登录")
+    @RequestMapping("/updateSell")
+    @ApiMethod(isPage = false, isLogin = true)
+    public Object updateSell(MobileInfo mobileInfo,@ApiParam(value="id",required = true)Integer id
+            ,@ApiParam(value="寄拍图片以,分割",required = true)String  sellImgs, @ApiParam(value="寄拍视频以,分隔",required = true)String  sellVideo
+    ,@ApiParam(value="寄拍信息",required = true)String sellInfo,@ApiParam(value="一口价",required = true)BigDecimal sellPrice,@ApiParam(value="类别code",required = true)String sellPawnCode){
+        UserGoods userGoods=userGoodsService.selectByPrimaryKey(id);
+        if (userGoods.getIsSell()==0){
+            throw new ApiException("该商品未寄拍请先寄拍！");
+        }
+        if (userGoods.getSellStatus()==2){
+            throw new ApiException("该商品已售出！");
+        }
+        if (userGoods.getSellStatus()==1){
+            throw new ApiException("请先下架该商品再编辑！");
+        }
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
+        Date date=new Date();
+
+        UserGoods entity=new UserGoods();
+//        if (Integer.valueOf(jedisTemplate.get("onLineUserGoods:"+sdf.format(userGoods.getSellStartTime())+id))>3){
+//            throw new ApiException("上架后只能修改三次价格！");
+//        }t
+        if (userGoods.getSellStartTime()!=null){
+            String key="onLineUserGoods:"+sdf.format(userGoods.getSellStartTime())+id;
+            if ( ReditClient.exists(key) && (Integer)ReditClient.get(key)>3){
+                throw new ApiException("上架后只能修改三次价格！");
+            }
+            if (userGoods.getSellEndTime()!=null && date.compareTo(userGoods.getSellEndTime())<=0 && sellPrice.compareTo(userGoods.getSellPrice())!=0){
+                ReditClient.increment(key,1);
+            }
+        }
+        entity.setId(id);
+        entity.setSellImgs(sellImgs);
+        entity.setSellVideo(sellVideo);
+        entity.setSellInfo(sellInfo);
+        entity.setSellPrice(sellPrice);
+        entity.setSellPawnCode(sellPawnCode);
+        return userGoodsService.updateByPrimaryKeySelective(entity);
+    }
+
+
+    //TODO 立即购买下单接口    评价相关接口 商品的评论列表
+
+
+
+
+    @ApiOperation(value = "新增评价", notes = "登陆")
+    @RequestMapping(value = "/addUserGoodsComment", method = RequestMethod.POST)
+    @ApiMethod(isLogin = true)
+    public Object addUserGoodsComment(MobileInfo mobileInfo,
+                      @ApiParam(value = "评论", required = true)String content,
+                      @ApiParam(value = "头像", required =false)String headImg,
+                      @ApiParam(value = "昵称", required = true)String nickName,
+                      @ApiParam(value = "商品id", required = true)Integer userGoodsId
+    ){
+
+        Comment entity=new Comment();
+        UserGoods userGoods=userGoodsService.selectByPrimaryKey(userGoodsId);
+
+        if (userGoods==null){
+            throw new ApiException("商品不存在！");
+        }
+//        if (userBlackService.isBlackUser(mobileInfo.getUserid(),article.getUserId())>0){
+//            throw new ApiException("已被拉黑无法评论动态");
+//        }
+
+        //敏感词汇过滤
+        entity.setContent(sensitivWordsService.relpSensitivWords(content));
+        entity.setIsHot(0);
+        entity.setUserId(mobileInfo.getUserid());
+        entity.setLikeNum(0);
+        entity.setIsReply(0);
+        entity.setReplyNum(0);
+        entity.setIsTop(0);
+        entity.setHeadImg(headImg);
+        entity.setNickName(nickName);
+        entity.setTopicId(userGoodsId);
+        entity.setType(1);
+        entity.setStatus(1);
+        entity.setTopicUserId(userGoods.getUserId());
+        entity.setCreateTime(new Date());
+        if (userGoods.getUserId()==mobileInfo.getUserid()){
+            entity.setIsAuthor(2);
+        }else {
+            entity.setIsAuthor(0);
+        }
+        //更新评论数
+        userGoodsService.updateUserGoodsCount(userGoodsId,1,0);
+        return commentService.insert(entity);
+    }
+
+
+    @ApiOperation(value = "回复评价", notes = "登陆")
+    @RequestMapping(value = "/replyUserGoodsComment", method = RequestMethod.POST)
+    @ApiMethod(isLogin = true)
+    public Object reply(MobileInfo mobileInfo,
+                        @ApiParam(value = "评论", required = true)String content,
+                        @ApiParam(value = "商品id", required = true)Integer userGoodsId,
+                        @ApiParam(value = "头像", required = false)String headImg,
+                        @ApiParam(value = "昵称", required = true)String nickName,
+                        @ApiParam(value = "评论id", required = true)Integer commentId,
+                        @ApiParam(value = "1为回复评论，2为回复别人的回复", required = true)Integer replyType,
+                        @ApiParam(value = "replyType为2时传值，回复评论id", required = false)Integer replyId
+
+    ){
+
+        UserGoods userGoods=userGoodsService.selectByPrimaryKey(userGoodsId);
+        if (userGoods==null){
+            throw new ApiException("商品不存在！");
+        }
+
+        CommentReply entity=new CommentReply();
+        entity.setReplyType(replyType);
+        Comment comment=commentService.selectByPrimaryKey(commentId);
+        if (comment==null){
+            throw new ApiException("评论不存在！");
+        }
+        if (userGoods.getUserId()==mobileInfo.getUserid()){
+            entity.setIsAuthor(2);
+        }else {
+            entity.setIsAuthor(0);
+        }
+        //敏感词汇过滤
+        entity.setContent(sensitivWordsService.relpSensitivWords(content));
+        entity.setReplyId(commentId);
+        entity.setCommentId(commentId);
+        if (replyType==2){
+            if (replyId==null){
+                throw new ApiException("缺少必要参数replyId");
+            }
+            entity.setReplyId(replyId);
+            CommentReply reply=commentReplyService.selectByPrimaryKey(replyId);
+            if (reply==null){
+                throw new ApiException("回复对象不存在");
+            }
+            entity.setToUid(reply.getFromUid());
+            entity.setToNickname(entity.getFromNickname());
+        }else {
+            entity.setReplyId(commentId);
+            entity.setToUid(comment.getUserId());
+            entity.setToNickname(comment.getNickName());
+        }
+        entity.setFromUid(mobileInfo.getUserid());
+        entity.setFromNickname(nickName);
+        entity.setFromThumbImg(headImg);
+        entity.setCreateTime(new Date());
+//        commentService.updateReplyNum(commentId);
+        //更新评论数
+        userGoodsService.updateUserGoodsCount(userGoodsId,1,0);
+        return commentReplyService.insert(entity);
+
+    }
+
+
+    @ApiOperation(value = "寄拍商品评价列表", notes = "登陆")
+    @RequestMapping(value = "/userGoodsCommentList", method = RequestMethod.POST)
+    @ApiMethod(isLogin = false)
+    public  Object userGoodsCommentList(MobileInfo mobileInfo, @ApiParam(value = "商品id", required = true)Integer userGoodsId){
+        CommentEx commentEx=new CommentEx();
+        commentEx.setTopicId(userGoodsId);
+        return commentService.findList(commentEx);
+    }
+
+
+    @ApiOperation(value = "寄拍商品购买", notes = "登陆")
+    @RequestMapping(value = "/createUserGoodsOrder", method = RequestMethod.POST)
+    @ApiMethod(isLogin = true)
+    public PayResult createUserGoodsOrder(MobileInfo mobileInfo, @ApiParam(value = "商品id", required = true)Integer userGoodsId,
+                                          @ApiParam(value = "地址id", required = true)Integer addressId){
+
+        if (jedisTemplate.getLock("createUserGoodsOrder:"+userGoodsId,30)){
+            return apiUserGoodsService.createUserGoodsOrder(mobileInfo.getUserid(),userGoodsId,addressId);
+        }else {
+            throw new ApiException("该商品已经被下单！");
+        }
+
+    }
+
+
 }

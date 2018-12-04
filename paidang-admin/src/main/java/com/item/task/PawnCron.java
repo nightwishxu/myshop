@@ -275,6 +275,15 @@ public class PawnCron{
 
 			//释放商品表库存
 			int updateGoods = orderService.updateGoodsList(list);
+			//修改寄拍商品状态
+			for (OrderEx ex:list){
+				if (ex.getGoodsSource()!=null && ex.getGoodsSource()==5){
+					UserGoods userGoods=new UserGoods();
+					userGoods.setId(ex.getUserGoodsId());
+					userGoods.setSellStatus(1);
+					userGoodsService.updateByPrimaryKey(userGoods);
+				}
+			}
 		}
 	}
 

@@ -179,7 +179,7 @@
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
 				<configuration>
-					<url>http://211.159.217.27/manager/text</url>
+					<url>http://106.12.13.178/manager/text</url>
 					<server>tomcat</server>
 					<username>admin</username>
 					<password>admin110</password>

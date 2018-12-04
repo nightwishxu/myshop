@@ -139,8 +139,8 @@
   <!-- 订单超过24小时，未付款。设置为已取消 -->
   <select id="selectTask" resultMap="BaseResultMap" parameterType="java.util.HashMap">
     select
-    A.*
-    from p_order A
+    A.*,B.user_goods_id
+    from p_order A LEFT join p_goods B on A.goods_id=B.id
     where A.state = 1  and A.create_time &lt; #{time}
   </select>
 
@@ -162,9 +162,13 @@
 
 
   <update id="updateGoodsList" parameterType="java.util.List">
-    update p_goods set total = 1,sold_out = 0,is_online = 1 where id in
+    update p_goods set total = total+1,sold_out = sold_out-1,is_online = 1 where id in
     <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
       ${item.goodsId}
     </foreach>
+  </update>
+
+  <update id="updateGoods" parameterType="java.lang.Integer">
+    update p_goods set total = total+1,sold_out = sold_out-1,is_online = 1 where id =#{id}
   </update>
 </mapper>

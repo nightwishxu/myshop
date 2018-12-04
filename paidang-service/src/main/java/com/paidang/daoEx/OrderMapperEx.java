@@ -35,4 +35,5 @@ public interface OrderMapperEx {
     int updateOrderList(List<OrderEx> list);
 
     int updateGoodsList(List<OrderEx> list);
+    int updateGoods(Integer id);
 }

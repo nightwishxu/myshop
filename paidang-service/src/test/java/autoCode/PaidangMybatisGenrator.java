@@ -6,7 +6,7 @@ public class PaidangMybatisGenrator {
 
 	public static void main(String[] args) {
 //		GenerateTool.generate("toutiao.properties");
-		GenerateTool.generate("paidang.properties");
+		GenerateTool.generate("generator.properties");
 	}
 	
 

@@ -3,7 +3,7 @@ package com.api.view.orgDeadPawnage;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- * Created by Lee on 2017/11/8.
+ * Created by Lee on 2017/11/gotoAuthGood
  */
 public class OrgAuctionDetail {
 

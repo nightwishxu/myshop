@@ -755,7 +755,13 @@ public class ApiHomeController extends ApiBaseController {
         if (null == goods) {
             throw new ApiException(MErrorEnum.GOODS_NOTEXISTS_ERROR);
         }
-
+        orderService.updateGoods(goods.getId());
+        if (goods.getSource()==5){
+            UserGoods userGoods=new UserGoods();
+            userGoods.setId(goods.getGoodsId());
+            userGoods.setSellStatus(1);
+            userGoodsService.updateByPrimaryKey(userGoods);
+        }
 
         return ok();
     }

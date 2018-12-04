@@ -176,4 +176,8 @@ public class OrderService {
 	public int updateGoodsList(List<OrderEx> list) {
 		return this.orderMapperEx.updateGoodsList(list);
 	}
+
+	public int updateGoods(Integer id){
+		return orderMapperEx.updateGoods(id);
+	}
 }

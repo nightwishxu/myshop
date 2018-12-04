@@ -17,6 +17,8 @@ public class OrderEx extends Order {
 
     private String tradNo;
 
+    private Integer userGoodsId;
+
     public String getTradNo() {
         return tradNo;
     }
@@ -85,5 +87,13 @@ public class OrderEx extends Order {
 
     public void setExpressData(String expressData) {
         this.expressData = expressData;
+    }
+
+    public Integer getUserGoodsId() {
+        return userGoodsId;
+    }
+
+    public void setUserGoodsId(Integer userGoodsId) {
+        this.userGoodsId = userGoodsId;
     }
 }

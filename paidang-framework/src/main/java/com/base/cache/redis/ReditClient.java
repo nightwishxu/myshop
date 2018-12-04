@@ -87,4 +87,7 @@ public class ReditClient {
 		}
 	}
 
+	public static void increment(String key,long delta ){
+		redisTemplate.opsForValue().increment(key,delta);
+	}
 }

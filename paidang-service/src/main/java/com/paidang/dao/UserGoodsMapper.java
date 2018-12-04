@@ -20,13 +20,19 @@ public interface UserGoodsMapper {
 
 	List<UserGoods> selectByExample(UserGoodsExample example);
 
+	List<UserGoods> selectByExampleWithBLOBs(UserGoodsExample example);
+
 	UserGoods selectByPrimaryKey(Integer id);
 
 	int updateByExampleSelective(@Param("record") UserGoods record,@Param("example") UserGoodsExample example);
 
+	int updateByExampleWithBLOBs(@Param("record") UserGoods record, @Param("example") UserGoodsExample example);
+
 	int updateByExample(@Param("record") UserGoods record,@Param("example") UserGoodsExample example);
 
 	int updateByPrimaryKeySelective(UserGoods record);
+
+	int updateByPrimaryKeyWithBLOBs(UserGoods record);
 
 	int updateByPrimaryKey(UserGoods record);
 
