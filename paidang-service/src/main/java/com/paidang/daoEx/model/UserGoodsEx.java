@@ -273,4 +273,12 @@ public class UserGoodsEx extends UserGoods {
     public void setExpressData2(String expressData2) {
         this.expressData2 = expressData2;
     }
+
+    public Integer getOrderState() {
+        return orderState;
+    }
+
+    public void setOrderState(Integer orderState) {
+        this.orderState = orderState;
+    }
 }

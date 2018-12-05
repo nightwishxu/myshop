@@ -23,7 +23,7 @@ $(document).ajaxError(function(event,xhr,settings){
 		    }
 			break;
 		default:
-			sy.msg("未知错误，请联系管理员！");
+			sy.msg(xhr.status+" 未知错误，请联系管理员！");
 			break;
 	}
 });

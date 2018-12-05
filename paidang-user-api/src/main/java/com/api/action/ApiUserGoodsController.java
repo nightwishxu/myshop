@@ -1182,7 +1182,8 @@ public class ApiUserGoodsController extends ApiBaseController {
     public PayResult createUserGoodsOrder(MobileInfo mobileInfo, @ApiParam(value = "商品id", required = true)Integer userGoodsId,
                                           @ApiParam(value = "地址id", required = true)Integer addressId){
 
-        if (jedisTemplate.getLock("createUserGoodsOrder:"+userGoodsId,30)){
+        if (!ReditClient.exists("createUserGoodsOrder:"+userGoodsId)){
+            ReditClient.set("createUserGoodsOrder:"+userGoodsId,userGoodsId,30L);
             return apiUserGoodsService.createUserGoodsOrder(mobileInfo.getUserid(),userGoodsId,addressId);
         }else {
             throw new ApiException("该商品已经被下单！");

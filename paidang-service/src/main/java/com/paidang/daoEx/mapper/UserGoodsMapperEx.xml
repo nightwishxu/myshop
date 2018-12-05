@@ -276,10 +276,10 @@ ORDER BY
     </set>
     where id=#{id}
     </update>
-    <select id="findList" resultType="com.paidang.daoEx.model.UserGoodsEx">
+    <select id="findList" resultMap="BaseResultMap">
         SELECT  ug.*,o.state as orderState from p_user_goods ug LEFT JOIN p_goods g on ug.id=g.goods_id
         LEFT JOIN p_order o on g.id=o.goods_id
-        where o.state!=-1
+        where (o.state!=-1 or o.state is null) and ug.is_sell=1
         <if test="name!=null and name!=''">
             and name LIKE  '%${name}%'
         </if>
