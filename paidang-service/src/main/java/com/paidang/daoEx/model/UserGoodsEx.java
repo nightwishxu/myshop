@@ -73,6 +73,9 @@ public class UserGoodsEx extends UserGoods {
      */
     private Integer orderState;
 
+
+    private Integer orderStateEx;
+
     public Integer getPawnId() {
         return pawnId;
     }
@@ -280,5 +283,9 @@ public class UserGoodsEx extends UserGoods {
 
     public void setOrderState(Integer orderState) {
         this.orderState = orderState;
+    }
+
+    public Integer getOrderStateEx() {
+        return orderState;
     }
 }

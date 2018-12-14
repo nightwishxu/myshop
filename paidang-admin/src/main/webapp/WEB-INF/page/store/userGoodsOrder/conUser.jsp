@@ -10,48 +10,57 @@
     <script type="text/javascript">
         var id = "${id}";
         $(function() {
-            $("#id").val(id);
-            console.debug('id='+id+'  v='+v)
-        });
+                $("#id").val(id);
+            });
+        var goodsSource = "${goodsSource}";
+
         var submitForm = function($dialog, $grid, $pjq) {
             if ($('form').form('validate')) {
                 var obj=sy.serializeObject($('form'));
-                var url=sy.contextPath + '/userGoods/settle';
+                console.log(obj);
+                var url=sy.contextPath + '/order/save?goodsSource='+goodsSource;
+
                 $.post(url, obj, function(result) {
                     if (result.code == 0) {
                         $grid.datagrid('reload');
                         $dialog.dialog('destroy');
                     } else {
-                        $pjq.messager.e('结算失败,'+result.msg);
+                        $pjq.messager.e('添加失败,'+result.msg);
                     }
                 }, 'json');
             }
         };
+
         $(function() {
-
-
+            if (id != '') {
+                parent.$.messager.progress({
+                    text : '数据加载中....'
+                });
+                $.post(sy.contextPath + '/order/findById', {
+                    id : id
+                }, function(result) {
+                    if (result) {
+                        $('form').form('load', result);
+                        //$('#file_upload').setFileId(result.image,true,true);
+                    }
+                    parent.$.messager.progress('close');
+                }, 'json');
+            }
         });
+
     </script>
 </head>
 <body>
 <form id="form" method="post">
-    <input name="id" id="id" type="hidden" />
+    <input id="id" name="id" type="hidden" />
     <div style="padding:15px;font-size: 12px">
         <table style="table-layout:fixed;" border="0" cellspacing="0" class="formtable">
             <tr>
-                <th >结算金额：</th>
-                <td>
-                    <input class="easyui-numberbox" id = "settleMoney" name="settleMoney"  data-options="required:true,precision:2,min:0,max:9999999999" style="width:100%" missingMessage="请输入结算金额"/>
-                </td>
-
-            </tr>
-            <tr>
-                <th >备注：</th>
-                <td>
-                    <input class="easyui-textbox" id = "sellRemark" name = "sellRemark"   style="width:100%" missingMessage="备注"/>
-                </td>
+                <textarea name="" id="" cols="120" rows="30"></textarea>
             </tr>
         </table>
+        <textarea cols="120"></textarea>
+        <input type="button" class="button button-default" value="发送">
     </div>
 </form>
 </body>

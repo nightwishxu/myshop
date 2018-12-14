@@ -191,7 +191,7 @@ public class ExpressService {
 		expressExample.createCriteria().andTypeEqualTo(6);//所有的机构申请取回快递
 		List<Express> expresses = this.selectByExample(expressExample);
 		for (Express express:expresses) {
-			KuaidiResult result = KuaidiApiUtil.query(express.getExpressName(),express.getExpressCode());
+			KuaidiResult result = KuaidiApiUtil. query(express.getExpressName(),express.getExpressCode());
 			if (result != null){
 				express.setExpressState(result.getState());
 				express.setExpressData(result.toString());

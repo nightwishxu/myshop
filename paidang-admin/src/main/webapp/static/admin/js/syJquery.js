@@ -165,7 +165,7 @@ $(document).ajaxError(function(event,xhr,settings){
         case 0:
             break;
 		default:
-			parent.$.messager.e("未知错误，请联系管理员！");
+			parent.$.messager.e(xhr.status +"未知错误，请联系管理员！");
 			break;
 	}
 });

@@ -429,7 +429,9 @@ public class UserGoodsController extends CoreController{
 		entity.setId(id);
 		entity.setSettleMoney(settleMoney);
 		entity.setSellRemark(sellRemark);
-		return userGoodsService.updateByPrimaryKey(entity);
+		entity.setSettleStatus(1);
+		userGoodsService.updateByPrimaryKeySelective(entity);
+		return ok();
 	}
 
 }

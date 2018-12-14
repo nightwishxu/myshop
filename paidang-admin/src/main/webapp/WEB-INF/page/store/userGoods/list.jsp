@@ -149,6 +149,20 @@
                 //     title : '视频',
                 //     field : 'cost',
                 //     align : 'center',
+
+                    // if(v==null){
+                    //     return '';
+                    // }else if (v==1){
+                    //     return '待付款';
+                    // }else if(v==2){
+                    //     return '已付款';
+                    // }else if(v==3){
+                    //     return '已发货';
+                    // }else if(v==4){
+                    //     return '确认收货';
+                    // }else if(v==5){
+                    //     return '已评价';
+                    // }
                 // }
                 ,{
                     width : $(this).width() * 0.05,
@@ -177,17 +191,17 @@
                         align : 'center',
                         formatter : function (v,r,i) {
                             if(v==null){
-                                return ''
+                                return '';
                             }else if (v==1){
-                                return '待付款'
+                                return '待付款';
                             }else if(v==2){
-                                return '已付款'
+                                return '已付款';
                             }else if(v==3){
-                                return '已发货'
+                                return '已发货';
                             }else if(v==4){
-                                return '确认收货'
+                                return '确认收货';
                             }else if(v==5){
-                                return '已评价'
+                                return '已评价';
                             }
                         }
 
@@ -217,12 +231,12 @@
                     },{
                     width : $(this).width() * 0.05,
                     title : '操作',
-                    field : 'orderState',
+                    field : 'orderStateEx',
                     align : 'center',
                     formatter : function (v,r,i) {
                         if(r.id){
 
-                            if(v == 4 || v==5){
+                            if((v == 4 || v==5)){
                                 return '<a href="javascript:void(0);" onclick="changeS(\''+r.id+'\');" class="button button-warning" title="结算">结算</a>';
                             }else {
                                 return ""
@@ -244,15 +258,13 @@
             });
         });
 
-        function changeS(id,v) {
-            var url = sy.contextPath + '/userGoods/settle?id='+id;
-            if(v==2){
-                //审核不通过需要填写原因
+        function changeS(id) {
+            // if(v==2){
                 var dialog = parent.sy.modalDialog({
-                    title : '审核不通过原因',
+                    title : '结算',
                     width : 600,
                     height : 400,
-                    url : sy.contextPath + '/go?path=store/userGoods/settle?id='+id,
+                    url : sy.contextPath + '/go?path=store/userGoods/settle' + '&id='+id,
                     buttons : [ {
                         text : '确定',
                         handler : function() {
@@ -260,14 +272,14 @@
                         }
                     } ]
                 });
-            }else {
-                $.post(url, function() {
-                    grid.datagrid('reload');
-                }, 'json');
-            }
-            $.post(url, function() {
-                grid.datagrid('reload');
-            }, 'json');
+            // }else {
+            //     $.post(url, function() {
+            //         grid.datagrid('reload');
+            //     }, 'json');
+            // }
+            // $.post(url, function() {
+            //     grid.datagrid('reload');
+            // }, 'json');
         };
 
         function changeO(id,v) {
@@ -328,9 +340,9 @@
         </div>
     </form>
     <div class="tbbutton">
-        <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fa-plus-circle',plain:true" onclick="addFun();">添加</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fa-pencil',plain:true" onclick="editFun();">修改</a>
-        <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fa-trash',plain:true" onclick="delFun();">删除</a>
+        <%--<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fa-plus-circle',plain:true" onclick="addFun();">添加</a>--%>
+        <%--<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fa-pencil',plain:true" onclick="editFun();">修改</a>--%>
+        <%--<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'fa-trash',plain:true" onclick="delFun();">删除</a>--%>
     </div>
 </div>
 <table id="grid" data-options="fit:true,border:false"></table>
