@@ -922,19 +922,19 @@ public class ApiUserGoodsController extends ApiBaseController {
     public Object sellUserGoods(MobileInfo mobileInfo,@ApiParam(value="id",required = true)Integer id){
         UserGoods userGoods=userGoodsService.selectByPrimaryKey(id);
         if (userGoods==null){
-            throw new ApiException("该商品不存在");
+            throw new ApiException(1100,"该商品不存在");
         }
         if (userGoods.getGotoPawn()!=0){
-            throw new ApiException("该商品已典当");
+            throw new ApiException(1100,"该商品已典当");
         }
         if (userGoods.getGoSell()!=0){
-            throw new ApiException("该商品已申请卖给平台或已卖出");
+            throw new ApiException(1100,"该商品已申请卖给平台或已卖出");
         }
-        if (userGoods.getPostState()!=3){
-            throw new ApiException("平台为确认收货");
+        if (userGoods.getPostState()!=3 || userGoods.getPostState()!=4){
+            throw new ApiException(1100,"平台未确认收货");
         }
         if (userGoods.getPostState()==1){
-            throw new ApiException("该商品已寄拍");
+            throw new ApiException(1100,"该商品已寄拍");
         }
         if (userGoods.getAuthResult()==4){
             UserGoods entity=new UserGoods();
@@ -952,18 +952,36 @@ public class ApiUserGoodsController extends ApiBaseController {
     @ApiMethod(isPage = true, isLogin = false)
     public Object sellIndex(MobileInfo mobileInfo,@ApiParam(value="name",required = false)String name,PageLimit pageLimit){
         PaginationSupport.byPage(pageLimit.getPage(), pageLimit.getLimit(), false);
-        UserGoodsExample example=new UserGoodsExample();
-        UserGoodsExample.Criteria criteria=example.createCriteria();
-        if (StringUtil.isNotBlank(name)){
-            criteria.andNameLike("%"+name+"%");
-        }
-        Date date=new Date();
-        criteria.andIsSellEqualTo(1).andSellStatusEqualTo(1).andSellEndTimeGreaterThan(date).andSellStartTimeLessThan(date);
-        example.setOrderByClause("sell_start_time desc");
-        List<UserGoods> list= userGoodsService.selectByExample(example);
+//        UserGoodsExample example=new UserGoodsExample();
+////        UserGoodsExample.Criteria criteria=example.createCriteria();
+////        if (StringUtil.isNotBlank(name)){
+////            criteria.andNameLike("%"+name+"%");
+////        }
+////        Date date=new Date();
+////        criteria.andIsSellEqualTo(1).andSellStatusEqualTo(1).andSellEndTimeGreaterThan(date).andSellStartTimeLessThan(date);
+////        example.setOrderByClause("sell_start_time desc");
+////        List<UserGoods> list= userGoodsService.selectByExample(example);
+        UserGoodsEx ex=new UserGoodsEx();
+        ex.setName(name);
+        ex.setUseDate(new Date());
+        ex.setSellStatus(1);
+        List<UserGoodsEx> list=userGoodsService.findList(ex);
         return list;
     }
 
+    @ApiOperation(value="寄拍详情 ", notes = "不登录")
+    @RequestMapping("/sellDetail")
+    @ApiMethod(isPage = false, isLogin = false)
+    public UserGoods getSellDetail(MobileInfo mobileInfo,@ApiParam(value="id",required = false)Integer id){
+        UserGoodsEx ex=new UserGoodsEx();
+        ex.setId(id);
+        List<UserGoodsEx> list=userGoodsService.findList(ex);
+        if (list!=null && list.size()>0){
+            return list.get(0);
+        }else {
+            throw new ApiException(1100,"商品不存在！");
+        }
+    }
 
 
     @ApiOperation(value="寄拍我的", notes = "登录")
@@ -990,14 +1008,14 @@ public class ApiUserGoodsController extends ApiBaseController {
     ,@ApiParam(value="sellStatus 0未上架，1上架",required = true)Integer sellStatus){
         UserGoods userGoods=userGoodsService.selectByPrimaryKey(id);
         if (userGoods.getIsSell()==0){
-            throw new ApiException("该商品未寄拍请先寄拍！");
+            throw new ApiException(1100,"该商品未寄拍请先寄拍！");
         }
         if (userGoods.getSellStatus()==2){
-            throw new ApiException("该商品已售出！");
+            throw new ApiException(1100,"该商品已售出！");
         }
         if (sellStatus==1 && (StringUtil.isBlank(userGoods.getSellInfo()) || userGoods.getSellPrice() == null || StringUtil.isBlank(userGoods.getSellImgs()) ||
         StringUtil.isBlank(userGoods.getSellVideo()))){
-            throw new ApiException("上架前请先完善商品寄拍信息！");
+            throw new ApiException(1100,"上架前请先完善商品寄拍信息！");
         }
         Date date=new Date();
         UserGoods entity=new UserGoods();
@@ -1018,14 +1036,17 @@ public class ApiUserGoodsController extends ApiBaseController {
             ,@ApiParam(value="寄拍图片以,分割",required = true)String  sellImgs, @ApiParam(value="寄拍视频以,分隔",required = true)String  sellVideo
     ,@ApiParam(value="寄拍信息",required = true)String sellInfo,@ApiParam(value="一口价",required = true)BigDecimal sellPrice,@ApiParam(value="类别code",required = true)String sellPawnCode){
         UserGoods userGoods=userGoodsService.selectByPrimaryKey(id);
+        if (userGoods==null){
+            throw new ApiException(1100,"该商品未不存在！");
+        }
         if (userGoods.getIsSell()==0){
-            throw new ApiException("该商品未寄拍请先寄拍！");
+            throw new ApiException(1100,"该商品未寄拍请先寄拍！");
         }
         if (userGoods.getSellStatus()==2){
-            throw new ApiException("该商品已售出！");
+            throw new ApiException(1100,"该商品已售出！");
         }
         if (userGoods.getSellStatus()==1){
-            throw new ApiException("请先下架该商品再编辑！");
+            throw new ApiException(1100,"请先下架该商品再编辑！");
         }
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
         Date date=new Date();
@@ -1037,7 +1058,7 @@ public class ApiUserGoodsController extends ApiBaseController {
         if (userGoods.getSellStartTime()!=null){
             String key="onLineUserGoods:"+sdf.format(userGoods.getSellStartTime())+id;
             if ( ReditClient.exists(key) && (Integer)ReditClient.get(key)>3){
-                throw new ApiException("上架后只能修改三次价格！");
+                throw new ApiException(1100,"上架后只能修改三次价格！");
             }
             if (userGoods.getSellEndTime()!=null && date.compareTo(userGoods.getSellEndTime())<=0 && sellPrice.compareTo(userGoods.getSellPrice())!=0){
                 ReditClient.increment(key,1);
@@ -1072,7 +1093,7 @@ public class ApiUserGoodsController extends ApiBaseController {
         UserGoods userGoods=userGoodsService.selectByPrimaryKey(userGoodsId);
 
         if (userGoods==null){
-            throw new ApiException("商品不存在！");
+            throw new ApiException(1100,"商品不存在！");
         }
 //        if (userBlackService.isBlackUser(mobileInfo.getUserid(),article.getUserId())>0){
 //            throw new ApiException("已被拉黑无法评论动态");
@@ -1120,14 +1141,14 @@ public class ApiUserGoodsController extends ApiBaseController {
 
         UserGoods userGoods=userGoodsService.selectByPrimaryKey(userGoodsId);
         if (userGoods==null){
-            throw new ApiException("商品不存在！");
+            throw new ApiException(1100,"商品不存在！");
         }
 
         CommentReply entity=new CommentReply();
         entity.setReplyType(replyType);
         Comment comment=commentService.selectByPrimaryKey(commentId);
         if (comment==null){
-            throw new ApiException("评论不存在！");
+            throw new ApiException(1100,"评论不存在！");
         }
         if (userGoods.getUserId()==mobileInfo.getUserid()){
             entity.setIsAuthor(2);
@@ -1140,12 +1161,12 @@ public class ApiUserGoodsController extends ApiBaseController {
         entity.setCommentId(commentId);
         if (replyType==2){
             if (replyId==null){
-                throw new ApiException("缺少必要参数replyId");
+                throw new ApiException(1100,"缺少必要参数replyId");
             }
             entity.setReplyId(replyId);
             CommentReply reply=commentReplyService.selectByPrimaryKey(replyId);
             if (reply==null){
-                throw new ApiException("回复对象不存在");
+                throw new ApiException(1100,"回复对象不存在");
             }
             entity.setToUid(reply.getFromUid());
             entity.setToNickname(entity.getFromNickname());
@@ -1186,7 +1207,7 @@ public class ApiUserGoodsController extends ApiBaseController {
             ReditClient.set("createUserGoodsOrder:"+userGoodsId,userGoodsId,30L);
             return apiUserGoodsService.createUserGoodsOrder(mobileInfo.getUserid(),userGoodsId,addressId);
         }else {
-            throw new ApiException("该商品已经被下单！");
+            throw new ApiException(1100,"该商品已经被下单！");
         }
 
     }

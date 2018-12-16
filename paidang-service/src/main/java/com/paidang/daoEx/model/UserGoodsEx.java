@@ -2,6 +2,8 @@ package com.paidang.daoEx.model;
 
 import com.paidang.dao.model.UserGoods;
 
+import java.util.Date;
+
 /**
 @author sun
 */
@@ -75,6 +77,12 @@ public class UserGoodsEx extends UserGoods {
 
 
     private Integer orderStateEx;
+
+    private Date useDate;
+
+
+
+    private String headImg;
 
     public Integer getPawnId() {
         return pawnId;
@@ -287,5 +295,21 @@ public class UserGoodsEx extends UserGoods {
 
     public Integer getOrderStateEx() {
         return orderState;
+    }
+
+    public Date getUseDate() {
+        return useDate;
+    }
+
+    public void setUseDate(Date useDate) {
+        this.useDate = useDate;
+    }
+
+    public String getHeadImg() {
+        return headImg;
+    }
+
+    public void setHeadImg(String headImg) {
+        this.headImg = headImg;
     }
 }

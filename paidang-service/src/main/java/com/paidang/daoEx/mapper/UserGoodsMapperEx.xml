@@ -277,11 +277,21 @@ ORDER BY
     where id=#{id}
     </update>
     <select id="findList" resultMap="BaseResultMap">
-        SELECT  ug.*,o.state as orderState from p_user_goods ug LEFT JOIN p_goods g on ug.id=g.goods_id
-        LEFT JOIN p_order o on g.id=o.goods_id
+        SELECT  ug.*,o.state as orderState,u.nick_name as nickName,u.head_img as headImg from p_user_goods ug LEFT JOIN p_goods g on ug.id=g.goods_id
+        LEFT JOIN p_order o on g.id=o.goods_id LEFT join b_user  u on ug.user_id=u.id
         where (o.state!=-1 or o.state is null) and ug.is_sell=1
         <if test="name!=null and name!=''">
-            and name LIKE  '%${name}%'
+            and ug.name LIKE  '%${name}%'
         </if>
-    </select>
+        <if test="id!=null and id!=''">
+            and ug.id=#{id}
+        </if>
+        <if test="useDate!=null">
+          and ug.sell_start_time &lt; #{useDate} and ug.sell_end_time &gt; #{useDate}
+        </if>
+        <if test="sellStatus!=null">
+            and ug.sell_status=#{sellStatus}
+        </if>
+        order by ug.sell_start_time desc
+     </select>
 </mapper>
