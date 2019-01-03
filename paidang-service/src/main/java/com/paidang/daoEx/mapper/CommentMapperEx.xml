@@ -36,7 +36,21 @@
   </select>
 
   <select id="findCommentReplyList" parameterType="java.lang.Integer" resultType="com.paidang.daoEx.model.CommentReplyEx">
-    SELECT  * from p_comment_reply where comment_id=#{id} order by create_time desc
+    SELECT
+    id as id,
+    comment_id as commentId,
+    reply_type as replyType,
+    reply_id as replyId,
+    to_uid as toUid,
+    from_uid as fromUid,
+    from_thumb_img as fromThumbImg,
+    from_nickname as fromNickname,
+    create_time as createTime,
+    to_nickname as toNickname,
+    is_show as isShow,
+    content as content,
+    is_author as isAuthor
+     from p_comment_reply where comment_id=#{id} order by create_time desc
   </select>
 
 </mapper>

@@ -106,6 +106,9 @@ public class ApiUserGoodsController extends ApiBaseController {
     private CommentReplyService commentReplyService;
 
     @Autowired
+    private ExperterInfoService experterInfoService;
+
+    @Autowired
     private ApiUserGoodsService apiUserGoodsService;
     public enum MGoodsCateList {
         SCPZB("1","奢侈品珠宝"),
@@ -977,7 +980,14 @@ public class ApiUserGoodsController extends ApiBaseController {
         ex.setId(id);
         List<UserGoodsEx> list=userGoodsService.findList(ex);
         if (list!=null && list.size()>0){
-            return list.get(0);
+            ExperterInfoExample example=new ExperterInfoExample();
+            example.createCriteria().andGoodsIdEqualTo(id).andStateEqualTo(1);
+            List<ExperterInfo> infos=experterInfoService.selectByExample(example);
+            UserGoodsEx entity=list.get(0);
+            if (infos!=null && infos.size()>0){
+                entity.setExperterInfo(infos.get(0).getInfo());
+            }
+            return entity;
         }else {
             throw new ApiException(1100,"商品不存在！");
         }
@@ -1084,8 +1094,8 @@ public class ApiUserGoodsController extends ApiBaseController {
     @ApiMethod(isLogin = true)
     public Object addUserGoodsComment(MobileInfo mobileInfo,
                       @ApiParam(value = "评论", required = true)String content,
-                      @ApiParam(value = "头像", required =false)String headImg,
-                      @ApiParam(value = "昵称", required = true)String nickName,
+//                      @ApiParam(value = "头像", required =false)String headImg,
+//                      @ApiParam(value = "昵称", required = true)String nickName,
                       @ApiParam(value = "商品id", required = true)Integer userGoodsId
     ){
 
@@ -1101,14 +1111,18 @@ public class ApiUserGoodsController extends ApiBaseController {
 
         //敏感词汇过滤
         entity.setContent(sensitivWordsService.relpSensitivWords(content));
+        User user=userService.selectByPrimaryKey(mobileInfo.getUserid());
+        if (user==null){
+            throw new ApiException(1100,"用户不存在");
+        }
         entity.setIsHot(0);
         entity.setUserId(mobileInfo.getUserid());
         entity.setLikeNum(0);
         entity.setIsReply(0);
         entity.setReplyNum(0);
         entity.setIsTop(0);
-        entity.setHeadImg(headImg);
-        entity.setNickName(nickName);
+        entity.setHeadImg(user.getHeadImg());
+        entity.setNickName(user.getNickName());
         entity.setTopicId(userGoodsId);
         entity.setType(1);
         entity.setStatus(1);
@@ -1131,8 +1145,8 @@ public class ApiUserGoodsController extends ApiBaseController {
     public Object reply(MobileInfo mobileInfo,
                         @ApiParam(value = "评论", required = true)String content,
                         @ApiParam(value = "商品id", required = true)Integer userGoodsId,
-                        @ApiParam(value = "头像", required = false)String headImg,
-                        @ApiParam(value = "昵称", required = true)String nickName,
+//                        @ApiParam(value = "头像", required = false)String headImg,
+//                        @ApiParam(value = "昵称", required = true)String nickName,
                         @ApiParam(value = "评论id", required = true)Integer commentId,
                         @ApiParam(value = "1为回复评论，2为回复别人的回复", required = true)Integer replyType,
                         @ApiParam(value = "replyType为2时传值，回复评论id", required = false)Integer replyId
@@ -1142,6 +1156,11 @@ public class ApiUserGoodsController extends ApiBaseController {
         UserGoods userGoods=userGoodsService.selectByPrimaryKey(userGoodsId);
         if (userGoods==null){
             throw new ApiException(1100,"商品不存在！");
+        }
+
+        User user=userService.selectByPrimaryKey(mobileInfo.getUserid());
+        if (user==null){
+            throw new ApiException(1100,"用户不存在");
         }
 
         CommentReply entity=new CommentReply();
@@ -1176,8 +1195,8 @@ public class ApiUserGoodsController extends ApiBaseController {
             entity.setToNickname(comment.getNickName());
         }
         entity.setFromUid(mobileInfo.getUserid());
-        entity.setFromNickname(nickName);
-        entity.setFromThumbImg(headImg);
+        entity.setFromNickname(user.getNickName());
+        entity.setFromThumbImg(user.getHeadImg());
         entity.setCreateTime(new Date());
 //        commentService.updateReplyNum(commentId);
         //更新评论数
@@ -1193,7 +1212,8 @@ public class ApiUserGoodsController extends ApiBaseController {
     public  Object userGoodsCommentList(MobileInfo mobileInfo, @ApiParam(value = "商品id", required = true)Integer userGoodsId){
         CommentEx commentEx=new CommentEx();
         commentEx.setTopicId(userGoodsId);
-        return commentService.findList(commentEx);
+        List<CommentEx> list=commentService.findList(commentEx);
+        return list;
     }
 
 

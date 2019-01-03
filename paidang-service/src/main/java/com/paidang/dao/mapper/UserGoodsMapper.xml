@@ -66,6 +66,7 @@
         <result column="is_sell" property="isSell" jdbcType="INTEGER" />
         <result column="sell_status" property="sellStatus" jdbcType="INTEGER" />
         <result column="sell_price" property="sellPrice" jdbcType="DECIMAL" />
+        <result column="sell_info" property="sellInfo" jdbcType="VARCHAR" />
         <result column="sell_imgs" property="sellImgs" jdbcType="VARCHAR" />
         <result column="sell_video" property="sellVideo" jdbcType="VARCHAR" />
         <result column="sell_start_time" property="sellStartTime" jdbcType="TIMESTAMP" />
@@ -80,10 +81,6 @@
         <result column="settle_status" property="settleStatus" jdbcType="INTEGER" />
         <result column="settle_money" property="settleMoney" jdbcType="DECIMAL" />
         <result column="sell_remark" property="sellRemark" jdbcType="VARCHAR" />
-    </resultMap>
-
-    <resultMap id="ResultMapWithBLOBs" type="com.paidang.dao.model.UserGoods" extends="BaseResultMap" >
-        <result column="sell_info" property="sellInfo" jdbcType="LONGVARCHAR" />
     </resultMap>
 
     <sql id="Example_Where_Clause" >
@@ -147,29 +144,8 @@
     </sql>
 
     <sql id="Base_Column_List" >
-        id,user_id,belong_id,belong_type,name,images,goods_imgs,video,buy_time,buy_price,info,content,city,user_name,user_phone,authenticate_require,cate_id,cate_code,auth_result,auth_price_test,auth_price,back_images,back_video,open_goods_video,plat_goods_receive_video,plat_goods_auth_video,not_verify_reason,go_video,goto_pawn,go_sell,location,post_state,post_user_name,post_user_phone,post_express,post_express_code,back_user_name,back_user_phone,back_user_express,back_express,back_express_code,back_state,create_time,modify_time,is_online,rate,money_rate,plat_user_name,plat_user_phone,plat_user_address,org_user_name,org_user_address,org_user_phone,plat_org_state,plat_org_video,plat_org_verify,plat_org_express_code,plat_org_time,is_verify,experter_info_id,sf_protect_price,is_sell,sell_status,sell_price,sell_imgs,sell_video,sell_start_time,sell_end_time,sell_pawn_code,comment_count,collect_count,praise_count,click_count,report_count,is_redeem,settle_status,settle_money,sell_remark
+        id,user_id,belong_id,belong_type,name,images,goods_imgs,video,buy_time,buy_price,info,content,city,user_name,user_phone,authenticate_require,cate_id,cate_code,auth_result,auth_price_test,auth_price,back_images,back_video,open_goods_video,plat_goods_receive_video,plat_goods_auth_video,not_verify_reason,go_video,goto_pawn,go_sell,location,post_state,post_user_name,post_user_phone,post_express,post_express_code,back_user_name,back_user_phone,back_user_express,back_express,back_express_code,back_state,create_time,modify_time,is_online,rate,money_rate,plat_user_name,plat_user_phone,plat_user_address,org_user_name,org_user_address,org_user_phone,plat_org_state,plat_org_video,plat_org_verify,plat_org_express_code,plat_org_time,is_verify,experter_info_id,sf_protect_price,is_sell,sell_status,sell_price,sell_info,sell_imgs,sell_video,sell_start_time,sell_end_time,sell_pawn_code,comment_count,collect_count,praise_count,click_count,report_count,is_redeem,settle_status,settle_money,sell_remark
     </sql>
-
-    <sql id="Blob_Column_List" >
-        sell_info
-    </sql>
-
-    <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" >
-        select
-        <if test="distinct" >
-            distinct
-        </if>
-        <include refid="Base_Column_List" />
-        ,
-        <include refid="Blob_Column_List" />
-        from p_user_goods
-        <if test="_parameter != null" >
-            <include refid="Example_Where_Clause" />
-        </if>
-        <if test="orderByClause != null" >
-            order by ${orderByClause}
-        </if>
-    </select>
 
     <select id="selectByExample" resultMap="BaseResultMap" >
         select
@@ -186,11 +162,9 @@
         </if>
     </select>
 
-    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" >
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" >
         select
         <include refid="Base_Column_List" />
-        ,
-        <include refid="Blob_Column_List" />
         from p_user_goods
         where id = #{id}
     </select>
@@ -257,7 +231,7 @@
         #{platOrgVideo,jdbcType=VARCHAR},#{platOrgVerify,jdbcType=TINYINT},#{platOrgExpressCode,jdbcType=VARCHAR},
         #{platOrgTime,jdbcType=TIMESTAMP},#{isVerify,jdbcType=TINYINT},#{experterInfoId,jdbcType=INTEGER},
         #{sfProtectPrice,jdbcType=DECIMAL},#{isSell,jdbcType=INTEGER},#{sellStatus,jdbcType=INTEGER},
-        #{sellPrice,jdbcType=DECIMAL},#{sellInfo,jdbcType=LONGVARCHAR},#{sellImgs,jdbcType=VARCHAR},
+        #{sellPrice,jdbcType=DECIMAL},#{sellInfo,jdbcType=VARCHAR},#{sellImgs,jdbcType=VARCHAR},
         #{sellVideo,jdbcType=VARCHAR},#{sellStartTime,jdbcType=TIMESTAMP},#{sellEndTime,jdbcType=TIMESTAMP},
         #{sellPawnCode,jdbcType=VARCHAR},#{commentCount,jdbcType=INTEGER},#{collectCount,jdbcType=INTEGER},
         #{praiseCount,jdbcType=INTEGER},#{clickCount,jdbcType=INTEGER},#{reportCount,jdbcType=INTEGER},
@@ -695,7 +669,7 @@
                 #{sellPrice,jdbcType=DECIMAL},
             </if>
             <if test="sellInfo != null" >
-                #{sellInfo,jdbcType=LONGVARCHAR},
+                #{sellInfo,jdbcType=VARCHAR},
             </if>
             <if test="sellImgs != null" >
                 #{sellImgs,jdbcType=VARCHAR},
@@ -945,7 +919,7 @@
                 sell_price = #{record.sellPrice,jdbcType=DECIMAL},
             </if>
             <if test="record.sellInfo != null" >
-                sell_info = #{record.sellInfo,jdbcType=LONGVARCHAR},
+                sell_info = #{record.sellInfo,jdbcType=VARCHAR},
             </if>
             <if test="record.sellImgs != null" >
                 sell_imgs = #{record.sellImgs,jdbcType=VARCHAR},
@@ -990,92 +964,6 @@
                 sell_remark = #{record.sellRemark,jdbcType=VARCHAR},
             </if>
         </set>
-        <if test="_parameter != null" >
-            <include refid="Update_By_Example_Where_Clause" />
-        </if>
-    </update>
-
-    <update id="updateByExampleWithBLOBs" >
-        update p_user_goods
-        set id = #{id,jdbcType=INTEGER},
-        user_id = #{userId,jdbcType=INTEGER},
-        belong_id = #{belongId,jdbcType=INTEGER},
-        belong_type = #{belongType,jdbcType=TINYINT},
-        name = #{name,jdbcType=VARCHAR},
-        images = #{images,jdbcType=VARCHAR},
-        goods_imgs = #{goodsImgs,jdbcType=VARCHAR},
-        video = #{video,jdbcType=VARCHAR},
-        buy_time = #{buyTime,jdbcType=DATE},
-        buy_price = #{buyPrice,jdbcType=DECIMAL},
-        info = #{info,jdbcType=VARCHAR},
-        content = #{content,jdbcType=VARCHAR},
-        city = #{city,jdbcType=VARCHAR},
-        user_name = #{userName,jdbcType=VARCHAR},
-        user_phone = #{userPhone,jdbcType=VARCHAR},
-        authenticate_require = #{authenticateRequire,jdbcType=VARCHAR},
-        cate_id = #{cateId,jdbcType=INTEGER},
-        cate_code = #{cateCode,jdbcType=VARCHAR},
-        auth_result = #{authResult,jdbcType=TINYINT},
-        auth_price_test = #{authPriceTest,jdbcType=DECIMAL},
-        auth_price = #{authPrice,jdbcType=DECIMAL},
-        back_images = #{backImages,jdbcType=VARCHAR},
-        back_video = #{backVideo,jdbcType=VARCHAR},
-        open_goods_video = #{openGoodsVideo,jdbcType=VARCHAR},
-        plat_goods_receive_video = #{platGoodsReceiveVideo,jdbcType=VARCHAR},
-        plat_goods_auth_video = #{platGoodsAuthVideo,jdbcType=VARCHAR},
-        not_verify_reason = #{notVerifyReason,jdbcType=VARCHAR},
-        go_video = #{goVideo,jdbcType=VARCHAR},
-        goto_pawn = #{gotoPawn,jdbcType=TINYINT},
-        go_sell = #{goSell,jdbcType=TINYINT},
-        location = #{location,jdbcType=TINYINT},
-        post_state = #{postState,jdbcType=TINYINT},
-        post_user_name = #{postUserName,jdbcType=VARCHAR},
-        post_user_phone = #{postUserPhone,jdbcType=VARCHAR},
-        post_express = #{postExpress,jdbcType=VARCHAR},
-        post_express_code = #{postExpressCode,jdbcType=VARCHAR},
-        back_user_name = #{backUserName,jdbcType=VARCHAR},
-        back_user_phone = #{backUserPhone,jdbcType=VARCHAR},
-        back_user_express = #{backUserExpress,jdbcType=VARCHAR},
-        back_express = #{backExpress,jdbcType=VARCHAR},
-        back_express_code = #{backExpressCode,jdbcType=VARCHAR},
-        back_state = #{backState,jdbcType=TINYINT},
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-        is_online = #{isOnline,jdbcType=TINYINT},
-        rate = #{rate,jdbcType=DECIMAL},
-        money_rate = #{moneyRate,jdbcType=DECIMAL},
-        plat_user_name = #{platUserName,jdbcType=VARCHAR},
-        plat_user_phone = #{platUserPhone,jdbcType=VARCHAR},
-        plat_user_address = #{platUserAddress,jdbcType=VARCHAR},
-        org_user_name = #{orgUserName,jdbcType=VARCHAR},
-        org_user_address = #{orgUserAddress,jdbcType=VARCHAR},
-        org_user_phone = #{orgUserPhone,jdbcType=VARCHAR},
-        plat_org_state = #{platOrgState,jdbcType=TINYINT},
-        plat_org_video = #{platOrgVideo,jdbcType=VARCHAR},
-        plat_org_verify = #{platOrgVerify,jdbcType=TINYINT},
-        plat_org_express_code = #{platOrgExpressCode,jdbcType=VARCHAR},
-        plat_org_time = #{platOrgTime,jdbcType=TIMESTAMP},
-        is_verify = #{isVerify,jdbcType=TINYINT},
-        experter_info_id = #{experterInfoId,jdbcType=INTEGER},
-        sf_protect_price = #{sfProtectPrice,jdbcType=DECIMAL},
-        is_sell = #{isSell,jdbcType=INTEGER},
-        sell_status = #{sellStatus,jdbcType=INTEGER},
-        sell_price = #{sellPrice,jdbcType=DECIMAL},
-        sell_info = #{sellInfo,jdbcType=LONGVARCHAR},
-        sell_imgs = #{sellImgs,jdbcType=VARCHAR},
-        sell_video = #{sellVideo,jdbcType=VARCHAR},
-        sell_start_time = #{sellStartTime,jdbcType=TIMESTAMP},
-        sell_end_time = #{sellEndTime,jdbcType=TIMESTAMP},
-        sell_pawn_code = #{sellPawnCode,jdbcType=VARCHAR},
-        comment_count = #{commentCount,jdbcType=INTEGER},
-        collect_count = #{collectCount,jdbcType=INTEGER},
-        praise_count = #{praiseCount,jdbcType=INTEGER},
-        click_count = #{clickCount,jdbcType=INTEGER},
-        report_count = #{reportCount,jdbcType=INTEGER},
-        is_redeem = #{isRedeem,jdbcType=TINYINT},
-        settle_status = #{settleStatus,jdbcType=INTEGER},
-        settle_money = #{settleMoney,jdbcType=DECIMAL},
-        sell_remark = #{sellRemark,jdbcType=VARCHAR}
         <if test="_parameter != null" >
             <include refid="Update_By_Example_Where_Clause" />
         </if>
@@ -1147,6 +1035,7 @@
         is_sell = #{isSell,jdbcType=INTEGER},
         sell_status = #{sellStatus,jdbcType=INTEGER},
         sell_price = #{sellPrice,jdbcType=DECIMAL},
+        sell_info = #{sellInfo,jdbcType=VARCHAR},
         sell_imgs = #{sellImgs,jdbcType=VARCHAR},
         sell_video = #{sellVideo,jdbcType=VARCHAR},
         sell_start_time = #{sellStartTime,jdbcType=TIMESTAMP},
@@ -1359,7 +1248,7 @@
                 sell_price = #{sellPrice,jdbcType=DECIMAL},
             </if>
             <if test="sellInfo != null" >
-                sell_info = #{sellInfo,jdbcType=LONGVARCHAR},
+                sell_info = #{sellInfo,jdbcType=VARCHAR},
             </if>
             <if test="sellImgs != null" >
                 sell_imgs = #{sellImgs,jdbcType=VARCHAR},
@@ -1404,89 +1293,6 @@
                 sell_remark = #{sellRemark,jdbcType=VARCHAR},
             </if>
         </set>
-        where id = #{id}
-    </update>
-
-    <update id="updateByPrimaryKeyWithBLOBs" >
-        update p_user_goods
-        set user_id = #{userId,jdbcType=INTEGER},
-        belong_id = #{belongId,jdbcType=INTEGER},
-        belong_type = #{belongType,jdbcType=TINYINT},
-        name = #{name,jdbcType=VARCHAR},
-        images = #{images,jdbcType=VARCHAR},
-        goods_imgs = #{goodsImgs,jdbcType=VARCHAR},
-        video = #{video,jdbcType=VARCHAR},
-        buy_time = #{buyTime,jdbcType=DATE},
-        buy_price = #{buyPrice,jdbcType=DECIMAL},
-        info = #{info,jdbcType=VARCHAR},
-        content = #{content,jdbcType=VARCHAR},
-        city = #{city,jdbcType=VARCHAR},
-        user_name = #{userName,jdbcType=VARCHAR},
-        user_phone = #{userPhone,jdbcType=VARCHAR},
-        authenticate_require = #{authenticateRequire,jdbcType=VARCHAR},
-        cate_id = #{cateId,jdbcType=INTEGER},
-        cate_code = #{cateCode,jdbcType=VARCHAR},
-        auth_result = #{authResult,jdbcType=TINYINT},
-        auth_price_test = #{authPriceTest,jdbcType=DECIMAL},
-        auth_price = #{authPrice,jdbcType=DECIMAL},
-        back_images = #{backImages,jdbcType=VARCHAR},
-        back_video = #{backVideo,jdbcType=VARCHAR},
-        open_goods_video = #{openGoodsVideo,jdbcType=VARCHAR},
-        plat_goods_receive_video = #{platGoodsReceiveVideo,jdbcType=VARCHAR},
-        plat_goods_auth_video = #{platGoodsAuthVideo,jdbcType=VARCHAR},
-        not_verify_reason = #{notVerifyReason,jdbcType=VARCHAR},
-        go_video = #{goVideo,jdbcType=VARCHAR},
-        goto_pawn = #{gotoPawn,jdbcType=TINYINT},
-        go_sell = #{goSell,jdbcType=TINYINT},
-        location = #{location,jdbcType=TINYINT},
-        post_state = #{postState,jdbcType=TINYINT},
-        post_user_name = #{postUserName,jdbcType=VARCHAR},
-        post_user_phone = #{postUserPhone,jdbcType=VARCHAR},
-        post_express = #{postExpress,jdbcType=VARCHAR},
-        post_express_code = #{postExpressCode,jdbcType=VARCHAR},
-        back_user_name = #{backUserName,jdbcType=VARCHAR},
-        back_user_phone = #{backUserPhone,jdbcType=VARCHAR},
-        back_user_express = #{backUserExpress,jdbcType=VARCHAR},
-        back_express = #{backExpress,jdbcType=VARCHAR},
-        back_express_code = #{backExpressCode,jdbcType=VARCHAR},
-        back_state = #{backState,jdbcType=TINYINT},
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-        is_online = #{isOnline,jdbcType=TINYINT},
-        rate = #{rate,jdbcType=DECIMAL},
-        money_rate = #{moneyRate,jdbcType=DECIMAL},
-        plat_user_name = #{platUserName,jdbcType=VARCHAR},
-        plat_user_phone = #{platUserPhone,jdbcType=VARCHAR},
-        plat_user_address = #{platUserAddress,jdbcType=VARCHAR},
-        org_user_name = #{orgUserName,jdbcType=VARCHAR},
-        org_user_address = #{orgUserAddress,jdbcType=VARCHAR},
-        org_user_phone = #{orgUserPhone,jdbcType=VARCHAR},
-        plat_org_state = #{platOrgState,jdbcType=TINYINT},
-        plat_org_video = #{platOrgVideo,jdbcType=VARCHAR},
-        plat_org_verify = #{platOrgVerify,jdbcType=TINYINT},
-        plat_org_express_code = #{platOrgExpressCode,jdbcType=VARCHAR},
-        plat_org_time = #{platOrgTime,jdbcType=TIMESTAMP},
-        is_verify = #{isVerify,jdbcType=TINYINT},
-        experter_info_id = #{experterInfoId,jdbcType=INTEGER},
-        sf_protect_price = #{sfProtectPrice,jdbcType=DECIMAL},
-        is_sell = #{isSell,jdbcType=INTEGER},
-        sell_status = #{sellStatus,jdbcType=INTEGER},
-        sell_price = #{sellPrice,jdbcType=DECIMAL},
-        sell_info = #{sellInfo,jdbcType=LONGVARCHAR},
-        sell_imgs = #{sellImgs,jdbcType=VARCHAR},
-        sell_video = #{sellVideo,jdbcType=VARCHAR},
-        sell_start_time = #{sellStartTime,jdbcType=TIMESTAMP},
-        sell_end_time = #{sellEndTime,jdbcType=TIMESTAMP},
-        sell_pawn_code = #{sellPawnCode,jdbcType=VARCHAR},
-        comment_count = #{commentCount,jdbcType=INTEGER},
-        collect_count = #{collectCount,jdbcType=INTEGER},
-        praise_count = #{praiseCount,jdbcType=INTEGER},
-        click_count = #{clickCount,jdbcType=INTEGER},
-        report_count = #{reportCount,jdbcType=INTEGER},
-        is_redeem = #{isRedeem,jdbcType=TINYINT},
-        settle_status = #{settleStatus,jdbcType=INTEGER},
-        settle_money = #{settleMoney,jdbcType=DECIMAL},
-        sell_remark = #{sellRemark,jdbcType=VARCHAR}
         where id = #{id}
     </update>
 
@@ -1555,6 +1361,7 @@
         is_sell = #{isSell,jdbcType=INTEGER},
         sell_status = #{sellStatus,jdbcType=INTEGER},
         sell_price = #{sellPrice,jdbcType=DECIMAL},
+        sell_info = #{sellInfo,jdbcType=VARCHAR},
         sell_imgs = #{sellImgs,jdbcType=VARCHAR},
         sell_video = #{sellVideo,jdbcType=VARCHAR},
         sell_start_time = #{sellStartTime,jdbcType=TIMESTAMP},
