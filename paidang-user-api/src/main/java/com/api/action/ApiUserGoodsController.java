@@ -933,7 +933,7 @@ public class ApiUserGoodsController extends ApiBaseController {
         if (userGoods.getGoSell()!=0){
             throw new ApiException(1100,"该商品已申请卖给平台或已卖出");
         }
-        if (userGoods.getPostState()!=3 || userGoods.getPostState()!=4){
+        if (userGoods.getPostState()!=3 && userGoods.getPostState()!=4){
             throw new ApiException(1100,"平台未确认收货");
         }
         if (userGoods.getPostState()==1){
@@ -1043,7 +1043,7 @@ public class ApiUserGoodsController extends ApiBaseController {
     @RequestMapping("/updateSell")
     @ApiMethod(isPage = false, isLogin = true)
     public Object updateSell(MobileInfo mobileInfo,@ApiParam(value="id",required = true)Integer id
-            ,@ApiParam(value="寄拍图片以,分割",required = true)String  sellImgs, @ApiParam(value="寄拍视频以,分隔",required = true)String  sellVideo
+            ,@ApiParam(value="寄拍图片以,分割",required = true)String  sellImgs, @ApiParam(value="寄拍视频以,分隔",required = false)String  sellVideo
     ,@ApiParam(value="寄拍信息",required = true)String sellInfo,@ApiParam(value="一口价",required = true)BigDecimal sellPrice,@ApiParam(value="类别code",required = true)String sellPawnCode){
         UserGoods userGoods=userGoodsService.selectByPrimaryKey(id);
         if (userGoods==null){
