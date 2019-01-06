@@ -609,7 +609,7 @@ public class ApiHomeController extends ApiBaseController {
             record.setGoodsName(ex.getGoodsName());
             record.setPrice(ex.getPrice().toString());
             record.setCouponPrice(ex.getCouponValue() == null? "" : ex.getCouponValue()+"");
-
+            record.setIsSell(ex.getIsSell()==null?0:ex.getIsSell());
             if(null != ex.getExpressId()){
                 record.setExpressState(ex.getExpressState());
                 record.setExpressId(ex.getExpressId());

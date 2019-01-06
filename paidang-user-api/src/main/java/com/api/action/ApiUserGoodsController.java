@@ -26,6 +26,7 @@ import com.base.dao.model.Ret;
 import com.base.dialect.PaginationSupport;
 import com.base.service.SensitivWordsService;
 import com.base.util.BeanUtils;
+import com.base.util.CollectionUtil;
 import com.base.util.DateUtil;
 import com.base.util.StringUtil;
 import com.item.dao.model.*;
@@ -110,6 +111,10 @@ public class ApiUserGoodsController extends ApiBaseController {
 
     @Autowired
     private ApiUserGoodsService apiUserGoodsService;
+
+    @Autowired
+    private CollectPraiseService collectPraiseService;
+
     public enum MGoodsCateList {
         SCPZB("1","奢侈品珠宝"),
         sb("2","手表"),
@@ -124,6 +129,33 @@ public class ApiUserGoodsController extends ApiBaseController {
         private MGoodsCateList(String code,String name) {
             this.code = code;
             this.name = name;
+        }
+
+        public static String getNameByCode(String code){
+            if (StringUtil.isBlank(code)){
+                return null;
+            }
+            switch (code){
+                case "1":
+                    return SCPZB.name;
+                case "2":
+                    return sb.name;
+                case "3":
+                    return zs.name;
+                case "4":
+                    return gjs.name;
+                case "5":
+                    return fcys.name;
+                case "6":
+                    return hty.name;
+                case "7":
+                    return qt.name;
+                case "8":
+                    return csbs.name;
+                    default:
+                        return null;
+            }
+
         }
     }
 
@@ -968,6 +1000,8 @@ public class ApiUserGoodsController extends ApiBaseController {
         ex.setName(name);
         ex.setUseDate(new Date());
         ex.setSellStatus(1);
+        ex.setCollectCount(0);
+        ex.setPraiseCount(0);
         List<UserGoodsEx> list=userGoodsService.findList(ex);
         return list;
     }
@@ -999,15 +1033,12 @@ public class ApiUserGoodsController extends ApiBaseController {
     @ApiMethod(isPage = true, isLogin = true)
     public Object mySell(MobileInfo mobileInfo,PageLimit pageLimit,@ApiParam(value="name",required = false)String name){
         PaginationSupport.byPage(pageLimit.getPage(), pageLimit.getLimit(), false);
-        UserGoodsExample example=new UserGoodsExample();
-        UserGoodsExample.Criteria criteria=example.createCriteria();
+        UserGoodsEx ex=new UserGoodsEx();
+        ex.setUserId(mobileInfo.getUserid());
         if (StringUtil.isNotBlank(name)){
-            criteria.andNameLike(name);
+            ex.setName(name);
         }
-        criteria.andIsSellEqualTo(1).andUserIdEqualTo(mobileInfo.getUserid());
-        example.setOrderByClause("sell_start_time desc");
-        List<UserGoods> list= userGoodsService.selectByExample(example);
-        return list;
+        return userGoodsService.findList(ex);
     }
 
 
@@ -1232,5 +1263,60 @@ public class ApiUserGoodsController extends ApiBaseController {
 
     }
 
+
+    @ApiOperation(value = "收藏点赞寄拍商品", notes = "登陆")
+    @RequestMapping(value = "/collectPraiseUserGoods", method = RequestMethod.POST)
+    @ApiMethod(isLogin = true)
+    public void collectPraiseUserGoods(MobileInfo mobileInfo, @ApiParam(value = "商品id", required = true)Integer userGoodsId,@ApiParam(value = "0点赞1收藏",required = true)Integer type){
+        if (type ==null || (type !=0 && type!=1)){
+            throw new ApiException(1100,"非法参数");
+        }
+        UserGoods userGoods=userGoodsService.selectByPrimaryKey(userGoodsId);
+        CollectPraise entity=new CollectPraise();
+        entity.setType(type);
+        entity.setCreateTime(new Date());
+        entity.setUserId(mobileInfo.getUserid());
+        entity.setStatus(1);
+        entity.setUserGoodsId(userGoodsId);
+        entity.setOwnerId(userGoods.getUserId());
+        if (StringUtil.isNotBlank(userGoods.getSellImgs())){
+            String[] imgs = userGoods.getSellImgs().split(",");
+            entity.setImg(imgs[0]);
+        }
+        CollectPraiseExample example=new CollectPraiseExample();
+        example.createCriteria().andUserIdEqualTo(mobileInfo.getUserid()).andUserGoodsIdEqualTo(userGoodsId).andTypeEqualTo(type);
+        if (CollectionUtil.isEmpty(collectPraiseService.selectByExample(example))){
+            if (type==0){
+                userGoodsService.updateUserGoodsCount(userGoodsId,1,2);
+            }else if (type==1){
+                userGoodsService.updateUserGoodsCount(userGoodsId,1,1);
+
+            }
+            collectPraiseService.insert(entity);
+        }
+    }
+
+
+    @ApiOperation(value = "我收藏的寄拍商品", notes = "登陆")
+    @RequestMapping(value = "/collectSellUserGoods/list", method = RequestMethod.POST)
+    @ApiMethod(isLogin = true)
+    public Object myCollectUserGoods(MobileInfo mobileInfo){
+        UserGoodsEx userGoodsEx=new UserGoodsEx();
+        userGoodsEx.setCollectUserId(mobileInfo.getUserid());
+        userGoodsEx.setCollectPraiseType(1);
+        List<UserGoodsEx> list=userGoodsService.findCollectList(userGoodsEx);
+        processUerGoods(list);
+        return list;
+    }
+
+
+    public static void processUerGoods(List<UserGoodsEx> list){
+        if (CollectionUtil.isNotEmpty(list)){
+            for (UserGoodsEx ex:list){
+                ex.setSellPawnCodeInfo(MGoodsCateList.getNameByCode(ex.getSellPawnCode()));
+            }
+        }
+
+    }
 
 }

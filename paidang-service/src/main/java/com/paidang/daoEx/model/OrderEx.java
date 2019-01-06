@@ -49,6 +49,8 @@ public class OrderEx extends Order {
     //物流数据
     private String expressData;
 
+    private Integer isSell;
+
     public String getEstate() {
         return estate;
     }
@@ -95,5 +97,13 @@ public class OrderEx extends Order {
 
     public void setUserGoodsId(Integer userGoodsId) {
         this.userGoodsId = userGoodsId;
+    }
+
+    public Integer getIsSell() {
+        return isSell;
+    }
+
+    public void setIsSell(Integer isSell) {
+        this.isSell = isSell;
     }
 }

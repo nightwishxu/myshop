@@ -59,6 +59,9 @@ public class  AppMyStoreGoods {
     @ApiModelProperty(value = "评价状态 0未评价1已评价")
     private Integer commentState;
 
+    @ApiModelProperty(value = "寄拍状态 0未寄拍 1寄拍")
+    private Integer isSell;
+
     public String getRefundNotVerifyReason() {
         return refundNotVerifyReason;
     }
@@ -257,5 +260,13 @@ public class  AppMyStoreGoods {
 
     public void setCommentState(Integer commentState) {
         this.commentState = commentState;
+    }
+
+    public Integer getIsSell() {
+        return isSell;
+    }
+
+    public void setIsSell(Integer isSell) {
+        this.isSell = isSell;
     }
 }

@@ -2,6 +2,7 @@ package com.paidang.daoEx.model;
 
 import com.paidang.dao.model.UserGoods;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -80,6 +81,23 @@ public class UserGoodsEx extends UserGoods {
 
     private Date useDate;
 
+    private Integer collectUserId;
+    /**
+     * 0点赞1收藏
+     */
+    private Integer collectPraiseType;
+
+    private String orderCode;
+
+    private String expressName;
+
+    private String expressCode;
+
+    private String sellPawnCodeInfo;
+
+    private Date orderPayTime;
+
+    private BigDecimal orderPrice;
 
 
     private String headImg;
@@ -311,5 +329,73 @@ public class UserGoodsEx extends UserGoods {
 
     public void setHeadImg(String headImg) {
         this.headImg = headImg;
+    }
+
+    public void setOrderStateEx(Integer orderStateEx) {
+        this.orderStateEx = orderStateEx;
+    }
+
+    public Integer getCollectUserId() {
+        return collectUserId;
+    }
+
+    public void setCollectUserId(Integer collectUserId) {
+        this.collectUserId = collectUserId;
+    }
+
+    public Integer getCollectPraiseType() {
+        return collectPraiseType;
+    }
+
+    public void setCollectPraiseType(Integer collectPraiseType) {
+        this.collectPraiseType = collectPraiseType;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public String getExpressName() {
+        return expressName;
+    }
+
+    public void setExpressName(String expressName) {
+        this.expressName = expressName;
+    }
+
+    public String getExpressCode() {
+        return expressCode;
+    }
+
+    public void setExpressCode(String expressCode) {
+        this.expressCode = expressCode;
+    }
+
+    public String getSellPawnCodeInfo() {
+        return sellPawnCodeInfo;
+    }
+
+    public void setSellPawnCodeInfo(String sellPawnCodeInfo) {
+        this.sellPawnCodeInfo = sellPawnCodeInfo;
+    }
+
+    public Date getOrderPayTime() {
+        return orderPayTime;
+    }
+
+    public void setOrderPayTime(Date orderPayTime) {
+        this.orderPayTime = orderPayTime;
+    }
+
+    public BigDecimal getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(BigDecimal orderPrice) {
+        this.orderPrice = orderPrice;
     }
 }

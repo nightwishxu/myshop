@@ -259,32 +259,36 @@ ORDER BY
     UPDATE  p_user_goods
     <set>
         <if test="type==0">
-            comment_count=comment_count+#{num}
+            comment_count=ifnull(comment_count,0)+#{num}
         </if>
         <if test="type==1">
-            collect_count=collect_count+#{num}
+            collect_count=ifnull(collect_count,0)+#{num}
         </if>
         <if test="type==2">
-            praise_count=praise_count+#{num}
+            praise_count=ifnull(praise_count,0)+#{num}
         </if>
         <if test="type==3">
-            click_count=click_count+#{num}
+            click_count=ifnull(click_count,0)+#{num}
         </if>
         <if test="type==4">
-            report_count=report_count+#{num}
+            report_count=ifnull(report_count,0)+#{num}
         </if>
     </set>
     where id=#{id}
     </update>
     <select id="findList" resultMap="BaseResultMap">
-        SELECT  ug.*,o.state as orderState,u.nick_name as nickName,u.head_img as headImg from p_user_goods ug LEFT JOIN p_goods g on ug.id=g.goods_id
+        SELECT  ug.*,o.state as orderState,u.nick_name as nickName,u.head_img as headImg,o.code as orderCode,e.express_name as expressName,e.express_code as expressCode , e.express_state as expressState,o.create_time,o.pay_time as orderPayTime,o.price as orderPrice from p_user_goods ug LEFT JOIN p_goods g on ug.id=g.goods_id
         LEFT JOIN p_order o on g.id=o.goods_id LEFT join b_user  u on ug.user_id=u.id
+        LEft join p_express e on o.id = e.fid
         where (o.state!=-1 or o.state is null) and ug.is_sell=1
         <if test="name!=null and name!=''">
             and ug.name LIKE  '%${name}%'
         </if>
         <if test="id!=null and id!=''">
             and ug.id=#{id}
+        </if>
+        <if test="userId!=null and userId!=''">
+            and ug.user_id=#{userId}
         </if>
         <if test="useDate!=null">
           and ug.sell_start_time &lt; #{useDate} and ug.sell_end_time &gt; #{useDate}
@@ -294,4 +298,34 @@ ORDER BY
         </if>
         order by ug.sell_start_time desc
      </select>
+
+
+    <select id="findCollectList" resultMap="BaseResultMap">
+        SELECT  ug.*,o.state as orderState,u.nick_name as nickName,u.head_img as headImg,o.code as orderCode,e.express_name as expressName,e.express_code as expressCode , e.express_state as expressState,o.create_time,o.pay_time as orderPayTime,o.price as orderPrice from p_user_goods ug LEFT JOIN p_goods g on ug.id=g.goods_id
+        LEFT JOIN p_order o on g.id=o.goods_id LEFT join b_user  u on ug.user_id=u.id left join p_collect_praise cp on cp.user_goods_id = ug.id
+        LEft join p_express e on o.id = e.fid
+        where (o.state!=-1 or o.state is null) and ug.is_sell=1
+        <if test="name!=null and name!=''">
+            and ug.name LIKE  '%${name}%'
+        </if>
+        <if test="id!=null and id!=''">
+            and ug.id=#{id}
+        </if>
+        <if test="userId!=null and userId!=''">
+            and ug.user_id=#{userId}
+        </if>
+        <if test="useDate!=null">
+            and ug.sell_start_time &lt; #{useDate} and ug.sell_end_time &gt; #{useDate}
+        </if>
+        <if test="sellStatus!=null">
+            and ug.sell_status=#{sellStatus}
+        </if>
+        <if test="collectUserId!=null">
+            and cp.user_id=#{collectUserId}
+        </if>
+        <if test="collectPraiseType!=null">
+            and cp.type=#{collectPraiseType}
+        </if>
+        order by ug.sell_start_time desc
+    </select>
 </mapper>

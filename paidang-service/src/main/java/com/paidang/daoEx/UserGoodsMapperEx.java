@@ -45,4 +45,6 @@ public interface UserGoodsMapperEx {
     Integer updateUserGoodsCount(@Param("id")Integer id, @Param("num")Integer num, @Param("type")Integer type);
 
     List<UserGoodsEx> findList(UserGoodsEx ex);
+
+    List<UserGoodsEx> findCollectList(UserGoodsEx ex);
 }

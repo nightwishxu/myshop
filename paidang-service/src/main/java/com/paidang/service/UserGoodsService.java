@@ -136,7 +136,13 @@ public class UserGoodsService {
 	}
 
 	public List<UserGoodsEx> findList(UserGoodsEx ex){
-		return userGoodsMapperEx.findList(ex);
+		List<UserGoodsEx> list=userGoodsMapperEx.findList(ex);
+		return list;
 	}
 
+
+	public List<UserGoodsEx> findCollectList(UserGoodsEx ex){
+		List<UserGoodsEx> list=userGoodsMapperEx.findCollectList(ex);
+		return list;
+	}
 }

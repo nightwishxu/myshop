@@ -3,6 +3,7 @@ package com.item.service;
 import java.util.*;
 
 import com.api.view.shopCart.ShopCartVo;
+import com.base.util.JSONUtils;
 import com.item.daoEx.ShopCartMapperEx;
 import com.item.daoEx.model.ShopCartEx;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,6 +90,7 @@ public class ShopCartService {
 				cartVo.getGoods().add(ex);
 			}
 		}
+		System.out.println(JSONUtils.serialize(result));
 		return result;
 	}
 

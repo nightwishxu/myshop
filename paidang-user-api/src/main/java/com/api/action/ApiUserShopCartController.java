@@ -161,8 +161,8 @@ public class ApiUserShopCartController extends ApiBaseController {
     @ApiOperation(value = "购物车商品列表", notes = "登陆")
     @RequestMapping(value = "/list", method = RequestMethod.POST)
     @ApiMethod(isLogin = true)
-    public Object list( @ApiParam(value = "用户id", required = true)Integer userId) {
-        return shopCartService.findList(userId);
+    public Object list( MobileInfo mobileInfo) {
+        return shopCartService.findList(mobileInfo.getUserid());
     }
 
 
