@@ -1078,7 +1078,7 @@ public class ApiUserGoodsController extends ApiBaseController {
     ,@ApiParam(value="寄拍信息",required = true)String sellInfo,@ApiParam(value="一口价",required = true)BigDecimal sellPrice,@ApiParam(value="类别code",required = true)String sellPawnCode){
         UserGoods userGoods=userGoodsService.selectByPrimaryKey(id);
         if (userGoods==null){
-            throw new ApiException(1100,"该商品未不存在！");
+            throw new ApiException(1100,"该商品不存在！");
         }
         if (userGoods.getIsSell()==0){
             throw new ApiException(1100,"该商品未寄拍请先寄拍！");
