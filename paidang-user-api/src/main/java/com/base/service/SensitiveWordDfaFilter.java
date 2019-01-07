@@ -2,12 +2,7 @@ package com.base.service;
 
 import java.util.*;
 
-/**
- * @param
- * @Auther: xuwenwei
- * @Date: 2018/7/24 13:14
- * @Description:
- */
+
 public class SensitiveWordDfaFilter {
 
     private static Map sensitiveWordMap = null;

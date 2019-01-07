@@ -30,12 +30,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @param
- * @Auther: xuwenwei
- * @Date: 2018/7/31 08:39
- * @Description:
- */
+
 @Service
 public class ApiUserPayService {
 

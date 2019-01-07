@@ -11,12 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @param
- * @Auther: xuwenwei
- * @Date: 2018/8/6 14:53
- * @Description:
- */
+
 @RequestMapping("cache")
 @Controller
 @LoginFilter

@@ -4,12 +4,7 @@ import com.item.daoEx.model.ShopCartEx;
 
 import java.util.List;
 
-/**
- * @param
- * @Auther: xuwenwei
- * @Date: 2018/7/23 19:59
- * @Description:
- */
+
 public class ShopCartVo {
     private Integer orgId;
     //机构名称

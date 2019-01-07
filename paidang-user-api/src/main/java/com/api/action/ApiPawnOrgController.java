@@ -18,12 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @param
- * @Auther: xuwenwei
- * @Date: 2018/8/3 15:48
- * @Description:
- */
+
 @RestController
 @RequestMapping(value = "/api/pawnOrg", produces = {"application/json;charset=UTF-8"}, method = RequestMethod.POST)
 @Api(tags = "店铺详情")
