@@ -46,7 +46,7 @@ public class ApiUserGoodsService {
         if (list!=null && list.size()>0){
             Goods goods=list.get(0);
             if ((goods.getTotal()-goods.getSoldOut())<=0){
-                throw new ApiException("商品已卖出");
+                throw new ApiException(1100,"商品已卖出");
             }
 //            OrderExample example1=new OrderExample();
 //            example1.createCriteria().andGoodsIdEqualTo(goods.getId());
