@@ -16,8 +16,7 @@ import java.util.Set;
  * 
  * Jedis客户端工具类
  * 
- * @author lilin
- * @version [版本号, 2015年2月3日]
+
  */
 @SuppressWarnings("unchecked")
 @Component

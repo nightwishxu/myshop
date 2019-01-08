@@ -136,15 +136,16 @@
                     field : 'name',
                     align : 'center'
                 }
-                // ,{
-                //     width : $(this).width() * 0.08,
-                //     title : '图片',
-                //     field : 'sell',
-                //     align : 'center',
-                //     formatter:function (v,r) {
-                //         return po.showImg(v,20,20);
-                //     }
-                // }, {
+                ,{
+                    width : $(this).width() * 0.08,
+                    title : '图片',
+                    field : 'sellImgs',
+                    align : 'center',
+                    formatter:function (v,r) {
+                        return po.showImg(v,20,20);
+                    }
+                }
+                    // {
                 //     width : $(this).width() * 0.05,
                 //     title : '视频',
                 //     field : 'cost',
