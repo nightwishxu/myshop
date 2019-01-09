@@ -1,5 +1,7 @@
 package com.api.action;
 
+import com.item.dao.SinglePage;
+import com.item.service.SinglePageService;
 import com.paidang.service.CacheService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,6 +51,9 @@ public class ApiCommonController extends ApiBaseController{
 
 	@Autowired
 	private CacheService cacheService;
+
+	@Autowired
+	private SinglePageService singlePageService;
 	
 	private static final String[] DEVICE = new String[]{"android","ios"};
 	
@@ -203,19 +208,19 @@ public class ApiCommonController extends ApiBaseController{
     @ApiMethod
     @RequestMapping(value="/appVerion", method = RequestMethod.POST)
     @ApiOperation(value = "APP版本获取", notes = "不需要登录")
-    public AppVersion getVersion(@ApiParam(value = "设备类型 1:android 2:ios", required = true) Integer deviceType){
-    	if (deviceType == null){
-    		throw new ApiException("deviceType");
-    	}
-    	String reuslt = codeService.getCode(DEVICE[deviceType - 1]+"@sys");
-    	if (StringUtil.isBlank(reuslt)){
-    		throw new ApiException(MEnumError.APP_VERSION_NULL);
-    	}
-    	AppVersion version = JSONUtils.deserialize(reuslt, AppVersion.class);
-    	if (version == null){
-    		throw new ApiException(MEnumError.APP_VERSION_NULL);
-    	}
-    	return version;
+    public AppVersion getVersion(@ApiParam(value = "设备类型 1:android 2:ios", required = true) Integer  deviceType){
+		if (deviceType == null){
+			throw new ApiException("deviceType");
+		}
+		String reuslt = codeService.getCode(DEVICE[deviceType - 1]+"@sys");
+		if (StringUtil.isBlank(reuslt)){
+			throw new ApiException(MEnumError.APP_VERSION_NULL);
+		}
+		AppVersion version = JSONUtils.deserialize(reuslt, AppVersion.class);
+		if (version == null){
+			throw new ApiException(MEnumError.APP_VERSION_NULL);
+		}
+		return version;
     }
 
 	@ApiMethod
@@ -224,5 +229,14 @@ public class ApiCommonController extends ApiBaseController{
 	@ApiOperation(value = "物流公司获取", notes = "不需要登录")
 	public List<String> express(){
 		return CacheService.expressList;
+	}
+
+
+	@ApiMethod
+	@RequestMapping(value="/simplePage/get", method = RequestMethod.POST)
+	@ApiOperation(value = "获取富文本页面", notes = "不需要登录")
+	public Object singlePage(@ApiParam(value = "页面code  about关于我们  yhxy用户协议", required = true) String code){
+		com.item.dao.model.SinglePage page=singlePageService.selectByPrimaryKey(code);
+		return page;
 	}
 }

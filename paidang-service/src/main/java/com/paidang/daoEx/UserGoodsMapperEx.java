@@ -47,4 +47,6 @@ public interface UserGoodsMapperEx {
     List<UserGoodsEx> findList(UserGoodsEx ex);
 
     List<UserGoodsEx> findCollectList(UserGoodsEx ex);
+
+    UserGoodsEx getById(Integer id);
 }

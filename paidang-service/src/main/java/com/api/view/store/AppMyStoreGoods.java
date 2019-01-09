@@ -62,6 +62,9 @@ public class  AppMyStoreGoods {
     @ApiModelProperty(value = "寄拍状态 0未寄拍 1寄拍")
     private Integer isSell;
 
+    @ApiModelProperty(value = "寄拍商品")
+    private Integer userGoodsId;
+
     public String getRefundNotVerifyReason() {
         return refundNotVerifyReason;
     }
@@ -268,5 +271,13 @@ public class  AppMyStoreGoods {
 
     public void setIsSell(Integer isSell) {
         this.isSell = isSell;
+    }
+
+    public Integer getUserGoodsId() {
+        return userGoodsId;
+    }
+
+    public void setUserGoodsId(Integer userGoodsId) {
+        this.userGoodsId = userGoodsId;
     }
 }

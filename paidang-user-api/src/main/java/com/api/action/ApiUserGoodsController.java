@@ -1011,14 +1011,12 @@ public class ApiUserGoodsController extends ApiBaseController {
     @RequestMapping("/sellDetail")
     @ApiMethod(isPage = false, isLogin = false)
     public UserGoods getSellDetail(MobileInfo mobileInfo,@ApiParam(value="id",required = false)Integer id){
-        UserGoodsEx ex=new UserGoodsEx();
-        ex.setId(id);
-        List<UserGoodsEx> list=userGoodsService.findList(ex);
-        if (list!=null && list.size()>0){
+
+        UserGoodsEx entity=userGoodsService.getById(id);
+        if (entity!=null){
             ExperterInfoExample example=new ExperterInfoExample();
             example.createCriteria().andGoodsIdEqualTo(id).andStateEqualTo(1);
             List<ExperterInfo> infos=experterInfoService.selectByExample(example);
-            UserGoodsEx entity=list.get(0);
             if (infos!=null && infos.size()>0){
                 entity.setExperterInfo(infos.get(0).getInfo());
             }
