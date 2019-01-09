@@ -90,6 +90,7 @@
   <select id="selectMyStoreOrderList" resultMap="BaseResultMap">
     select
     A.*,
+    C.goods_id as userGoodsId,
     B.express_state as expressState,
     B.id as expressId,
     D.is_sell as isSell
