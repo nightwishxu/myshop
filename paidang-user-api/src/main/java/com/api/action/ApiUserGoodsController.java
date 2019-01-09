@@ -44,6 +44,7 @@ import com.util.PaidangConst;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -1088,6 +1089,9 @@ public class ApiUserGoodsController extends ApiBaseController {
         }
         if (userGoods.getSellStatus()==1){
             throw new ApiException(1100,"请先下架该商品再编辑！");
+        }
+        if (StringUtils.isBlank(sellPawnCode)){
+            throw new ApiException(1100,"类别不能为空！");
         }
         SimpleDateFormat sdf=new SimpleDateFormat("yyyyMMddHHmmss");
         Date date=new Date();
