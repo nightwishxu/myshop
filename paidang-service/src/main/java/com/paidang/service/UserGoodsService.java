@@ -145,4 +145,8 @@ public class UserGoodsService {
 		List<UserGoodsEx> list=userGoodsMapperEx.findCollectList(ex);
 		return list;
 	}
+
+	public UserGoodsEx getById(Integer id){
+		return userGoodsMapperEx.getById(id);
+	}
 }

@@ -6,8 +6,6 @@ import redis.clients.jedis.Jedis;
  * 
  * 定义redis回调接口
  * 
- * @author lilin
- * @version [版本号, 2015年4月27日]
  */
 public interface JedisCallback {
     /**

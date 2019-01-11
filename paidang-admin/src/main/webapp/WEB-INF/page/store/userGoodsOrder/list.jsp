@@ -114,7 +114,17 @@
 				title : '商品名称',
 				field : 'goodsName',
 				align : 'center',
-			}, {
+			}
+               , {
+                    width : $(this).width() * 0.08,
+                    title : '图片',
+                    field : 'goodsImg',
+                    align : 'center',
+                    formatter:function (v,r) {
+                        return po.showImg(v,20,20);
+                    }
+                }
+			, {
                 width : $(this).width() * 0.05,
                 title : '订单状态',
                 field : 'stateType',

@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+
 import com.paidang.dao.model.Order;
 
 
@@ -35,8 +37,8 @@ public class ApiUserGoodsService {
     public PayResult createUserGoodsOrder(Integer userId, Integer userGoodsId, Integer addressId){
 
         UserGoods userGoods=userGoodsMapper.selectByPrimaryKey(userGoodsId);
-        if (userGoods.getUserId()==userId){
-            throw new ApiException("自身商品不可购买");
+        if (Objects.equals(userGoods.getUserId(),userId)){
+            throw new ApiException(1100,"自身商品不可购买");
         }
         GoodsExample example=new GoodsExample();
         example.createCriteria().andGoodsIdEqualTo(userGoodsId);
@@ -68,7 +70,8 @@ public class ApiUserGoodsService {
             goods.setGoodsId(userGoods.getId());
             goods.setSource(5);
             goods.setType(2);
-            goods.setOrgId(0);
+            //固定机构 寄卖保管仓库
+            goods.setOrgId(1);
             goods.setName(userGoods.getName());
             goods.setCost(userGoods.getSellPrice());
             goods.setTotal(1);

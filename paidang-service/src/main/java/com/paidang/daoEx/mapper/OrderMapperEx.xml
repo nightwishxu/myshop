@@ -93,6 +93,7 @@
     C.goods_id as userGoodsId,
     B.express_state as expressState,
     B.id as expressId,
+    D.id as userGoodsId,
     D.is_sell as isSell
     from p_order A
     left join p_express B on A.id = B.fid

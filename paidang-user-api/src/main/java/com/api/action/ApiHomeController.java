@@ -603,6 +603,7 @@ public class ApiHomeController extends ApiBaseController {
             }
             record.setCommentState(ex.getCommentState());
             record.setId(ex.getId());
+            record.setUserGoodsId(ex.getUserGoodsId());
             record.setGoodsId(ex.getGoodsId());
             record.setImages(ex.getGoodsImg());
             record.setOrderCode(ex.getCode());

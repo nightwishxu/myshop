@@ -299,6 +299,14 @@ ORDER BY
         order by ug.sell_start_time desc
      </select>
 
+    <select id="getById" resultMap="BaseResultMap">
+        SELECT  ug.*,o.state as orderState,u.nick_name as nickName,u.head_img as headImg,o.code as orderCode,e.express_name as expressName,e.express_code as expressCode , e.express_state as expressState,o.create_time,o.pay_time as orderPayTime,o.price as orderPrice from p_user_goods ug LEFT JOIN p_goods g on ug.id=g.goods_id
+        LEFT JOIN p_order o on g.id=o.goods_id LEFT join b_user  u on ug.user_id=u.id
+        LEft join p_express e on o.id = e.fid
+        where (o.state!=-1 or o.state is null) and ug.is_sell!=0
+            and ug.id=#{id}
+
+    </select>
 
     <select id="findCollectList" resultMap="BaseResultMap">
         SELECT  ug.*,o.state as orderState,u.nick_name as nickName,u.head_img as headImg,o.code as orderCode,e.express_name as expressName,e.express_code as expressCode , e.express_state as expressState,o.create_time,o.pay_time as orderPayTime,o.price as orderPrice from p_user_goods ug LEFT JOIN p_goods g on ug.id=g.goods_id

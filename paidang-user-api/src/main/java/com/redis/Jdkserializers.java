@@ -5,9 +5,7 @@ import java.io.*;
 /**
  * 
  * JDK序列化/反序列化工具类
- * 
- * @author lilin
- * @version [版本号, 2015年2月13日]
+ *
  */
 public final class Jdkserializers {
     /**
