@@ -555,9 +555,12 @@ public class PayController extends CoreController {
 					//商品
 					Goods goodsUpdate = new Goods();
 					goodsUpdate.setId(order.getGoodsId());
-					goodsUpdate.setState(-1);
-					goodsUpdate.setIsOnline(0);
-					update = goodsService.updateByPrimaryKeySelective(goodsUpdate);
+					Goods old=goodsService.selectByPrimaryKey(order.getGoodsId());
+					if (old.getTotal()==0){
+						goodsUpdate.setState(-1);
+						goodsUpdate.setIsOnline(0);
+						update = goodsService.updateByPrimaryKeySelective(goodsUpdate);
+					}
 					if (update == 0) {
 						logger.info("$$$$商品没有更新成功!——商户订单号:" + no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
 					}
