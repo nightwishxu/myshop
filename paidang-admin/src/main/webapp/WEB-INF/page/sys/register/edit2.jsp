@@ -47,9 +47,7 @@
                 obj.businessLicense=$('#businessLicense').getFileId();
 
 
-                layer.msg('注册成功',{icon: 11},function () {
-                    $dialog.dialog('destroy')
-                });
+
                 $.post(url, obj, function(result) {
                     if (result.code == 0) {
                         layer.msg('注册成功',{icon: 11},function () {

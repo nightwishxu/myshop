@@ -14,11 +14,11 @@
     (
     select DISTINCT B.express_data from p_express B where A.ship_code = B.express_code and B.fid = A.id
     )as expressData,
-    C.trade_no as tradNo,
+    (select  c.trade_no from b_pay_log c where A.id=c.order_id order by create_time desc limit 1) AS tradNo,
     D.name as orgName
     from p_order A
-    left join b_pay_log C
-    on A.id = C.order_id
+--     left join b_pay_log C
+--     on A.id = C.order_id
     left join
     p_pawn_org D
     on A.org_id = D.id
