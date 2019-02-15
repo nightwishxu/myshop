@@ -112,4 +112,9 @@
        order by g.create_time desc
     </select>
 
+    <select id="findById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        SELECT  g.*,po.name as orgName,po.introduction as orgIntroduction,po.org_logo as orgLogo from p_goods g LEFT join p_pawn_org po on g.org_id=po.id where
+        g.id=#{id}
+    </select>
+
 </mapper>

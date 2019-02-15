@@ -10,6 +10,7 @@ import com.base.dialect.PaginationSupport;
 import com.base.dao.model.Ret;
 import com.base.dao.model.Grid;
 import com.base.security.util.UserUtils;
+import com.base.util.CollectionUtil;
 import com.paidang.daoEx.model.GoodsEx;
 import com.paidang.daoEx.model.PawnOrgEx;
 import com.util.PaidangConst;
@@ -62,6 +63,12 @@ public class PawnOrgController extends CoreController{
     public String save(PawnOrg pawnOrg)throws Exception{
 
     	if (pawnOrg.getId() == null){
+    		PawnOrgExample example=new PawnOrgExample();
+    		example.createCriteria().andAccountEqualTo(pawnOrg.getAccount());
+    		List<PawnOrg> list=pawnOrgService.selectByExample(example);
+    		if (CollectionUtil.isNotEmpty(list)){
+				return msg(-1,"不能添加重复的机构和供应商");
+			}
     		if(pawnOrg.getType()==1){
 				pawnOrg.setRoleCode(PaidangConst.ORG_ROLE);
 			}else if(pawnOrg.getType()==3){

@@ -254,13 +254,11 @@ public class ApiStoreController extends ApiBaseController {
     @ApiMethod(isLogin = false)
     public AppStoreGoodsDetail storeGoodsDetail(@ApiParam(value="id",required = true) Integer id){
         AppStoreGoodsDetail appStoreGoodsDetail = new AppStoreGoodsDetail();
-        GoodsEx goodsEx=new GoodsEx();
-        goodsEx.setId(id);
-        List<GoodsEx>  exList= goodsService.findList(goodsEx);
-        if (exList==null || exList.size()==0){
+
+        GoodsEx ex= goodsService.findById(id);
+        if (ex==null ){
             throw new ApiException(-1,"该商品不存在");
         }
-        GoodsEx ex=exList.get(0);
         appStoreGoodsDetail.setId(ex.getId());
         appStoreGoodsDetail.setImages(ex.getImgs());
         appStoreGoodsDetail.setTitle(ex.getName());

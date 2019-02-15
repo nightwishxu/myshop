@@ -107,4 +107,8 @@ public class GoodsService {
 	public List<GoodsEx> findList(GoodsEx goodsEx){
 		return goodsMapperEx.findList(goodsEx);
 	}
+
+	public   GoodsEx findById(Integer id){
+		return goodsMapperEx.findById(id);
+	}
 }

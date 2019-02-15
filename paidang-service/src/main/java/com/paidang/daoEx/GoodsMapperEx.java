@@ -32,4 +32,6 @@ public interface GoodsMapperEx {
     List<GoodsEx> getMostThreeGoods(Integer orgId);
 
     List<GoodsEx> findList(GoodsEx goodsEx);
+
+    GoodsEx findById(Integer id);
 }
