@@ -21,6 +21,7 @@ import com.redis.RedisKeyUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,6 +98,19 @@ public class ApiUserShopCartController extends ApiBaseController {
         ShopCartExample entity=new ShopCartExample();
         ShopCartExample.Criteria criteria=entity.createCriteria();
         criteria.andUserIdEqualTo(mobileInfo.getUserid());
+
+        List<ShopCart> all=shopCartService.selectByExample(entity);
+        if (CollectionUtils.isNotEmpty(all)){
+            int i= num;
+            for (ShopCart shopCart:all){
+                if (!shopCart.getGoodsId().equals(goodsId)){
+                    i+=shopCart.getNum();
+                }
+            }
+            if (i>=30){
+                throw new ApiException(-1,"购物车商品数量不能大于30");
+            }
+        }
         criteria.andGoodsIdEqualTo(goodsId);
         List<ShopCart> list=shopCartService.selectByExample(entity);
         Goods goods=goodsService.selectByPrimaryId(goodsId);

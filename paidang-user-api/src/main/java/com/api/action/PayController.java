@@ -12,14 +12,8 @@ import com.base.pay.wx.util.XMLUtil;
 import com.base.util.ResponseUtils;
 import com.item.dao.model.PayLog;
 import com.item.service.BaseService;
-import com.paidang.dao.model.Goods;
-import com.paidang.dao.model.Order;
-import com.paidang.dao.model.UserBalanceLog;
-import com.paidang.dao.model.UserGoods;
-import com.paidang.service.GoodsService;
-import com.paidang.service.OrderService;
-import com.paidang.service.UserBalanceLogService;
-import com.paidang.service.UserGoodsService;
+import com.paidang.dao.model.*;
+import com.paidang.service.*;
 import com.unionpay.acp.sdk.LogUtil;
 import com.unionpay.acp.sdk.SDKConstants;
 import com.unionpay.acp.sdk.SDKUtil;
@@ -59,6 +53,9 @@ public class PayController extends CoreController {
 	private UserGoodsService userGoodsService;
 	@Autowired
 	private UserBalanceLogService userBalanceLogService;
+
+	@Autowired
+	private OutOrderService outOrderService;
 
 	@RequestMapping(value = "/payReturn")
 	public String alipayWapReturn(HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -504,6 +501,17 @@ public class PayController extends CoreController {
 			// 重新查找订单状态信息
 			BigDecimal tradeStatus = null;
 			Integer userId = null;
+			if (out_trade_no.indexOf("shop")==0){
+				try {
+					OutOrderExample example =new OutOrderExample();
+					example.createCriteria().andOutOrderIdEqualTo(out_trade_no);
+					List<OutOrder> orders =outOrderService.selectByExample(example);
+					out_trade_no=orders.get(0).getOrderId();
+				} catch (Exception e) {
+					logger.error("$$$$解析out_trade_no异常!——out_trade_no:" + out_trade_no + ";交易号:" + trade_no + ",交易状态:" + trade_status);
+					e.printStackTrace();
+				}
+			}
 			String[] nos=out_trade_no.split("-");
 			for (String no:nos){
 				try {

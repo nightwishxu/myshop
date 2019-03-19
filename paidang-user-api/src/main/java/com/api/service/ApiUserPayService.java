@@ -14,10 +14,7 @@ import com.item.dao.model.ShopCartExample;
 import com.item.service.PayLogService;
 import com.item.service.ShopCartService;
 import com.paidang.dao.model.*;
-import com.paidang.service.GoodsService;
-import com.paidang.service.OrderService;
-import com.paidang.service.UserAddressService;
-import com.paidang.service.UserCouponService;
+import com.paidang.service.*;
 import com.util.MPaidangPayType;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +44,9 @@ public class ApiUserPayService {
 
     @Autowired
     private ShopCartService shopCartService;
+
+    @Autowired
+    private OutOrderService outOrderService;
 
     @Transactional(readOnly = false,rollbackFor = Exception.class)
     public List<PayResult> createShopCartOrder(MobileInfo mobileInfo, String data, Integer addressId){
@@ -171,12 +171,21 @@ public class ApiUserPayService {
         List<PayLog> logList=new ArrayList<>();
         BigDecimal price=new BigDecimal(0);
         String[] orderArray=orderIds.split(",");
+        String code = "";
+        Date date= new Date();
+        boolean tmp = false;
         for (String id:orderArray){
             Integer orderId=Integer.valueOf(id);
             Order order = orderService.selectByPrimaryKey(orderId);
             if (order == null){
                 throw new ApiException(MEnumError.WM_ORDER_NOTEXISTS);
             }
+            if (!tmp){
+                code = order.getCode();
+                date= order.getCreateTime();
+                tmp = true;
+            }
+
             order.setPayType(platform);
             orderService.updateByPrimaryKeySelective(order);
             PayLog log = new PayLog();
@@ -195,18 +204,23 @@ public class ApiUserPayService {
         if (flag){
             logIds=logIds.substring(0,logIds.length()-1);
         }
+        OutOrder outOrder = new OutOrder();
+        outOrder.setOrderId(logIds);
+        outOrder.setUserId(mobileInfo.getUserid());
+        outOrder.setCreateTime(date);
+        outOrder.setOutOrderId("shop"+code);
         PayResult result = new PayResult();
         result.setPlatform(platform);
         switch (platform) {
             case 1:
                 //支付宝
-                result.setId(logIds+"_"+ MPaidangPayType.NORMAL_BUY.name());
+                result.setId(outOrder.getOrderId()+"_"+ MPaidangPayType.NORMAL_BUY.name());
                 result.setMoney(price.toString());
                 result.setBackUrl(PayMethod.urlToUrl(AlipayConfig.notify_url));
                 break;
             case 2:
                 //微信
-                String wxId = PayMethod.wxPrepayId(price, logIds, "订单支付",MPaidangPayType.NORMAL_BUY);
+                String wxId = PayMethod.wxPrepayId(price, outOrder.getOrderId(), "订单支付",MPaidangPayType.NORMAL_BUY);
                 if (StringUtil.isBlank(wxId)){
                     throw new ApiException(MEnumError.SERVER_BUSY_ERROR);
                 }
@@ -216,7 +230,7 @@ public class ApiUserPayService {
                 throw new ApiException(MEnumError.PAY_TYPE_ERRPR);
         }
 
-
+        outOrderService.insert(outOrder);
         return result;
     }
 
